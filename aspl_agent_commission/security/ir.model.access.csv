@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_product_commission,access_product_product_commission,model_product_product_commission,base.group_user,1,1,1,1
+access_agent_commission,access_agent_commission,model_agent_commission,base.group_user,1,1,1,1
+access_commission_payment,access_commission_payment,model_commission_payment,base.group_user,1,1,1,1
+access_product_category_commission,access_product_category_commission,model_product_category_commission,base.group_user,1,1,1,1
+access_sale_commission,access_sale_commission,model_sale_commission,base.group_user,1,1,1,1
+access_res_partner_commission,access_res_partner_commission,model_res_partner_commission,base.group_user,1,1,1,1
+access_report_commission_analysis,access_report_commission_analysis,model_report_commission_analysis,base.group_user,1,1,1,1
+access_res_partner_range,access_res_partner_range,model_res_partner_range,base.group_user,1,1,1,1
+access_agent_commission_payment,access_agent_commission_payment,model_agent_commission_payment,base.group_user,1,1,1,1

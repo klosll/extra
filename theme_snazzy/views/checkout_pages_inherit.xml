@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<template id="snazzy_checkout_pages_banner_extra_info" inherit_id="website_sale.extra_info" name="snazzy Checkout Pages Banner Extra info">
+		<xpath expr="//div[hasclass('oe_website_sale')]" position="attributes">
+			<attribute name="class" add="extra_info_main" separator=" "></attribute>
+		</xpath>
+		<xpath expr="//div[@id='wrap']/div[hasclass('oe_website_sale')]" position="before">
+			<section class="cart_banner_extra pt32">
+				<div class="container">
+					<div class="cart_banner_description text-center">
+						<h4>
+							<span>Extra Info</span>
+						</h4> 
+						<ol class="breadcrumb justify-content-center bg-transparent">
+							<li class="breadcrumb-item">
+								<a href="/">Home</a>
+							 </li>
+							<li class="breadcrumb-item active">
+							   <span>Extra Info</span>
+							</li>
+						</ol>
+					</div>
+				</div>
+			</section>
+		</xpath>
+
+		<xpath expr="//div[hasclass('order-xl-2','col-xl-auto')]" position="attributes">
+			<attribute name="class" add="extra-product-detail" separator=" "></attribute>
+		</xpath>
+	</template>
+
+	<template id="snazzy_checkout_pages_banner_cart" inherit_id="website_sale.cart" name="snazzy Checkout Pages Banner Cart">
+		<xpath expr="//div[hasclass('oe_website_sale')]" position="attributes">
+			<attribute name="class" add="cart_main" separator=" "></attribute>
+		</xpath>
+		<xpath expr="//div[@id='wrap']/div[hasclass('oe_website_sale')]" position="before">
+			<section class="cart_banner_cart pt32">
+				<div class="container">
+					<div class="cart_banner_description text-center">
+						<h4>
+							<span>Cart</span>
+						</h4> 
+						<ol class="breadcrumb justify-content-center bg-transparent">
+							<li class="breadcrumb-item">
+								<a href="/">Home</a>
+							 </li>
+							<li class="breadcrumb-item active">
+							   <span>Your Shopping Cart</span>
+							</li>
+						</ol>
+					</div>
+				</div>
+			</section>
+		</xpath>
+
+		<xpath expr="//div[hasclass('oe_cart')]//div[hasclass('col-lg-12')]" position="attributes">
+			<attribute name="t-attf-class" add="col-lg-12 {{'' if website_sale_order and website_sale_order.website_order_line else 'text-center'}}" separator=" "></attribute>
+		</xpath>
+
+		<xpath expr="//a[hasclass('btn-secondary')]" position="attributes">
+			<attribute name="class" add="btn-primary continue-btn" remove="btn-secondary" separator=" "></attribute>
+		</xpath>
+
+		<xpath expr="//div[hasclass('oe_cart')]//a[hasclass('float-right')]" position="replace">
+			<t t-if="uid and uid &gt; 0">
+				<a role="button" t-if="website_sale_order and website_sale_order.website_order_line" class="btn btn-primary float-right d-none d-xl-block" href="/shop/checkout?express=1">
+					<span class="">Checkout</span>
+				</a>
+			</t>
+			<t t-else=''>
+				<t t-if="is_view_active('theme_snazzy.loginsignup_popup_bizt')">
+					<a href='#' data-toggle="modal" data-target="#popupuserlogin" t-att-data-theme_name = "request.website.sudo().theme_id.name" class="btn btn-secondary float-right lpopen border-0 rounded-0">
+						<span class="">Login to Place Order</span>
+					</a>
+				</t>
+				<t t-else=''>
+					<a role="button" class="btn btn-secondary float-right border-0 rounded-0" href="/web/login">
+						<span class="">Login to Place Order</span>
+					</a>
+				</t>
+			</t>
+		</xpath>
+		<xpath expr="//div[@id='o_cart_summary']" position="replace">
+			<div class="col-12 col-xl-4" id="o_cart_summary">
+					<t t-call="website_sale.short_cart_summary"/>
+					<div class="d-flex justify-content-between d-xl-none my-3">
+						<a role="button" href="/shop" class="btn btn-secondary flat">
+							<span class="fa fa-chevron-left" />
+							Continue<span class="d-none d-md-inline"> Shopping</span>
+						</a>
+						<a role="button" t-if="website_sale_order and website_sale_order.website_order_line" class="btn btn-primary flat" href="/shop/checkout?express=1">
+							<span class="">Process Checkout</span>
+							<span class="fa fa-chevron-right" />
+						</a>
+					</div>
+				</div>
+		</xpath>
+
+	</template>
+
+	<template id="snazzy_cart_summary" inherit_id="website_sale.cart_summary" name="snazzy Cart Summary">
+		<xpath expr="//div[hasclass('alert')]" position="attributes">
+			<attribute name="class" add="empty-cart-line" remove="alert-info" separator=" "></attribute>
+		</xpath>
+
+		<xpath expr="//table[@id='cart_products']" position="attributes">
+			<attribute name="class" add="table-product" remove="table-sm" separator=" "></attribute>
+		</xpath>
+	</template>
+
+	<template id="snazzy_cart_lines" inherit_id="website_sale.cart_lines" name="snazzy Cart Lines">
+		<!-- empty cart "Your cart is empty!" page -->
+		<xpath expr="//div[hasclass('alert')]" position="attributes">
+			<attribute name="class" add="empty-cart-line" remove="alert-info" separator=" "></attribute>
+		</xpath>
+
+		<xpath expr="//table[@id='cart_products']" position="attributes">
+			<attribute name="class" add="table-product" remove="table-sm" separator=" "></attribute>
+		</xpath>
+
+		<xpath expr="//td[hasclass('td-product_name')]/div" position="before">
+			<span t-field="line.product_id.image_128" t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded o_image_64_max'}" class="d-block d-md-none mb-1"/>
+		</xpath>
+	</template>
+
+	<template id="snazzy_cart_coupon_form_btn" inherit_id="website_sale.coupon_form" name="snazzy Cart Coupon Form Btn">
+		<xpath expr="//a[hasclass('btn-secondary')]" position="attributes">
+			<attribute name="class" add="btn-primary" remove="btn-secondary" separator=" "></attribute>
+		</xpath>
+	</template>
+
+
+	<template id="snazzy_checkout_pages_banner_checkout" inherit_id="website_sale.checkout" name="snazzy Checkout Pages Banner Checkout">
+		<xpath expr="//div[hasclass('oe_website_sale')]" position="attributes">
+			<attribute name="class" add="checkout_main" separator=" "></attribute>
+		</xpath>
+		<xpath expr="//div[@id='wrap']/div[hasclass('oe_website_sale')]" position="before">
+			<section class="cart_banner_check pt32">
+				<div class="container">
+					<div class="cart_banner_description text-center">
+						<h4>
+							<span>Address</span>
+						</h4> 
+						<ol class="breadcrumb justify-content-center bg-transparent">
+							<li class="breadcrumb-item">
+								<a href="/">Home</a>
+							 </li>
+							<li class="breadcrumb-item active">
+							   <span>Address</span>
+							</li>
+						</ol>
+					</div>
+				</div>
+			</section>
+		</xpath>
+
+		<xpath expr="//div[hasclass('oe_cart')]" position="before">
+			<div class="store col-12">
+
+				<div class="row">
+					<div class="col-md-4">
+						<label class="switch">
+							<label for="delivery" class="text_delivery">Delivery</label>
+							<input type="radio" class="radio_delivery" value="delivery" name="store_address" checked="checked" id="delivery" />
+							<span class="slider round"></span>
+						</label>
+					</div>
+					<div class="col-md-4">
+						<label class="switch">
+							<label for="pickup" card="text_pickup">Pickup</label>
+							<input type="radio" class="radio_pickup" value="pickup" name="store_address" id="pickup" />
+							<span class="slider round"></span>
+						</label>
+					</div>
+				</div>
+				<div class="store_data d-none">
+					<div class="pickup_info mt16 mb64">
+						<div class="store_line">
+							<div class="container">
+								<div class="row">
+									<t t-foreach="store_data" t-as="line">
+										<div class="store-data col-md-4 mb-3 mb-md-0">
+											<input t-att-id="line.id" t-att-value="line.id" class="info_id d-none" name="info_id"/>
+											<input type="radio" class="d-none" name="pickup_address" value="" t-attf-id="store-#{line.id}" />
+											<label class="store-label p-3" t-attf-for="store-#{line.id}">
+												<div class="store-content">
+													<div class="store-details">
+														<div class="store-name">
+															<span t-esc="line.name"></span>
+														</div>
+														<div class="store-address">
+															
+															<p class="detail-info mb-0">
+																<span t-esc="line.street"/>,<span t-esc="line.street2"/>
+															</p>
+															<p class="detail-info">
+																<span t-esc="line.city"/>,<span t-esc="line.zip"/>
+															</p>
+														</div>
+													</div>
+													<div class="store-contact d-flex">
+														<t t-if="line.phone">
+															<div class="contact-phone">
+																<a t-attf-href="tel:#{line.phone}">
+																	<span class="ri ri-phone-fill align-middle" />
+																</a>
+															</div>
+														</t>
+														<t t-if="line.email">
+															<div class="contact-email">
+																<a t-attf-href="mailto:#{line.email}">
+																	<span class="ri ri-mail-fill align-middle"/>
+																</a>
+															</div>
+														</t>
+														<t t-if="line.location_url">
+															<div class="contact-location">
+																<a t-attf-href="#{line.location_url}" target="_blank">
+																	<span class="ri ri-map-pin-2-fill align-middle"/>
+																</a>
+															</div>
+														</t>
+													</div>
+												</div>
+											</label>
+										</div>
+									</t>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</xpath>
+		<xpath expr="//div[hasclass('order-xl-1')]" position="attributes">
+			<attribute name="class" add="col-xl-12 bill-check" remove="col-xl" separator=" "></attribute>
+		</xpath>
+
+		<xpath expr="//div[hasclass('order-xl-2','col-xl-auto')]" position="attributes">
+			<attribute name="class" add="col-xl-12 checkout-product-detail" remove="col-xl-auto" separator=" "></attribute>
+		</xpath>
+	</template>
+
+	<template id="snazzy_billing_checkout_address" inherit_id="website_sale.address" name="snazzy Billing Checkout Address">
+		<xpath expr="//div[hasclass('oe_website_sale')]" position="attributes">
+			<attribute name="class" add="add_address_main" separator=" "></attribute>
+		</xpath>
+		<xpath expr="//div[hasclass('order-xl-1')]" position="attributes">
+			<attribute name="class" add="bill-address"  separator=" "></attribute>
+		</xpath>
+
+		<xpath expr="//div[hasclass('order-xl-2','col-xl-auto')]" position="attributes">
+			<attribute name="class" add="address-product-detail"  separator=" "></attribute>
+		</xpath>
+	</template>
+
+	<template id="snazzy_billing_payment" inherit_id="website_sale.payment" name="snazzy Billing payment">
+		<xpath expr="//div[hasclass('oe_website_sale')]" position="attributes">
+			<attribute name="class" add="cart_payment_main" separator=" "></attribute>
+		</xpath>
+
+		<xpath expr="//div[hasclass('order-xl-1')]" position="attributes">
+			<attribute name="class" add="col-xl bill-payment" remove="col-xl" separator=" "></attribute>
+		</xpath>
+
+		<xpath expr="//div[hasclass('order-xl-2','col-xl-auto')]" position="attributes">
+			<attribute name="class" add="col-xl-auto payment-product-detail" remove="col-xl-auto" separator=" "></attribute>
+		</xpath>
+	</template>
+
+	<template id="snazzy_cart_suggested_products" inherit_id="website_sale.suggested_products_list" name="snazzy Cart Suggested Products">
+		<xpath expr="//h5[hasclass('js_cart_lines')]" position="attributes">
+			<attribute name="class" add="snazzy_suggest_title mt32" separator=" "></attribute>
+		</xpath>
+		<xpath expr="//table[@id='suggested_products']" position="attributes">
+			<attribute name="class" add="snazzy_suggest_table" remove="table-striped" separator=" "></attribute>
+		</xpath>
+	</template>
+
+	<template id="snazzy_payment_confirmation_inherited" inherit_id="website_sale.confirmation" name="snazzy Payment Confirmation inherited">
+		<xpath expr="//div[hasclass('oe_website_sale')]" position="attributes">
+			<attribute name="class" add="snazzy_confirmation_main" separator=" "/>
+		</xpath>
+	</template>
+
+	<!-- icons change templates -->
+	<template id="snazzy_address_kanban_icons" inherit_id="website_sale.address_kanban" name="snazzy Address Kanban Icons">
+		<xpath expr="//div[hasclass('card-footer')]//i[hasclass('fa-check')]" position="attributes">
+			<attribute name="class" add="lnr lnr-location" remove="fa fa-check" separator=" "></attribute>
+		</xpath>
+	</template>
+
+
+	<template id="snazzy_checkout_pages_cart_lines_pages" inherit_id="website_sale.cart_lines" name="snazzy Cart Lines Pages">
+		<xpath expr="//table[@id='cart_products']" position="attributes">
+			<attribute name="class" add="table-borderless" separator=" "></attribute>
+		</xpath>
+
+		<xpath expr="//td[hasclass('td-qty')]/div[hasclass('css_quantity')]" position="replace">
+			<div class="css_quantity input-group mx-auto justify-content-center">
+				<div class="input-group-prepend">
+					<a t-attf-href="#" class="btn btn-link bg-transparent js_add_cart_json d-none d-md-inline-block" aria-label="Remove one" title="Remove one">
+						<i class="fa fa-minus"></i>
+					</a>
+				</div>
+				<input type="text" class="js_quantity form-control quantity bg-transparent" name="add_qty" t-att-data-line-id="line.id" t-att-data-product-id="line.product_id.id" t-att-value="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty" />					
+				<div class="input-group-append">
+					<a t-attf-href="#" class="btn btn-link bg-transparent float_left js_add_cart_json d-none d-md-inline-block" aria-label="Add one" title="Add one">
+						<i class="fa fa-plus"></i>
+					</a>
+				</div>
+			</div>
+		</xpath>
+	</template>
+
+
+	<template id="snazzy_address_on_payment" inherit_id="website_sale.payment" name="snazzy Address On Payment">
+		<xpath expr="//div[hasclass('card')]" position="replace">
+			<div class="shipping_and_billing_main_class">
+				<t t-set="same_shipping" t-value="bool(order.partner_shipping_id==order.partner_id or only_services)" />
+				<b class="billing_and_shipping">Billing<t t-if="same_shipping and not only_services"> &amp; Shipping</t>: </b>
+				<div class="card">
+					<div class="card-body" id="shipping_and_billing">
+						<a class='float-right no-decoration' href='/shop/checkout'><i class="fa fa-edit"/> Edit</a>
+						<t t-set="same_shipping" t-value="bool(order.partner_shipping_id==order.partner_id or only_services)" />
+						<div><b>Billing<t t-if="same_shipping and not only_services"> &amp; Shipping</t>: </b><span t-esc='order.partner_id' t-options="dict(widget='contact', fields=['address'], no_marker=True, separator=', ')" class="address-inline"/></div>
+						<div t-if="not same_shipping and not only_services" groups="sale.group_delivery_invoice_address"><b>Shipping: </b><span t-esc='order.partner_shipping_id' t-options="dict(widget='contact', fields=['address'], no_marker=True, separator=', ')"  class="address-inline"/></div>
+					</div>
+				</div>
+			</div>
+		</xpath>
+	</template>
+
+	<template id="snazzy_wizard_checkout_icon" inherit_id="website_sale.wizard_checkout" name="snazzy Wizard Checkout Icon">
+		<xpath expr="//div[@id='wizard-step10']/div[hasclass('progress-wizard-steplabel')]" position="after">
+			<div class="text-center progress-wizard-step-icon">
+				<i class="icofont icofont-cart-alt fa-fw"></i>
+			</div>
+		</xpath>
+
+		<xpath expr="//div[@id='wizard-step20']/div[hasclass('progress-wizard-steplabel')]" position="after">
+			<div class="text-center progress-wizard-step-icon">
+				<i class="ti ti-location-pin fa-fw"></i>
+			</div>
+		</xpath>
+
+		<xpath expr="//div[@id='wizard-step40']/div[hasclass('progress-wizard-steplabel')]" position="after">
+			<div class="text-center progress-wizard-step-icon">
+				<i class="ri ri-check-fill fa-fw"></i>
+			</div>
+		</xpath>
+	</template>
+
+	<template id="snazzy_extra_info_option_icon" inherit_id="website_sale.extra_info_option" name="snazzy Extra Info Option Icon">
+		<xpath expr="//div[@id='wizard-step30']/div[hasclass('progress-wizard-steplabel')]" position="after">
+			<div class="text-center progress-wizard-step-icon">
+				<i class="ri ri-information-line fa-fw"></i>
+			</div>
+		</xpath>
+	</template>
+</odoo>

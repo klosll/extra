@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<template id="theme_common_contactus_inherited" inherit_id="website.contactus">
+		<xpath expr="//section[hasclass('s_title')]" position="replace">
+		</xpath>
+		<xpath expr="//div[hasclass('mt-4')]" position="replace">
+			<section class="contactus-section s_text_block o_colored_level " data-snippet="s_text_block" style="background-image: url(/theme_snazzy/static/src/img/contact_page_bg.png); background-position: center; background-size: cover;">
+					<div class="container s_allow_columns">
+						<div class="row snazzy_contact_info align-items-center">
+							<div class="col-lg-6 contact-details">
+								<div class="mb-5">
+									<h3 class="contact-main-title">Get In Touch <span class="text-primary">With Us</span></h3>
+									<p>Want to get started on your next ad campaign? Maybe a new <br/>website? Let's get started!</p>
+								</div>
+								<div class="row align-items-center">
+									<div class="col-lg-6 col-md-6 mb-4">
+										<div class="detail-container">
+											<div class="detail-icon mb16 d-flex align-items-center">
+												<span class="ri ri-map-pin-2-fill text-primary mr-2"/>
+												<h6 class="detail-title mb-0">Address</h6>
+											</div>
+											<p class="detail-info">
+												<span>250 Executive Park Blvd, Suite 3400,<br/>San Francisco,94134</span>
+											</p>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 mb-4">
+										<div class="detail-container">
+											<div class="detail-icon mb16 d-flex align-items-center">
+												<span class="ri ri-community-fill text-primary mr-2"/>
+												<h6 class="detail-title mb-0">Open Hours</h6>
+											</div>
+											<p class="detail-info mb-1">
+												<span>Monday-Friday:</span>
+											</p>
+											<p class="detail-info">
+												<span>9AM - 6PM</span>
+											</p>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 mb-4">
+										<div class="detail-container">
+											<div class="detail-icon mb16 d-flex align-items-center">
+												<span class="ri ri-phone-fill text-primary mr-2"/>
+												<h6 class="detail-title mb-0">Call Us</h6>
+											</div>
+											<p class="detail-info">
+												<span>
+													<a href="tel:+1 (650) 691-3277">+1 (650) 691-3277</a>
+												</span>
+											</p>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-6 mb-4">
+										<div class="detail-container">
+											<div class="detail-icon mb16 d-flex align-items-center">
+												<span class="ri ri-mail-fill text-primary mr-2"/>
+												<h6 class="detail-title mb-0">Email Us</h6>
+											</div>
+											<p class="detail-info">
+												<span>
+													<a href="mailto:info@yourcompany.example.com">info@yourcompany.example.com</a>
+												</span>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<section class="s_website_form o_colored_level shadow p-md-5 p-3 bg-white" data-vcss="001" data-snippet="s_website_form" data-name="Form" style="background-image: none;">
+									<div class="container">
+										<form id="contactus_form" action="/website_form/" method="post" enctype="multipart/form-data" class="o_mark_required" data-mark="*" data-model_name="mail.mail" data-success-mode="redirect" data-success-page="/thank-you">
+											<div class="s_website_form_rows row s_col_no_bgcolor">
+												<div class="form-group s_website_form_field col-12 col-lg-6 s_website_form_custom s_website_form_required  " data-type="char" data-name="Field">
+												<label class="s_website_form_label" style="width: 200px" for="o123xg3wijozk">
+													<span class="s_website_form_label_content">Your Name</span>
+													<span class="s_website_form_mark">                     *</span>
+												</label>
+												<input type="text" class="form-control s_website_form_input" name="Your Name" required="1" placeholder="Your Name" id="o123xg3wijozk"/>
+												</div>
+												<div class="form-group s_website_form_field col-12 col-lg-6 s_website_form_custom   " data-type="char" data-name="Field">
+												<label class="s_website_form_label " style="width: 200px" for="oez0z4lw1t4h">
+													<span class="s_website_form_label_content">Phone Number</span>
+												</label>
+												<input type="text" class="form-control s_website_form_input" name="Phone Number" placeholder="Phone Number" id="oez0z4lw1t4h"/>
+												</div>
+												<div class="form-group s_website_form_field col-12 s_website_form_required col-lg-6" data-type="email" data-name="Field">
+												<label class="s_website_form_label " style="width: 200px" for="on4feytxdqf">
+													<span class="s_website_form_label_content">Email</span>
+													<span class="s_website_form_mark">       *</span>
+												</label>
+												<input type="email" class="form-control s_website_form_input" name="email_from" required="1" placeholder="Your Email" id="on4feytxdqf"/>
+												</div>
+												<div class="form-group s_website_form_field col-12 col-lg-6 s_website_form_custom   " data-type="char" data-name="Field">
+												<label class="s_website_form_label " style="width: 200px" for="oo64wep9w3c">
+													<span class="s_website_form_label_content">Your Company</span>
+												</label>
+												<input type="text" class="form-control s_website_form_input" name="Your Company" placeholder="Your company" id="oo64wep9w3c"/>
+												</div>
+												<div class="form-group s_website_form_field col-12  s_website_form_required  " data-type="char" data-name="Field">
+												<label class="s_website_form_label " style="width: 200px" for="oej8n9lrgtes">
+													<span class="s_website_form_label_content">Subject</span>
+													<span class="s_website_form_mark">             *</span>
+												</label>
+												<input type="text" class="form-control s_website_form_input" name="subject" required="1" placeholder="Enter Your Subject" id="oej8n9lrgtes"/>
+												</div>
+												<div class="form-group s_website_form_field col-12 s_website_form_custom s_website_form_required  " data-type="text" data-name="Field">
+												<label class="s_website_form_label " style="width: 200px" for="oo8excugq77l">
+													<span class="s_website_form_label_content">Your Question</span>
+												</label>
+												<textarea class="form-control s_website_form_input" name="Your Question" required="1" placeholder="Enter Your Question" id="oo8excugq77l" rows="2"/>
+												</div>
+												<div class="form-group s_website_form_field col-12    s_website_form_dnone" data-name="Field">
+												<div class="row s_col_no_resize s_col_no_bgcolor">
+													<label class="col-form-label col-sm-auto s_website_form_label " style="width: 200px">
+													<span class="s_website_form_label_content"/>
+													<span title="Separate email addresses with a comma.">
+														<i class="fa fa-info-circle"/>
+													</span>
+													</label>
+													<div class="col-sm">
+													<input type="hidden" class="form-control s_website_form_input" name="email_to" value="info@yourcompany.example.com"/>
+													</div>
+												</div>
+												</div>
+												<div class="form-group col-12 s_website_form_submit text-center s_website_form_no_submit_label" data-name="Submit Button">
+												<div style="width: 200px;" class="s_website_form_label"/>
+												<a href="#" role="button" class="btn btn-primary btn-lg s_website_form_send">Submit</a>
+												<span id="s_website_form_result"/>
+												</div>
+											</div>
+										</form>
+									</div>
+								</section>
+							</div>
+							<div class="oe_structure oe_empty"/> 
+						</div>
+					</div>
+			</section>
+		</xpath>
+	</template>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <record id="sale_order_view_form_inherit" model="ir.ui.view">
+            <field name="name">sale.order.from</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form//sheet//notebook" position="inside">
+                    <page string="Agent Commission">
+                        <group col="4">
+                            <field name="commission_calculation"/>
+                            <field name="commission_based_on"/>
+                        </group>
+                        <field name="sale_commission_ids" mode="tree" options="{'no_create': True}">
+                            <tree editable="bottom">
+                                <field name="agent_id"/>
+                                <field name="amount"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+                <field name="partner_id" position="after">
+                    <field name="agent_id" context="{'create_agent':True}"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

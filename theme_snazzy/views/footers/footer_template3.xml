@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<template id="theme_common_footer3" inherit_id="website.layout" name="Footer Three" active="False">
+       	<xpath expr="//div[@id='footer']" position="replace">
+            <div id="footer" class="oe_structure oe_structure_solo" t-ignore="true" t-if="not no_footer">
+                <section id="footer_theme_common3" class="footer_theme_common3 o_footer">
+                    <section class="subscribe-content py-4 border-bottom">
+                        <div class="container">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                <div class="address-contact d-flex mb-3 mb-md-0">
+                                    <p class="m-0 text-white"><span class="ri ri-mail-send-line mr-3 "/></p>
+                                    <p class="m-0 text-white">Subscribe and get a 20% discount.</p>
+                                </div>
+                                <div class="block-subscribe">
+                                    <form class="input-group js_subscribe d-flex" data-list-id="1">
+                                        <input type="email" name="email" class="js_subscribe_email form-control bg-white" placeholder="Email Address"/>
+                                        <span class="input-group-append">
+                                            <a role="button" href="#" class="btn btn-primary js_subscribe_btn h-100 px-4">Subscribe</a>
+                                            <a role="button" href="#" class="btn btn-success js_subscribed_btn h-100 d-none px-4" disabled="disabled">Thanks</a>
+                                        </span>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="middle-footer">
+                        <div class="container">
+                            <div class="row justify-content-center pt32 pb32">
+                                <div class="col-lg-6 mb-3 mb-lg-0 col-md-6">
+                                    <div class="block-footer">
+                                        <div class="footer-logo mb-4">
+											<a href="/" class="navbar-brand logo p-0 m-0">
+												<img src="/theme_snazzy/static/src/img/snazzy-logo-white.png" class="img-fluid"/>
+											</a>
+										</div>
+                                        <div class="content-block-footer mb-5">
+                                            <ul class="contact-list pl-0">
+                                                <li class="address-contact d-flex">
+                                                    <p class="m-0 text-white"><span class="icon icon-House mr-3"/></p>
+                                                    <p class="m-0 text-white"><span t-esc="res_company.street"/>,<span t-esc="res_company.city"/>,<span t-esc="res_company.zip"/></p>
+                                                </li>
+                                                <li class="address-contact d-flex">
+                                                    <p class="m-0 text-white"><span class="lnr lnr-phone-handset mr-3"/></p>
+                                                    <p class="m-0 text-white"><span t-esc="res_company.phone"/></p>
+                                                </li>
+                                                <li class="address-contact d-flex">
+                                                    <p class="m-0 text-white"><span class="ri ri-mail-send-line mr-3"/></p>
+                                                    <p class="m-0 text-white"><span t-esc="res_company.email"/></p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="payment-image">
+                                            <img src="/theme_snazzy/static/src/img/payment-footer-white.png" class="img-fluid"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mb-3 mb-lg-0 col-lg-2">
+                                    <div class="footer-links text-white">
+                                        <h5 class="mb-4">Product</h5>
+                                        <p><a href="#">About Us</a></p>
+                                        <p><a href="#">Contact</a></p>
+                                        <p><a href="#">Shipping Return</a></p>
+                                        <p><a href="#">FAQ</a></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mb-3 mb-lg-0 col-lg-2">
+                                    <div class="footer-links text-white">
+                                        <h5 class="mb-4 ">Market Place</h5>
+                                        <p><a href="#">My Account</a></p>
+                                        <p><a href="#">Login</a></p>
+                                        <p><a href="#">My Cart</a></p>
+                                        <p><a href="#">Wishlist</a></p>
+                                        <p><a href="#">Checkout</a></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mb-3 mb-lg-0 col-lg-2">
+                                    <div class="footer-links text-white">
+                                        <h5 class="mb-4 ">Customer Care</h5>
+                                        <p><a href="#">Customer Service</a></p>
+                                        <p><a href="#">Store Locator</a></p>
+                                        <p><a href="#">Wholesale</a></p>
+                                        <p><a href="#">Career</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </xpath>
+
+        <xpath expr="//div[hasclass('o_footer_copyright')]" position="replace">
+			<div t-if="not no_copyright" class="o_footer_copyright footer3_copyright">
+				<section class="copyright-section py-4">
+                    <div class="container">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                            <div class="footer-langage-option">
+                                <p class="m-0 o_footer_copyright_name text-white">All Rights Are Reserved By ©<span t-field="res_company.name" /> 2023</p>
+                            </div>
+                            <div class="social-share">
+                                <a class="link text-white" t-att-href="website.social_facebook" t-if="website.social_facebook" target="_blank">
+                                    <i class="fa fa-facebook" />
+                                </a>
+                                <a class="link text-white" t-att-href="website.social_twitter" t-if="website.social_twitter" target="_blank">
+                                    <i class="fa fa-twitter" />
+                                </a>
+                                <a class="link text-white" t-att-href="website.social_instagram" t-if="website.social_instagram" target="_blank">
+                                    <i class="fa fa-instagram"></i>
+                                </a>
+                                <a class="link text-white" t-att-href="website.social_linkedin" t-if="website.social_linkedin" target="_blank">
+                                    <i class="fa fa-linkedin" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+				</section>
+			</div>
+		</xpath>
+    </template>
+</odoo>

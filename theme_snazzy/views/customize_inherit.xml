@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="website_sale_comparison.product_add_to_compare" model="ir.ui.view">
+		<field name="active" eval="False"/>
+		<field name="customize_show" eval="False"/>
+	</record>
+    <record id="website_sale.product_custom_text" model="ir.ui.view">
+		<field name="active" eval="False"/>
+		<field name="customize_show" eval="False"/>
+	</record>
+	<record id="portal.user_sign_in" model="ir.ui.view">
+		<field name="customize_show" eval="True"/>
+	</record>
+</odoo>
