@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mass_editing_valuation_layer" model="ir.actions.server">
+        <field name="state">mass_edit</field>
+        <field name="name">Asignar Valor unitario en Valoración de stock</field>
+        <field name="model_id" ref="stock_account.model_stock_valuation_layer" />
+        <field name="binding_model_id" ref="stock_account.model_stock_valuation_layer"/>
+        <field name="binding_view_types">list</field>
+    </record>
+    <record id="mass_editing_valuation_layer_unit_cost" model="mass.editing.line">
+        <field name="server_action_id" ref="mass_editing_valuation_layer" />
+        <field name="field_id" ref="stock_account.field_stock_valuation_layer__unit_cost" />
+    </record>
+
+    <record id="action_calc_total_cost_valuation_layer" model="ir.actions.server">
+        <field name="name">Calcular Valor total en Valoración de stock</field>
+        <field name="model_id" ref="stock_account.model_stock_valuation_layer"/>
+        <field name="binding_model_id" ref="stock_account.model_stock_valuation_layer"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            for record in records:
+                record.write({'value':record.unit_cost * record.quantity})
+        </field>
+    </record>
+</odoo>

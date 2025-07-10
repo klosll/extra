@@ -1,0 +1,930 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* stock_inventory_adjustment
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-23 23:20+0000\n"
+"PO-Revision-Date: 2024-08-23 23:20+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#, python-format
+msgid "%s (copy)"
+msgstr "%s (copiar)"
+
+#. module: stock_inventory_adjustment
+#: model:ir.actions.report,print_report_name:stock_inventory_adjustment.action_report_stock_inventory
+msgid "'Report'"
+msgstr "'Informe'"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.report_stock_inventory
+msgid ""
+"<br/>\n"
+"                            <strong>Created By:</strong>"
+msgstr ""
+"<br/>\n"
+"<strong>Creado por:</strong>"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.report_stock_inventory
+msgid ""
+"<br/>\n"
+"                            <strong>Date:</strong>"
+msgstr ""
+"<br/>\n"
+"<strong>Fecha:</strong>"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.report_stock_inventory
+msgid ""
+"<br/>\n"
+"                            <strong>Location:</strong>"
+msgstr ""
+"<br/>\n"
+"<strong>Ubicación:</strong>"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.report_stock_inventory
+msgid "<strong>Counted Quantity</strong>"
+msgstr "<strong>Cantidad contada</strong>"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.report_stock_inventory
+msgid "<strong>Difference</strong>"
+msgstr "<strong>Diferencia</strong>"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.report_stock_inventory
+msgid "<strong>Inventory Name:</strong>"
+msgstr "<strong>Nombre del inventario:</strong>"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.report_stock_inventory
+msgid "<strong>Lot/Serial Number</strong>"
+msgstr "<strong>Número de lote/serie</strong>"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.report_stock_inventory
+msgid "<strong>On hand Quantity</strong>"
+msgstr "<strong>Cantidad disponible</strong>"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.report_stock_inventory
+msgid "<strong>Product</strong>"
+msgstr "<strong>Producto</strong>"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__message_needaction
+msgid "Action Needed"
+msgstr "Acción necesaria"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__activity_ids
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "Decoración de excepción de actividad"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__activity_state
+msgid "Activity State"
+msgstr "Estado de actividad"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Icono de tipo de actividad"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields.selection,name:stock_inventory_adjustment.selection__stock_inventory__inventory_type__all
+msgid "All Product"
+msgstr "Todos los productos"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__prefill_counted_quantity
+msgid ""
+"Allows to start with a pre-filled counted quantity for each lines or with "
+"all counted quantities set to zero."
+msgstr ""
+"Permite comenzar con una cantidad contada previamente rellenada para cada "
+"línea o con todas las cantidades contadas establecidas en cero."
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__start_empty
+msgid "Allows to start with an empty inventory."
+msgstr "Permite comenzar con un inventario vacío."
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#, python-format
+msgid "Another inventory is in progress."
+msgstr "Otro inventario está en curso."
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__message_attachment_count
+msgid "Attachment Count"
+msgstr "Recuento de archivos adjuntos"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.actions.act_window,help:stock_inventory_adjustment.action_stock_inventory
+msgid ""
+"Barcode scanner can be activated via inventory settings.\n"
+"            Manual inventory adjustments can also be performed and pre-filled with\n"
+"            suggested counted quantity."
+msgstr ""
+"El escáner de código de barras se puede activar a través de la configuración de inventario.\n"
+"También se pueden realizar ajustes de inventario manuales y rellenarlos previamente con la cantidad contada sugerida."
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_form
+msgid "Cancel Inventory"
+msgstr "Cancelar inventario"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields.selection,name:stock_inventory_adjustment.selection__stock_inventory__state__cancel
+msgid "Cancelled"
+msgstr "Cancelado"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__categ_id
+msgid "Categ"
+msgstr "Categoria"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__company_id
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_tree
+msgid "Counted"
+msgstr "Contado"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__prefill_counted_quantity
+msgid "Counted Quantities"
+msgstr "Cantidades contadas"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__product_qty
+msgid "Counted Quantity"
+msgstr "Cantidad contada"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__move_ids
+msgid "Created Moves"
+msgstr "Movimientos creados"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__create_uid
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__create_date
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields.selection,name:stock_inventory_adjustment.selection__stock_inventory__prefill_counted_quantity__counted
+msgid "Default to stock on hand"
+msgstr "Por defecto, stock disponible"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields.selection,name:stock_inventory_adjustment.selection__stock_inventory__prefill_counted_quantity__zero
+msgid "Default to zero"
+msgstr "Valor predeterminado cero"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__difference_qty
+msgid "Difference"
+msgstr "Diferencia"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_search
+msgid "Difference different than zero"
+msgstr "Diferencia distinta de cero"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__display_name
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields.selection,name:stock_inventory_adjustment.selection__stock_inventory__state__draft
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_filter
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__start_empty
+msgid "Empty Inventory"
+msgstr "Inventario vacío"
+
+#. module: stock_inventory_adjustment
+#: model:res.groups,name:stock_inventory_adjustment.group_inventory_adjustment
+msgid "Enable Inventory Adjustment"
+msgstr "Habilitar ajuste de inventario"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory_line__product_tracking
+msgid "Ensure the traceability of a storable product in your warehouse."
+msgstr "Garantice la trazabilidad de un producto almacenable en su almacén."
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__message_follower_ids
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Seguidores (socios)"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Ícono de Font Awesome, por ejemplo, fa-tasks"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_filter
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_search
+msgid "Group by..."
+msgstr "Agrupar por..."
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__has_message
+msgid "Has Message"
+msgstr "Tiene mensaje"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__id
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__id
+msgid "ID"
+msgstr "IDENTIFICACIÓN"
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory_line.py:0
+#, python-format
+msgid "INV:"
+msgstr "INV:"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__activity_exception_icon
+msgid "Icon"
+msgstr "Icono"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "Icono para indicar una actividad de excepción."
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Si está marcada, los mensajes nuevos requieren su atención."
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__message_has_error
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Si está marcada, algunos mensajes tendrán un error de entrega."
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__date
+msgid ""
+"If the inventory adjustment is not validated, date at which the theoritical quantities have been checked.\n"
+"If the  inventory adjustment is validated, date at which the inventory adjustment has been validated."
+msgstr ""
+"Si no se valida el ajuste de inventario, fecha en la que se han comprobado las cantidades teóricas.\n"
+"Si se valida el ajuste de inventario, fecha en la que se ha validado el ajuste de inventario."
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_form
+msgid ""
+"If you cancel this inventory adjustment, all its inventory adjustment lines "
+"will be lost. Are you sure you want to discard it ?"
+msgstr ""
+"Si cancela este ajuste de inventario, se perderán todas las líneas de ajuste"
+" de inventario. ¿Está seguro de que desea descartarlo?"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields.selection,name:stock_inventory_adjustment.selection__stock_inventory__state__confirm
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_filter
+msgid "In Progress"
+msgstr "En curso"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__exhausted
+msgid "Include Exhausted Products"
+msgstr "Incluir productos agotados"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__exhausted
+msgid "Include also products with quantity of 0"
+msgstr "Incluir también productos con cantidad 0"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory_line__difference_qty
+msgid ""
+"Indicates the gap between the product's theoretical quantity and its newest "
+"quantity."
+msgstr ""
+"Indica la brecha entre la cantidad teórica del producto y su cantidad más "
+"reciente."
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#, python-format
+msgid "Invalid password"
+msgstr "Contraseña inválida"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__line_ids
+msgid "Inventories"
+msgstr "Inventarios"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model,name:stock_inventory_adjustment.model_stock_inventory
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__inventory_id
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_move__inventory_id
+msgid "Inventory"
+msgstr "Inventario"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_form
+msgid "Inventory Adjustment"
+msgstr "Ajuste de inventario"
+
+#. module: stock_inventory_adjustment
+#: model:ir.actions.act_window,name:stock_inventory_adjustment.action_stock_inventory
+#: model:ir.ui.menu,name:stock_inventory_adjustment.menu_action_stock_inventory
+msgid "Inventory Adjustments"
+msgstr "Ajustes de inventario"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.report_stock_inventory
+msgid "Inventory Count Sheet"
+msgstr "Hoja de recuento de inventario"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__date
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__inventory_date
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_filter
+msgid "Inventory Date"
+msgstr "Fecha de inventario"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_tree
+msgid "Inventory Details"
+msgstr "Detalles del inventario"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model,name:stock_inventory_adjustment.model_stock_inventory_line
+msgid "Inventory Line"
+msgstr "Línea de inventario"
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#, python-format
+msgid "Inventory Lines"
+msgstr "Líneas de inventario"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__name
+msgid "Inventory Reference"
+msgstr "Referencia de inventario"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__inventory_type
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_filter
+msgid "Inventory Type"
+msgstr "Tipo de inventario"
+
+#. module: stock_inventory_adjustment
+#: model:res.groups,name:stock_inventory_adjustment.make_invisible
+msgid "Invisible"
+msgstr "Invisible"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__is_editable
+msgid "Is Editable"
+msgstr "Es editable"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__message_is_follower
+msgid "Is Follower"
+msgstr "Es seguidor"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__write_uid
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__write_date
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory_line__inventory_date
+msgid "Last date at which the On Hand Quantity has been computed."
+msgstr "Última fecha en la que se ha calculado la cantidad disponible."
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__location_id
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_search
+msgid "Location"
+msgstr "Ubicación"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__location_id
+msgid "Locations"
+msgstr "Ubicaciones"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__lot_id
+msgid "Lot"
+msgstr "Lote"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__prod_lot_id
+msgid "Lot/Serial Number"
+msgstr "Número de lote/serie"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_tree
+msgid "Lot/Serial Number Inventory"
+msgstr "Inventario de números de serie/lotes"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__message_has_error
+msgid "Message Delivery error"
+msgstr "Error en la entrega del mensaje"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__message_ids
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "Fecha límite de mi actividad"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Fecha límite para la próxima actividad"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__activity_summary
+msgid "Next Activity Summary"
+msgstr "Resumen de la próxima actividad"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__activity_type_id
+msgid "Next Activity Type"
+msgstr "Siguiente tipo de actividad"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Número de acciones"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__message_has_error_counter
+msgid "Number of errors"
+msgstr "Número de errores"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "Número de mensajes que requieren acción"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Número de mensajes con error de entrega"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_tree
+msgid "On Hand"
+msgstr "A mano"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields.selection,name:stock_inventory_adjustment.selection__stock_inventory__inventory_type__categ
+msgid "One Product Category"
+msgstr "Una categoría de producto"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields.selection,name:stock_inventory_adjustment.selection__stock_inventory__inventory_type__one
+msgid "Only One Product"
+msgstr "Sólo un producto"
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#, python-format
+msgid "Only a stock manager can validate an inventory adjustment."
+msgstr "Sólo un administrador de stock puede validar un ajuste de inventario."
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_search
+msgid "Outdated Theoretical Quantities"
+msgstr "Magnitudes teóricas obsoletas"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__partner_id
+msgid "Owner"
+msgstr "Dueño"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__package_id
+msgid "Pack"
+msgstr "Embalar"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_tree
+msgid "Package"
+msgstr "Paquete"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_search
+msgid "Packaging"
+msgstr "Embalaje"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__password
+msgid "Password"
+msgstr "Contraseña"
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#, python-format
+msgid "Password is required"
+msgstr "Se requiere contraseña"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_filter
+msgid "Physical Inventories by Date"
+msgstr "Inventarios físicos por fecha"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__product_id
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__product_id
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_search
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_filter
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_form
+msgid "Product"
+msgstr "Producto"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__categ_id
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_search
+msgid "Product Category"
+msgstr "Categoría de producto"
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_form
+#, python-format
+msgid "Product Moves"
+msgstr "Movimientos de productos"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__product_uom_id
+msgid "Product Unit of Measure"
+msgstr "Unidad de medida del producto"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model,name:stock_inventory_adjustment.model_product_product
+msgid "Product Variant"
+msgstr "Variante del producto"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__product_ids
+msgid "Products"
+msgstr "Productos"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__outdated
+msgid "Quantity outdated"
+msgstr "Cantidad obsoleta"
+
+#. module: stock_inventory_adjustment
+#: model:ir.actions.server,name:stock_inventory_adjustment.model_stock_inventory_line_action_recompute_quantity
+msgid "Recompute On Hand Quantity"
+msgstr "Recalcular cantidad disponible"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_filter
+msgid "Reference"
+msgstr "Referencia"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_tree
+msgid "Refresh quantity"
+msgstr "Actualizar cantidad"
+
+#. module: stock_inventory_adjustment
+#: model:ir.actions.report,name:stock_inventory_adjustment.action_report_stock_inventory
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_form
+msgid "Report"
+msgstr "Informe"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__activity_user_id
+msgid "Responsible User"
+msgstr "Usuario responsable"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.report_stock_inventory
+msgid "SHORTAGES"
+msgstr "Faltantes"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "Error de entrega de SMS"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.report_stock_inventory
+msgid "SURPLUSES"
+msgstr "Sobrantes"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_filter
+msgid "Search Inventory"
+msgstr "Buscar inventario"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_search
+msgid "Search Inventory Lines"
+msgstr "Buscar líneas de inventario"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields.selection,name:stock_inventory_adjustment.selection__stock_inventory__inventory_type__product
+msgid "Select Product Manually"
+msgstr "Seleccionar producto manualmente"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: stock_inventory_adjustment
+#: model:ir.actions.server,name:stock_inventory_adjustment.model_stock_inventory_line_action_reset_product_qty
+msgid "Set counted quantities to 0"
+msgstr "Establecer las cantidades contadas en 0"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_form
+msgid "Set to Draft"
+msgstr "Establecer en borrador"
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__product_list_shortages
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_form
+#, python-format
+msgid "Shortages"
+msgstr "Faltantes"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__product_ids
+msgid "Specify Products to focus your inventory on particular Products."
+msgstr ""
+"Especifique productos para centrar su inventario en productos específicos."
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_form
+msgid "Start Inventory"
+msgstr "Iniciar inventario"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__state
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__state
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_filter
+msgid "Status"
+msgstr "Estado"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"Estado basado en actividades\n"
+"Vencido: la fecha de vencimiento ya pasó\n"
+"Hoy: la fecha de la actividad es hoy\n"
+"Planificado: actividades futuras."
+
+#. module: stock_inventory_adjustment
+#: model:ir.model,name:stock_inventory_adjustment.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de acciones"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_form
+msgid "Summary Difference"
+msgstr "Resumen Diferencia"
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__product_list_surpluses
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_form
+#, python-format
+msgid "Surpluses"
+msgstr "Sobrantes"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory_line__is_editable
+msgid "Technical field to restrict editing."
+msgstr "Campo técnico para restringir la edición."
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__theoretical_qty
+msgid "Theoretical Quantity"
+msgstr "Cantidad teórica"
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory_line.py:0
+#, python-format
+msgid ""
+"There is already one inventory adjustment line for this product, you should "
+"rather modify this one instead of creating a new one."
+msgstr ""
+"Ya existe una línea de ajuste de inventario para este producto, es mejor "
+"modificarla en lugar de crear una nueva."
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#, python-format
+msgid "Tracked Products in Inventory Adjustment"
+msgstr "Productos rastreados en el ajuste de inventario"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory_line__product_tracking
+msgid "Tracking"
+msgstr "Seguimiento"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "Tipo de actividad de excepción registrada."
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory_line.py:0
+#: code:addons/stock_inventory_adjustment/models/stock_inventory_line.py:0
+#, python-format
+msgid "Unsupported search on %s outside of an Inventory Adjustment"
+msgstr "Búsqueda no admitida en %s fuera de un ajuste de inventario"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.stock_inventory_line_tree
+msgid "UoM"
+msgstr "UM"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model,name:stock_inventory_adjustment.model_res_users
+msgid "User"
+msgstr "Usuario"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_form
+msgid "Validate Inventory"
+msgstr "Validar inventario"
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/res_users.py:0
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_res_users__password_stock
+#, python-format
+msgid "Validate inventory password"
+msgstr "Validar contraseña de inventario"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields.selection,name:stock_inventory_adjustment.selection__stock_inventory__state__done
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_filter
+msgid "Validated"
+msgstr "Validado"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.actions.act_window,help:stock_inventory_adjustment.action_stock_inventory
+msgid "Want to speed up your inventory counts? Try our Barcode app"
+msgstr ""
+"¿Quieres acelerar el recuento de inventario? Prueba nuestra aplicación de "
+"código de barras"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__website_message_ids
+msgid "Website Messages"
+msgstr "Mensajes del sitio web"
+
+#. module: stock_inventory_adjustment
+#: model:ir.model.fields,help:stock_inventory_adjustment.field_stock_inventory__website_message_ids
+msgid "Website communication history"
+msgstr "Historial de comunicación del sitio web"
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory_line.py:0
+#, python-format
+msgid "You can only adjust storable products."
+msgstr "Sólo puedes ajustar productos almacenables."
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#, python-format
+msgid ""
+"You can only delete a draft inventory adjustment. If the inventory "
+"adjustment is not done, you can cancel it."
+msgstr ""
+"Solo se puede eliminar un borrador de ajuste de inventario. Si el ajuste de "
+"inventario no se ha realizado, se puede cancelar."
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#, python-format
+msgid ""
+"You can't validate the inventory '%s', maybe this inventory has been already"
+" validated or isn't ready."
+msgstr ""
+"No puedes validar el inventario '%s', tal vez este inventario ya ha sido "
+"validado o no está listo."
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#, python-format
+msgid ""
+"You cannot set a negative product quantity in an inventory line:\n"
+"\t%s - qty: %s"
+msgstr ""
+"No se puede establecer una cantidad de producto negativa en una línea de inventario:\n"
+"%s - qty: %s"
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#: model:ir.model.fields,field_description:stock_inventory_adjustment.field_stock_inventory__inventory_line_count
+#, python-format
+msgid "details"
+msgstr "detalles"
+
+#. module: stock_inventory_adjustment
+#: model_terms:ir.ui.view,arch_db:stock_inventory_adjustment.view_stock_inventory_form
+msgid "e.g. Annual inventory"
+msgstr "p.ej. Inventario anual"
+
+#. module: stock_inventory_adjustment
+#. odoo-python
+#: code:addons/stock_inventory_adjustment/models/stock_inventory.py:0
+#, python-format
+msgid "there is no record to inventory."
+msgstr "No existe registro para inventariar."

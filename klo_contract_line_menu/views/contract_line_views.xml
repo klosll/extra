@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="klo_contract_line_view_tree" model="ir.ui.view">
+        <field name="name">klo.contract.line.view.tree</field>
+        <field name="model">contract.line</field>
+        <field name="arch" type="xml">
+            <tree default_order="contract_id">
+                <field name="contract_id" readonly="1" optional="show" />
+                <field name="partner_id" readonly="1" optional="show" />
+                <field name="product_id" readonly="1" optional="show" />
+                <field name="analytic_account_id" readonly="1" optional="show" />
+                <field name="quantity" readonly="1" optional="show" />
+                <field name="uom_id" readonly="1" optional="show" />
+                <field name="automatic_price" readonly="1" optional="show" />
+                <field name="price_unit" readonly="1" optional="show" />
+                <field name="discount" readonly="1" optional="show" />
+                <field name="price_subtotal" readonly="1" optional="show" />
+                <field name="date_start" readonly="1" optional="show" />
+                <field name="date_end" readonly="1" optional="show" />
+                <field name="recurring_next_date" readonly="1" optional="show" />
+                <field name="last_date_invoiced" readonly="1" optional="show" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="klo_contract_line_view_filter" model="ir.ui.view">
+        <field name="name">klo.contract.line.view.filter</field>
+        <field name="model">contract.line</field>
+        <field name="arch" type="xml">
+            <search string="Search Contract Lines">
+                <field name="contract_id" />
+                <field name="product_id" />
+                <field name="analytic_account_id" />
+                <group expand="0" string="Group By">
+                    <filter
+                        string="Contract"
+                        name="group-contract"
+                        domain="[]"
+                        context="{'group_by': 'contract_id'}"
+                    />
+                    <filter
+                        string="Product"
+                        name="group-product"
+                        domain="[]"
+                        context="{'group_by': 'product_id'}"
+                    />
+                    <filter
+                        string="Analytic Account"
+                        name="group-analytic_account"
+                        domain="[]"
+                        context="{'group_by': 'analytic_account_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="klo_contract_line_action" model="ir.actions.act_window">
+        <field name="name">Contract Lines</field>
+        <field name="res_model">contract.line</field>
+        <field name="view_id" ref="klo_contract_line_view_tree" />
+    </record>
+
+    <menuitem
+    id="klo_menu_contract_line"
+    name="Contract Lines"
+    parent="account.menu_finance_receivables"
+    action="klo_contract_line_menu.klo_contract_line_action"
+    sequence="99"
+  />
+</odoo>

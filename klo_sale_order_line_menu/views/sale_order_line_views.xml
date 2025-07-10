@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2025 KLO Ingeniería Informática S.L.L.
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="klo_sale_order_line_tree" model="ir.ui.view">
+        <field name="name">klo.sale.order.line.tree</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale_order_line_menu.sale_order_line_tree" />
+        <field name="mode">extension</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <!-- KLO Categoria de producto-->
+                <field name="product_categ_id" optional="show" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
