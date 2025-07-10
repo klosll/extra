@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="agent_payment_report" model="ir.actions.report">
+            <field name="name">Agent Commission Payment</field>
+            <field name="model">agent.commission.payment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">aspl_agent_commission.agent_payment_report_template</field>
+            <field name="report_file">aspl_agent_commission.agent_payment_report_template</field>
+            <field name="binding_model_id" ref="model_agent_commission_payment"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

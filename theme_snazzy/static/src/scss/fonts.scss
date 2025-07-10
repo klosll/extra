@@ -1,0 +1,43 @@
+@font-face{
+    font-family:"Poppins";
+    src:url("/theme_snazzy/static/src/fonts/poppins/poppins-v15-latin-regular.woff2") format("woff2"),url("fonts/poppins/poppins-v15-latin-regular.woff") format("woff");
+}
+
+h1,.h1{
+	font-family: $h1-font;
+	//font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: -1px;
+	font-size: $o-theme-h1-font-size-multiplier;
+}
+h2,.h2 {
+  	font-family: $h2-font;
+	  line-height: 1.1;
+	  //font-weight: 200;
+	  font-size: $o-theme-h2-font-size-multiplier;
+}
+h3,.h3 {
+  	font-family: $h3-font;
+	  line-height: 1.1;
+	  //letter-spacing: -0.04em;
+	  //font-weight:700;
+	  font-size: $o-theme-h3-font-size-multiplier;
+}
+h4,.h4 {
+  	font-family: $h4-font;
+	  line-height: 1.1;
+	  //font-weight:700;
+	  font-size: $o-theme-h4-font-size-multiplier;
+}
+h5,.h5 {
+  	font-family: $h5-font;
+	  line-height: 1.1;
+	  //font-weight: 200;
+	  font-size: $o-theme-h5-font-size-multiplier;
+}
+h6,.h6 {
+  	font-family: $h6-font;
+	  line-height: 1.4;
+	  //font-weight: 400;
+	  font-size: $o-theme-h6-font-size-multiplier;
+}

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="theme_snazzy_header6" inherit_id="website.layout" customize_show="True" name="Header Six" active="False">
+        <xpath expr="//header//nav" position="replace">
+			<nav data-name="Navbar" id="snazzy-header6" t-attf-class="snazzy_header shadow-sm snazzy_header_six navbar-light o_cc">
+				<section class="top-header d-none d-lg-block py-2 px-xl-5">
+					<div class="container-fluid">
+						<div class="row align-items-center">
+							<div class="col-lg-4 user-address-info">
+								<div class="user-contact d-flex align-items-center">
+									<a class="mb-0 text-decoration-none btn btn-link pl-0 py-0"><span class="fa fa-envelope-o mr-2"/><span class="small">info@bizople.com</span></a>
+									<a class="mb-0 text-decoration-none btn btn-link py-0"><span class="icofont icofont-location-pin mr-2"/><span class="small">Find a Store</span></a>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<p class="mb-0 pr-2 small text-center">Today's deal sale off 70% Ends in,Hurry up</p>
+							</div>
+							<div class="col-lg-4">
+								<div class="d-flex align-items-center justify-content-end">
+									<!-- Language Selector -->
+									<t t-call="website.placeholder_header_language_selector">
+										<t t-set="_div_classes" t-valuef="my-auto ml-0"/>
+									</t>
+									<!-- Pricelist Selector -->
+									<t t-call="theme_snazzy.placeholder_snazzy_header_pricelist"/>
+							    </div>
+							</div>
+						</div>
+					</div>
+				</section>
+                <section class="middle-header py-3 px-xl-5">
+					<div class="container-fluid">
+						<div class="row align-items-center">
+							<div class="col-lg-3 d-flex align-items-center">
+								<button type="button" id="show-sidebar" class="mobile-sidebar-toggle mr-4 btn btn-sm btn-dark d-block d-lg-none">
+									<span class="ri ri-menu-line"></span>
+								</button>
+								<div class="snazzy-logo justify-content-md-start mx-auto mx-lg-0">
+									<t t-call="website.placeholder_header_brand"/>
+								</div>
+								<t t-call="theme_snazzy.snazzy_header_mobile_cart">
+									<t t-set="_class" t-value="'d-block d-lg-none'"/>
+								</t>
+							</div>
+
+                            <div class="col-lg-6 d-none d-lg-block">
+								<div class="header-center bottom_content">
+									<nav class="navbar navbar-expand-md p-0" id="bizople-header-6">
+										<div class="collapse navbar-collapse " id="snazzy-header6">
+											<ul class="nav navbar-nav justify-content-center mx-auto" id="top_menu">
+												<t t-foreach="website.menu_id.child_id" t-as="submenu">
+													<t t-call="website.submenu">
+														<t t-set="item_class" t-value="'nav-item'" />
+														<t t-set="link_class" t-value="'nav-link'" />
+													</t>
+												</t>
+											</ul>
+										</div>
+									</nav>
+								</div>
+                            </div>
+							
+							<div class="col-lg-3 text-right d-none d-lg-block header_right">
+								<div class="header-search align-middle d-inline-block">
+									<a href="#" class="nav-link open-popup">
+										<span class="ri ri-search-line show-search align-middle"></span>
+									</a>
+								</div>
+								<div class="wishlist align-middle d-none d-lg-inline-block list-unstyled">
+									<t t-call="website_sale_wishlist.header_wishlist_link">
+										<t t-set="_icon" t-value="True"/>
+										<t t-set="_icon_color" t-value="''"/>
+										<t t-set="_item_class" t-value="'nav-item'"/>
+										<t t-set="_link_class" t-value="'nav-link'"/>
+									</t>
+								</div>
+								<div class="cart bizople-add-to-cart align-middle d-none d-lg-inline-block list-unstyled" id="">
+									<t t-set="website_sale_order" t-value="website.sale_get_order()" />
+									<t t-call="website_sale.header_cart_link">
+										<t t-set="_icon" t-value="True"/>
+										<t t-set="_icon_color" t-value="''"/>
+										<t t-set="_item_class" t-value="'nav-item'"/>
+										<t t-set="_link_class" t-value="'nav-link show_cart_sidebar'"/>
+									</t>
+								</div>
+								<t t-call="theme_snazzy.theme_snazzy_signin_main_template">
+									<t t-set="_myaccount_class" t-value="'align-items-center align-middle d-none d-md-inline-block'"/>
+									<t t-set="_icon" t-value="True"/>
+									<t t-set="_text" t-value="False"/>
+								</t>
+							</div>
+						</div>
+					</div>
+				</section>
+				<div class="container-fluid">
+					<div class="mbl-search-box d-block d-lg-none">
+						<t t-call="theme_snazzy.snazzy_product_searchbar">
+							<t t-set="searchbar_classes" t-value="'d-block d-lg-none bizople-search mbl-search-bar'"/>
+						</t>
+					</div>
+					<t t-call="theme_snazzy.snazzy_mobile_categories"/>
+				</div>
+            </nav>
+         </xpath>
+		 <xpath expr="//header" position="before">
+			<div class="d-block d-lg-none">
+				<t t-call="theme_snazzy.bizople_mobile_bottom_icon_bar"/>
+			</div>
+			<nav id="cart_sidebar" class="cart-sidebar bg-white">
+				<t t-call="theme_snazzy.cart_sidebar_content"/>
+			</nav>
+			<div class="cart_sidebar_backdrop"></div>
+		</xpath>
+		<xpath expr="//header" position="before">
+			<t t-call="theme_snazzy.search_popup"/>
+		</xpath>
+    </template>
+</odoo>

@@ -1,0 +1,14 @@
+14.0.0.1 ==>changed group as groups in xml.
+
+14.0.0.2 => Fix the issue for unreserve button.
+
+date 20th sept 2021
+version 14.0.0.3
+issue solve:-
+	after cancel picking quantity is not reverse in on hand
+
+
+14.0.0.4 ==>fixed issue of valuation when cancel the picking.
+14.0.0.5 ==>removed purchase dependancy.
+14.0.0.6 ==>fixed issue of porduct qty calculation after cancel the delivery.
+14.0.0.7 ==>fixed issue of warning while cancel picking when product with lot or serial.

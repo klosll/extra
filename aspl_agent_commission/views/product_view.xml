@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <record id="product_view_form_inherit" model="ir.ui.view">
+            <field name="name">product.product.from</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form//sheet//notebook" position="inside">
+                    <page string="Agent Commission">
+                        <field name="product_commission_ids" mode="tree" nolable="1">
+                            <tree editable="bottom">
+                                <field name="agent_id" context="{'create_agent':True}"/>
+                                <field name="calculation"/>
+                                <field name="commission"/>
+                                <field name="product_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
