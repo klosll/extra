@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale_order_project_form" model="ir.ui.view">
+            <field name="name">sale_order_project_form</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="model">sale.order</field>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('oe_title')]" position="after">
+                    <group attrs="{'invisible':[('use_sale_project', '=', 'no')]}">
+                        <group>
+                            <field name="use_sale_project" invisible="True"/>
+                            <field name="project_id"
+                                   attrs="{'required':[('use_sale_project', '=', 'required')]}"/>
+                        </group>
+                        <group>
+                            <button type="object" name="action_apply_project" string="Apply Project"
+                                    attrs="{'invisible':[('project_id', '=', False)]}"
+                                    confirm="Please confirm that you want apply project details"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

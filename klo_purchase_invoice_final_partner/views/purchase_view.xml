@@ -1,0 +1,22 @@
+<odoo>
+    <record id="klo_purchase_order_final_partner_tree" model="ir.ui.view">
+        <field name="name">klo.purchase.order.final.partner.tree</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree" />
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="sale_partner_id" optional="hide"/>
+            </field>
+        </field>
+    </record>
+    <record id="klo_purchase_order_final_partner_form" model="ir.ui.view">
+        <field name="name">klo.purchase.order.final.partner.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_ref']" position="after">
+                <field name="sale_partner_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

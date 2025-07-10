@@ -1,0 +1,11 @@
+# Ignorar archivos .pyc
+*.pyc
+__pycache__/
+
+# Ignorar otros archivos temporales comunes
+*.pyo
+*.log
+*.swp
+*.DS_Store
+
+
