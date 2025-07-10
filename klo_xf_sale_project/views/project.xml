@@ -9,8 +9,10 @@
         <field name="arch" type="xml">
             <!-- KLO. Primero, como cambiamos de sitio la columna Elemento del pedido de venta para
             ponerla a la derecha de Pedido, la quitamos primero de donde está puesta -->
+            <!-- KLO. En v16.0 no está este campo:
             <xpath expr="//field[@name='sale_line_id']" position="replace">
             </xpath>
+            -->
             <!-- KLO. Ponemos otra columna en la que dice si tiene asignada pedido o factura -->
             <xpath expr="//field[@name='name']" position="before">
                 <field name="sale_order_ids" string="Pedidos" widget="many2many_tags" optional="show"/>

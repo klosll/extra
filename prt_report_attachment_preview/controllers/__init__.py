@@ -1,1 +1,1 @@
-from . import cetmix_controllers
+from . import report

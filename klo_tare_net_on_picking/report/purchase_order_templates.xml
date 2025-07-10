@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_ticket_purchaseorder_document">
+    <t t-call="klo_tare_net_on_picking.external_layout_sin_cabecera">
+        <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+        <t t-set="company" t-value="o.company_id"/>
+
+        <!-- KLO. HOJA DE LA IZQUIERDA -->
+        <div class="page" style="width:48%; display: inline-block; vertical-align:top; font-size:13px;" align="left">
+            <div class="oe_structure"/>
+
+            <div class="mt-4" style="width:68%; display: inline-block; vertical-align:top;" align="left">
+                <h2>Ticket de báscula de Entrada
+                </h2>
+            </div>
+            <!-- KLO. logo -->
+            <div id="company_logo" class="col-3 mb4" style="width:28%; display: inline-block; vertical-align:top;" align="center">
+                <div class="col-3 mb4">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 55px;" alt="Logo"/>
+                </div>
+            </div>
+
+            <div id="company_info" style="width:48%; display: inline-block; vertical-align:top;" align="left">
+                <ul class="list-unstyled">
+                    <li t-if="company.is_company_details_empty"><t t-esc="company.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/></li>
+                    <li t-else=""><t t-esc="company.company_details"/></li>
+                    <li t-if="forced_vat">
+                        <t t-esc="company.country_id.vat_label or 'Tax ID'"/>:
+                        <span t-esc="forced_vat"/>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="informations"  style="width:48%; display: inline-block; vertical-align:top;" align="left">
+                <div>
+                    Campaña: <span t-field="o.fiscal_year_id"/>
+                    <br/>
+                    Número: <span t-field="o.name"/>
+                    <br/>
+                    <div t-if="o.state in ['purchase','done'] and o.date_approve">
+                        Fecha/Hora: <span t-field="o.date_approve"/>
+                    </div>
+                    <div t-elif="o.date_order">
+                        Fecha/Hora: <span t-field="o.date_order"/>
+                    </div>
+                </div>
+            </div>
+
+            <div id="partner_info" style="width:100%; vertical-align:top; border-box: 25px; padding: 10px; border: 1px solid;" align="left">
+                <strong>Proveedor:</strong>
+                <span t-field="o.partner_id"
+                      t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'
+                />
+                <br/>
+                <strong>Destino:</strong>
+                <span t-field="o.picking_type_id"/>
+            </div>
+
+            <table class="table table-sm o_main_table table-borderless mt-4">
+                <thead style="display: table-row-group">
+                    <tr>
+                        <th name="th_description"><strong>Producto</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="current_subtotal" t-value="0"/>
+                    <t t-foreach="o.order_line" t-as="line">
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+
+                        <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                            <t t-if="not line.display_type">
+                                <td id="product">
+                                    <span t-field="line.name"/>
+                                </td>
+                                <table class="table table-sm o_main_table table-borderless mt-4">
+                                    <td id="th_texto">
+                                        <strong>Peso Bruto (Kg)</strong>
+                                        <br/>
+                                        <strong>Tara (Kg)</strong>
+                                        <br/>
+                                        <strong>Neto (Kg)</strong>
+                                        <br/>
+                                        <strong>Deducciones</strong>
+                                        <br/>
+                                        <strong>Limpio (Kg)</strong>
+                                        <br/>
+                                        <br/>
+                                        <strong>Peso esp. (Kg/Hl)</strong>
+                                        <br/>
+                                        <strong>Humedad</strong>
+                                    </td>
+                                    <td name="td_dato" class="text-end">
+                                        <span t-field="line.gross_weight"/>
+                                        <br/>
+                                        <span t-field="line.tare_weight"/>
+                                        <br/>
+                                        <span t-field="line.net_weight"/>
+                                        <br/>
+                                        <span t-field="line.deduction"/>
+                                        <br/>
+                                        <span t-field="line.product_qty"/>
+                                        <br/>
+                                        <br/>
+                                        <span t-field="line.specific_weight"/>
+                                        <br/>
+                                        <span t-field="line.humidity" t-options='{"widget": "float", "precision": 2}'/>
+                                        <br/>
+                                    </td>
+                                </table>
+                            </t>
+                            <t t-if="line.display_type == 'line_section'">
+                                <td colspan="99" id="section">
+                                    <span t-field="line.name"/>
+                                </td>
+                                <t t-set="current_section" t-value="line"/>
+                                <t t-set="current_subtotal" t-value="0"/>
+                            </t>
+                            <t t-if="line.display_type == 'line_note'">
+                                <td colspan="99" id="note">
+                                    <span t-field="line.name"/>
+                                </td>
+                            </t>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+
+            <!-- KLO. Observaciones y conforme -->
+            <table class="table table-sm o_main_table table-borderless mt-4">
+                <thead style="display: table-row-group">
+                    <tr>
+                        <th name="th_texto_pie">
+                            <span>Revise los datos de su ticket de entrada y verifique que son correctos.</span>
+                        </th>
+                    </tr>
+                </thead>
+                <table style="height:35mm" class="table table-sm o_main_table table-borderless mt-4">
+                    <thead style="display: table-row-group">
+                        <tr>
+                            <th name="th_observaciones">
+                                <span>Observaciones:</span>
+                            </th>
+                            <th name="th_firma">
+                                <span>Conforme:</span>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </table>
+
+            <div class="oe_structure"/>
+        </div>
+
+        <!-- KLO. Se pone un espacio entre las dos hojas para poder hacer el corte.-->
+        <div style="width:10mm; display: inline-block;"/>
+
+        <!-- KLO. HOJA DE LA DERECHA -->
+        <div class="page" style="width:48%; display: inline-block; vertical-align:top; font-size:13px;" align="left">
+            <div class="oe_structure"/>
+
+            <div class="mt-4" style="width:68%; display: inline-block; vertical-align:top;" align="left">
+                <h2>Ticket de báscula de Entrada
+                </h2>
+            </div>
+            <!-- KLO. logo -->
+            <div id="company_logo" class="col-3 mb4" style="width:28%; display: inline-block; vertical-align:top;" align="center">
+                <div class="col-3 mb4">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 55px;" alt="Logo"/>
+                </div>
+            </div>
+
+            <div id="company_info" style="width:48%; display: inline-block; vertical-align:top;" align="left">
+                <ul class="list-unstyled">
+                    <li t-if="company.is_company_details_empty"><t t-esc="company.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/></li>
+                    <li t-else=""><t t-esc="company.company_details"/></li>
+                    <li t-if="forced_vat">
+                        <t t-esc="company.country_id.vat_label or 'Tax ID'"/>:
+                        <span t-esc="forced_vat"/>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="informations"  style="width:48%; display: inline-block; vertical-align:top;" align="left">
+                <div>
+                    Campaña: <span t-field="o.fiscal_year_id"/>
+                    <br/>
+                    Número: <span t-field="o.name"/>
+                    <br/>
+                    <div t-if="o.state in ['purchase','done'] and o.date_approve">
+                        Fecha/Hora: <span t-field="o.date_approve"/>
+                    </div>
+                    <div t-elif="o.date_order">
+                        Fecha/Hora: <span t-field="o.date_order"/>
+                    </div>
+                </div>
+            </div>
+
+            <div id="partner_info" style="width:100%; vertical-align:top; border-box: 25px; padding: 10px; border: 1px solid;" align="left">
+                <strong>Proveedor:</strong>
+                <span t-field="o.partner_id"
+                      t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'
+                />
+                <br/>
+                <strong>Destino:</strong>
+                <span t-field="o.picking_type_id"/>
+            </div>
+
+            <table class="table table-sm o_main_table table-borderless mt-4">
+                <thead style="display: table-row-group">
+                    <tr>
+                        <th name="th_description"><strong>Producto</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="current_subtotal" t-value="0"/>
+                    <t t-foreach="o.order_line" t-as="line">
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+
+                        <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                            <t t-if="not line.display_type">
+                                <td id="product">
+                                    <span t-field="line.name"/>
+                                </td>
+                                <table class="table table-sm o_main_table table-borderless mt-4">
+                                    <td id="th_texto">
+                                        <strong>Peso Bruto (Kg)</strong>
+                                        <br/>
+                                        <strong>Tara (Kg)</strong>
+                                        <br/>
+                                        <strong>Neto (Kg)</strong>
+                                        <br/>
+                                        <strong>Deducciones</strong>
+                                        <br/>
+                                        <strong>Limpio (Kg)</strong>
+                                        <br/>
+                                        <br/>
+                                        <strong>Peso esp. (Kg/Hl)</strong>
+                                        <br/>
+                                        <strong>Humedad</strong>
+                                    </td>
+                                    <td name="td_dato" class="text-end">
+                                        <span t-field="line.gross_weight"/>
+                                        <br/>
+                                        <span t-field="line.tare_weight"/>
+                                        <br/>
+                                        <span t-field="line.net_weight"/>
+                                        <br/>
+                                        <span t-field="line.deduction"/>
+                                        <br/>
+                                        <span t-field="line.product_qty"/>
+                                        <br/>
+                                        <br/>
+                                        <span t-field="line.specific_weight"/>
+                                        <br/>
+                                        <span t-field="line.humidity" t-options='{"widget": "float", "precision": 2}'/>
+                                        <br/>
+                                    </td>
+                                </table>
+                            </t>
+                            <t t-if="line.display_type == 'line_section'">
+                                <td colspan="99" id="section">
+                                    <span t-field="line.name"/>
+                                </td>
+                                <t t-set="current_section" t-value="line"/>
+                                <t t-set="current_subtotal" t-value="0"/>
+                            </t>
+                            <t t-if="line.display_type == 'line_note'">
+                                <td colspan="99" id="note">
+                                    <span t-field="line.name"/>
+                                </td>
+                            </t>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+
+            <!-- KLO. Observaciones y conforme -->
+            <table class="table table-sm o_main_table table-borderless mt-4">
+                <thead style="display: table-row-group">
+                    <tr>
+                        <th name="th_texto_pie">
+                            <span>Revise los datos de su ticket de entrada y verifique que son correctos.</span>
+                        </th>
+                    </tr>
+                </thead>
+                <table style="height:35mm" class="table table-sm o_main_table table-borderless mt-4">
+                    <thead style="display: table-row-group">
+                        <tr>
+                            <th name="th_observaciones">
+                                <span>Observaciones:</span>
+                            </th>
+                            <th name="th_firma">
+                                <span>Conforme:</span>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </table>
+
+            <div class="oe_structure"/>
+        </div>
+
+    </t>
+</template>
+
+<template id="report_ticket_purchaseorder">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="klo_tare_net_on_picking.report_ticket_purchaseorder_document" t-lang="o.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+</odoo>

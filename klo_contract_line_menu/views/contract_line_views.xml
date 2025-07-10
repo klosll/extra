@@ -8,7 +8,7 @@
                 <field name="contract_id" readonly="1" optional="show" />
                 <field name="partner_id" readonly="1" optional="show" />
                 <field name="product_id" readonly="1" optional="show" />
-                <field name="analytic_account_id" readonly="1" optional="show" />
+<!--  KLO DA ERROR EN V16.0      <field name="analytic_account_id" readonly="1" optional="show" />-->
                 <field name="quantity" readonly="1" optional="show" />
                 <field name="uom_id" readonly="1" optional="show" />
                 <field name="automatic_price" readonly="1" optional="show" />
@@ -30,7 +30,7 @@
             <search string="Search Contract Lines">
                 <field name="contract_id" />
                 <field name="product_id" />
-                <field name="analytic_account_id" />
+<!--                <field name="analytic_account_id" />-->
                 <group expand="0" string="Group By">
                     <filter
                         string="Contract"
@@ -44,12 +44,12 @@
                         domain="[]"
                         context="{'group_by': 'product_id'}"
                     />
-                    <filter
-                        string="Analytic Account"
-                        name="group-analytic_account"
-                        domain="[]"
-                        context="{'group_by': 'analytic_account_id'}"
-                    />
+<!--                    <filter-->
+<!--                        string="Analytic Account"-->
+<!--                        name="group-analytic_account"-->
+<!--                        domain="[]"-->
+<!--                        context="{'group_by': 'analytic_account_id'}"-->
+<!--                    />-->
                 </group>
             </search>
         </field>

@@ -33,110 +33,78 @@ class Project(models.Model):
 class ProjectProductLine(models.Model):
     _inherit = 'project.product.line'
 
-    def _get_display_price(self, product):
-        # KLO. Esta función está traída de odoo/addons/sale/models/sale_order_line.py
-        # Por si se necesita para un futuro por nuevo código.
-        if self.project_id.partner_id.property_product_pricelist.discount_policy == 'with_discount':
-            return product.with_context(pricelist=self.project_id.partner_id.property_product_pricelist.id, uom=self.product_id.uom_id.id).price
-        product_context = dict(self.env.context, partner_id=self.project_id.partner_id.id, date=self.project_id.date, uom=self.product_id.uom_id.id)
+    price_unit = fields.Monetary(
+        string='Unit Price',
+        compute='_compute_price_unit',
+        digits='Product Price',
+    )
 
-        final_price, rule_id = self.project_id.partner_id.property_product_pricelist.with_context(product_context).get_product_price_rule(product or self.product_id, self.quantity or 1.0, self.project_id.partner_id)
-        base_price, currency = self.with_context(product_context)._get_real_price_currency(product, rule_id, self.quantity, self.product_id.uom_po_id, self.project_id.partner_id.property_product_pricelist.id)
-        if currency != self.project_id.partner_id.property_product_pricelist.currency_id:
-            base_price = currency._convert(
-                base_price, self.project_id.partner_id.property_product_pricelist.currency_id,
-                self.project_id.company_id or self.env.company, self.project_id.date or fields.Date.today())
-        # negative discounts (= surcharge) are included in the display price
-        return max(base_price, final_price)
-
-
-    def _get_real_price_currency(self, product, rule_id, qty, uom, pricelist_id):
-        """Retrieve the price before applying the pricelist
-            :param obj product: object of current product record
-            :parem float qty: total quentity of product
-            :param tuple price_and_rule: tuple(price, suitable_rule) coming from pricelist computation
-            :param obj uom: unit of measure of current order line
-            :param integer pricelist_id: pricelist id of sales order"""
-        PricelistItem = self.env['product.pricelist.item']
-        field_name = 'lst_price'
-        currency_id = None
-        product_currency = product.currency_id
-        if rule_id:
-            pricelist_item = PricelistItem.browse(rule_id)
-            if pricelist_item.pricelist_id.discount_policy == 'without_discount':
-                while pricelist_item.base == 'pricelist' and pricelist_item.base_pricelist_id and pricelist_item.base_pricelist_id.discount_policy == 'without_discount':
-                    _price, rule_id = pricelist_item.base_pricelist_id.with_context(uom=uom.id).get_product_price_rule(product, qty, self.project_id.partner_id)
-                    pricelist_item = PricelistItem.browse(rule_id)
-
-            if pricelist_item.base == 'standard_price':
-                field_name = 'standard_price'
-                product_currency = product.cost_currency_id
-            elif pricelist_item.base == 'pricelist' and pricelist_item.base_pricelist_id:
-                field_name = 'price'
-                product = product.with_context(pricelist=pricelist_item.base_pricelist_id.id)
-                product_currency = pricelist_item.base_pricelist_id.currency_id
-            currency_id = pricelist_item.pricelist_id.currency_id
-
-        if not currency_id:
-            currency_id = product_currency
-            cur_factor = 1.0
-        else:
-            if currency_id.id == product_currency.id:
-                cur_factor = 1.0
+    @api.depends('product_id')
+    def _compute_price_unit(self):
+        for line in self:
+            if not line.product_id:
+                line.price_unit = 0.0
             else:
-                cur_factor = currency_id._get_conversion_rate(product_currency, currency_id, self.project_id.company_id or self.env.company, self.project_id.date or fields.Date.today())
+                line.price_unit = line.product_id.lst_price
+                self._get_discount()
 
-        product_uom = self.env.context.get('uom') or product.uom_id.id
-        if uom and uom.id != product_uom:
-            # the unit price is in a different uom
-            uom_factor = uom._compute_price(1.0, product.uom_id)
-        else:
-            uom_factor = 1.0
-
-        return product[field_name] * uom_factor * cur_factor, currency_id
-
-
-    @api.onchange('product_id')
-    def _onchange_discount(self):
-        if not (self.product_id and self.product_id.uom_id and
-                self.project_id.partner_id and self.project_id.partner_id.property_product_pricelist and
-                self.project_id.partner_id.property_product_pricelist.discount_policy == 'without_discount' and
-                self.env.user.has_group('product.group_discount_per_so_line')):
-            return
-
-        self.discount = 0.0
-        product = self.product_id.with_context(
-            lang=self.project_id.partner_id.lang,
-            partner=self.project_id.partner_id,
-            quantity=self.quantity,
-            date=self.project_id.date,
-            pricelist=self.project_id.partner_id.property_product_pricelist.id,
-            uom=self.product_id.uom_id.id,
-            fiscal_position=self.env.context.get('fiscal_position')
-        )
-
-        product_context = dict(self.env.context, partner_id=self.project_id.partner_id.id, date=self.project_id.date, uom=self.product_id.uom_id.id)
-
-        price, rule_id = self.project_id.partner_id.property_product_pricelist.with_context(product_context).get_product_price_rule(self.product_id, self.quantity or 1.0, self.project_id.partner_id)
-        new_list_price, currency = self.with_context(product_context)._get_real_price_currency(product, rule_id, self.quantity, self.product_id.uom_id, self.project_id.partner_id.property_product_pricelist.id)
-
-        if new_list_price != 0:
-            if self.project_id.partner_id.property_product_pricelist.currency_id != currency:
-                # we need new_list_price in the same currency as price, which is in the SO's pricelist's currency
-                new_list_price = currency._convert(
-                    new_list_price, self.project_id.partner_id.property_product_pricelist,
-                    self.project_id.company_id or self.env.company, self.project_id.date or fields.Date.today())
-            discount = (new_list_price - price) / new_list_price * 100
-            if (discount > 0 and new_list_price > 0) or (discount < 0 and new_list_price < 0):
-                self.discount = discount
+    def _get_discount(self):
+        for line in self:
+            if not line.product_id:
+                line.discount = 0.0
+            else:
+                product_pricelist_id = line.project_id.partner_id.property_product_pricelist.id
+                product_tmpl_id = line.product_id.product_tmpl_id.id
+                domain = [
+                    ('product_tmpl_id', '=', product_tmpl_id),
+                    ('pricelist_id', '=', product_pricelist_id)
+                          ]
+                product_discount = self.env['product.pricelist.item'].search(domain)
+                if product_discount.compute_price == 'percentage':
+                    if not line.discount:
+                        line.discount = product_discount.percent_price
+                else:
+                    line.discount = 0.0
 
 
-    @api.onchange('product_id')
-    def product_id_change(self):
+    # KLO. Adaptada del padre para quitar la línea de analytic_tag_ids
+    def _prepare_invoice_line(self, move_id):
+        self.ensure_one()
+        vals = {
+            'display_type': False,
+            'partner_id': self.project_id.partner_id.id,
+            'company_id': self.project_id.company_id.id,
+            'currency_id': self.currency_id.id,
+            'sequence': self.sequence,
+            'product_id': self.product_id.id,
+            'product_uom_id': self.product_uom_id.id,
+            'name': self.name,
+            'quantity': self.quantity,
+            'price_unit': self.price_unit,
+            'discount': self.discount,
+            'analytic_distribution': self.analytic_account_id.id,
+        }
+        # 'analytic_account_id': self.analytic_account_id.id,
+        # 'analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
+        if move_id:
+            vals['move_id'] = move_id
+        return vals
+
+    # KLO. Adaptada del padre para quitar la línea de analytic_tag_ids
+    def _prepare_sale_order_line(self, order):
+        self.ensure_one()
         if not self.product_id:
-            return
-
-        product = self.product_id
-        if product:
-            product_price = self._get_display_price(product)
-            self.price_unit = product_price
+            raise MissingError(_('Please set product for each project product line as is required to generate sale orders'))
+        vals = {
+            'name': self.name,
+            'sequence': self.sequence,
+            'product_uom_qty': self.quantity,
+            'product_uom': self.product_uom_id.id or self.product_id.uom_po_id.id,
+            'product_id': self.product_id.id,
+            'price_unit': self.price_unit,
+            'discount': self.discount,
+        }
+        # 'analytic_tag_ids': [(6, 0, self.analytic_tag_ids.ids)],
+        if order:
+            vals['order_id'] = order
+        return vals

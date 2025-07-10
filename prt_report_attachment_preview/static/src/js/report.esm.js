@@ -4,10 +4,11 @@ import {WARNING_MESSAGE, WKHTMLTOPDF_MESSAGES, _getReportUrl} from "./tools.esm"
 import {_t} from "web.core";
 import {registry} from "@web/core/registry";
 
+/* eslint-disable init-declarations */
+let wkhtmltopdfStateProm;
 registry
     .category("ir.actions.report handlers")
     .add("open_report_handler", async function (action, options, env) {
-        let wkhtmltopdfStateProm = null;
         if (action.type === "ir.actions.report" && action.report_type === "qweb-pdf") {
             // Check the state of wkhtmltopdf before proceeding
             if (!wkhtmltopdfStateProm) {
@@ -22,13 +23,17 @@ registry
             }
             if (state === "upgrade" || state === "ok") {
                 // Trigger the download of the PDF report
-                const url = _getReportUrl(action, "pdf");
+                const url = _getReportUrl(action, "pdf", env);
                 // AAB: this check should be done in get_file service directly,
                 // should not be the concern of the caller (and that way, get_file
                 // could return a deferred)
                 if (!window.open(url)) {
                     env.services.notification.add(WARNING_MESSAGE, {
                         type: "warning",
+                    });
+                } else if (action.close_on_report_download) {
+                    env.services.action.doAction({
+                        type: "ir.actions.act_window_close",
                     });
                 }
             }

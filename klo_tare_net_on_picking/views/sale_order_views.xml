@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="klo_view_order_form" model="ir.ui.view">
+            <field name="name">klo.sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <!-- KLO. Pongo el campo Tara para los cálculos del limpio -->
+                <!-- KLO
+                <field name="partner_id" position="after">
+                    <field name="tare_weight" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                </field>
+                -->
+
+                <!-- KLO. Peso bruto en líneas del pedido -->
+                <xpath expr="//tree/field[@name='product_uom']" position="before">
+                    <field name="gross_weight" readonly="0" optional="show"/>
+                    <field name="tare_weight" readonly="0" optional="show"/>
+                    <field name="net_weight" editable="0" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

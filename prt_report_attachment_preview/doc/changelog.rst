@@ -1,24 +1,17 @@
-15.0.1.0.4
------------
+16.0.1.0.2
+~~~~~~~~~~~~~~~~~~~~~~~
 
-- Fix: bug fixes
+* [FIX] product labels are not printed
+* [FIX] OM accounting reports are not printed
 
-15.0.1.0.3
------------
 
-- Fix: repeated button actions
+16.0.1.0.1
+~~~~~~~~~~~~~~~~~~~~~~~
 
-15.0.1.0.2
------------
+* [FIX] multi-company issue
 
-- Fix: printing via action
 
-15.0.1.0.1
------------
+16.0.1.0.0
+~~~~~~~~~~~~~~~~~~~~~~~
 
-- Fix: product labels printing
-
-15.0.1.0.0
------------
-
-- Release for Odoo 15
+* Release for Odoo 16

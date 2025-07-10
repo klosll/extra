@@ -3,7 +3,7 @@
 
 {
     "name": "Invoice number editable",
-    "version": "15.0.0.1.0",
+    "version": "16.0.0.1.0",
     "category": "Account",
     "sequence": 80,
     "summary": "Invoice number editable",

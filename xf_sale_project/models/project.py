@@ -195,8 +195,8 @@ class ProjectProductLine(models.Model):
     analytic_tag_ids = fields.Many2many(
         string='Analytic Tags',
         comodel_name='account.analytic.tag',
-        check_company=True,
     )
+    # KLO. en analytic_tag_ids, da error en v16.0: check_company = True,
 
     def _prepare_invoice_line(self, move_id):
         self.ensure_one()

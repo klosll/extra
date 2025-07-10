@@ -1,0 +1,285 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* klo_tare_net_on_picking
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-29 09:00+0000\n"
+"PO-Revision-Date: 2024-10-29 09:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model.fields,field_description:klo_tare_net_on_picking.field_res_company__humidity_percent
+msgid "% Humedad"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model:ir.actions.report,print_report_name:klo_tare_net_on_picking.action_report_purchase_ticket_order
+msgid "'Ticket de entrada - %s' % (object.name)"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model:ir.actions.report,print_report_name:klo_tare_net_on_picking.action_report_saleorder_ticket
+msgid "'Ticket de salida - %s' % (object.name)"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_ticket_purchaseorder_document
+msgid ""
+"<br/>\n"
+"                    Número:"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_ticket_purchaseorder_document
+msgid ""
+"<br/>\n"
+"                <strong>Destino:</strong>"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_ticket_purchaseorder_document
+msgid "<span>Conforme:</span>"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_ticket_purchaseorder_document
+msgid "<span>Observaciones:</span>"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_ticket_purchaseorder_document
+msgid ""
+"<span>Revise los datos de su ticket de entrada y verifique que son "
+"correctos.</span>"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "<strong class=\"mr16\">Subtotal</strong>"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "<strong>Cliente:</strong>"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "<strong>Fiscal Position Remark:</strong>"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_ticket_purchaseorder_document
+msgid ""
+"<strong>Peso Bruto (Kg)</strong>\n"
+"                                        <br/>\n"
+"                                        <strong>Tara (Kg)</strong>\n"
+"                                        <br/>\n"
+"                                        <strong>Neto (Kg)</strong>\n"
+"                                        <br/>\n"
+"                                        <strong>Deducciones</strong>\n"
+"                                        <br/>\n"
+"                                        <strong>Limpio (Kg)</strong>\n"
+"                                        <br/>\n"
+"                                        <br/>\n"
+"                                        <strong>Peso esp. (Kg/Hl)</strong>\n"
+"                                        <br/>\n"
+"                                        <strong>Humedad</strong>"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_ticket_purchaseorder_document
+msgid "<strong>Producto</strong>"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_ticket_purchaseorder_document
+msgid "<strong>Proveedor:</strong>"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "<strong>Signature</strong>"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "Bruto (Kg)"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model.fields,field_description:klo_tare_net_on_picking.field_purchase_order__fiscal_year_id
+msgid "Campaign"
+msgstr "Campaña"
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_ticket_purchaseorder_document
+msgid "Campaña:"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "Chofer"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model,name:klo_tare_net_on_picking.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model.fields,field_description:klo_tare_net_on_picking.field_purchase_order_line__deduction
+msgid "Deduction"
+msgstr "Deducción"
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "El cliente"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "El encargado"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "El transportista"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_ticket_purchaseorder_document
+msgid "Fecha/Hora:"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model.fields,field_description:klo_tare_net_on_picking.field_purchase_order_line__gross_weight
+#: model:ir.model.fields,field_description:klo_tare_net_on_picking.field_sale_order_line__gross_weight
+msgid "Gross weight"
+msgstr "Peso bruto"
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model.fields,field_description:klo_tare_net_on_picking.field_purchase_order_line__humidity
+msgid "Humidity"
+msgstr "Humedad"
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "Lote"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "Matrícula"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model.fields,field_description:klo_tare_net_on_picking.field_stock_move__mode_line_ids
+msgid "Mode Line"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model.fields,field_description:klo_tare_net_on_picking.field_purchase_order_line__net_weight
+#: model:ir.model.fields,field_description:klo_tare_net_on_picking.field_sale_order_line__net_weight
+msgid "Net weight"
+msgstr "Peso Neto"
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "Neto (Kg)"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "Nº Carnet Fitosanitarios: 654654213-HML"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "Número:"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "Producto"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model,name:klo_tare_net_on_picking.model_purchase_order
+msgid "Purchase Order"
+msgstr "Pedido de compra"
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model,name:klo_tare_net_on_picking.model_purchase_order_line
+msgid "Purchase Order Line"
+msgstr "Línea de pedido de compra"
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "Remolque"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model,name:klo_tare_net_on_picking.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea de pedido de venta"
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model.fields,field_description:klo_tare_net_on_picking.field_purchase_order_line__specific_weight
+msgid "Specific weight"
+msgstr "Peso específico"
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model,name:klo_tare_net_on_picking.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de existencias"
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model.fields,field_description:klo_tare_net_on_picking.field_sale_order_line__move_ids
+msgid "Stock Moves"
+msgstr "Movimientos de stock"
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "Tara (Kg)"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model:ir.model.fields,field_description:klo_tare_net_on_picking.field_purchase_order_line__tare_weight
+#: model:ir.model.fields,field_description:klo_tare_net_on_picking.field_sale_order_line__tare_weight
+msgid "Tare weight"
+msgstr "Tara"
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_ticket_purchaseorder_document
+msgid "Ticket de báscula de Entrada"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "Ticket de báscula de Salida"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model:ir.actions.report,name:klo_tare_net_on_picking.action_report_purchase_ticket_order
+msgid "Ticket de entrada"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model:ir.actions.report,name:klo_tare_net_on_picking.action_report_saleorder_ticket
+msgid "Ticket de salida"
+msgstr ""
+
+#. module: klo_tare_net_on_picking
+#: model_terms:ir.ui.view,arch_db:klo_tare_net_on_picking.report_saleorder_ticket_document
+msgid "Transportista"
+msgstr ""
