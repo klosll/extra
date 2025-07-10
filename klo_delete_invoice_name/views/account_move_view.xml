@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!-- KLO. En modo borrador aparece el nº de factura para poder editarlo. Se hace a causa de la importación -->
+    <record id="klo_view_move_form" model="ir.ui.view">
+        <field name="name">klo.account.move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_reference']" position="after">
+                <field
+                    name="posted_before"
+                    string="Validada"
+                    attrs="{'readonly': [('state', 'not in', ['draft'])], 'invisible': [('state', 'not in', ['draft'])]}"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

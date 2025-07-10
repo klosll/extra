@@ -1,0 +1,19 @@
+<!--  coding: utf-8  -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- Developed by Bizople Solutions Pvt. Ltd. -->
+
+<odoo>
+    <record id="store_location_field_form" model="ir.ui.view">
+        <field name="name">store.location.field.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                <field name="store_location_id" />
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="after">
+                <widget name="web_ribbon" bg_color="bg-success" title="Pickup Order" attrs="{'invisible':[('store_location_id','=',False)]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

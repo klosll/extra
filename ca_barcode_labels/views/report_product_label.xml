@@ -1,0 +1,713 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="product_label_layout">
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"/>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+        <div class="article">
+            <t t-raw="0"/>
+        </div>
+    </template>
+
+
+    <template id="report_product_label">
+        <t t-call="web.html_container">
+            <t t-call="ca_barcode_labels.product_label_layout">
+                <!--                    
+                    CONDICIONAR ESTRUCTURA EN BASE A NOMBRE PLANTILLA IMPRESA barcode_config.name
+                    - Etiqueta 6x35
+                    - Etiqueta 10x8
+                    - Etiqueta 10x13
+                -->
+                
+                <t t-foreach="docs" t-as="product">
+
+                    <t t-set="ref_order" t-value="False"/>
+                    <t t-set="ref_customer" t-value="False"/>
+                    <t t-set="product_long" t-value="False"/>
+                    <t t-set="product_ref_color" t-value="False"/>
+                    <t t-set="product_desc_es" t-value="False"/>
+                    <t t-set="product_desc_en" t-value="False"/>
+                    <t t-set="product_color_es" t-value="False"/>
+                    <t t-set="product_color_en" t-value="False"/>
+                    <t t-set="barcode_url" t-value="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %(barcode_config.barcode_type, product[3], int(barcode_config.display_width), int(barcode_config.display_height),is_humanreadable)"/>
+
+                    <t t-if="data.get('ref_order')">
+                        <t t-set="ref_order" t-value="data.get('ref_order')"/>
+                    </t>
+                    <t t-if="data.get('ref_customer')">
+                        <t t-set="ref_customer" t-value="data.get('ref_customer')"/>
+                    </t>
+
+                    <!-- KLO. ORIGINAL DE WEBINLAB QUE PONE LOS DATOS DE LOS ATRIBUTOS.
+                    <t t-if="product[0].product_template_attribute_value_ids">
+                        <t t-foreach="product[0].product_template_attribute_value_ids" t-as="product_attribute">
+                            <t t-if="product_attribute.attribute_id">
+                                <t t-if="product_attribute.attribute_id.name">
+                                    <t t-if="product_attribute.attribute_id.name == 'Altura' or product_attribute.attribute_id.name == 'Longitud'">
+                                        <t t-set="product_long" t-value="product_attribute.name"/>
+                                    </t>
+                                    <t t-if="product_attribute.attribute_id.name == 'Color'">
+                                        <t t-set="product_color_es" t-value="product_attribute.name"/>
+                                        <t t-set="product_color_en" t-value="product_attribute.with_context(lang='en_US').name"/>
+                                    </t>
+                                    <t t-if="product_attribute.attribute_id.name == 'Descripcion Etiqueta'">
+                                        <t t-set="product_desc_es" t-value="product_attribute.name"/>
+                                        <t t-set="product_desc_en" t-value="product_attribute.with_context(lang='en_US').name"/>
+                                    </t>
+                                    <t t-if="product_attribute.attribute_id.name == 'Ref. Color'">
+                                        <t t-set="product_ref_color" t-value="product_attribute.name"/>
+                                    </t>
+                                </t>
+                            </t>
+                        </t>
+                    </t>
+                    -->
+
+                    <!-- KLO. AHORA PONE LOS CAMPOS CREADOS EN LA FICHA PARA LAS ETIQUETAS -->
+                    <t t-foreach="product[0]" t-as="product_attribute">
+                        <t t-if="product_attribute.id">
+                                <t t-if="product_attribute.labeled_length != ''">
+                                    <t t-set="product_long" t-value="product_attribute.labeled_length"/>
+                                </t>
+                                <t t-if="product_attribute.labeled_color_es != ''">
+                                    <t t-set="product_color_es" t-value="product_attribute.labeled_color_es"/>
+                                    <t t-set="product_color_en" t-value="product_attribute.labeled_color_en"/>
+                                </t>
+                                <t t-if="product_attribute.description_label_es != ''">
+                                    <t t-set="product_desc_es" t-value="product_attribute.description_label_es"/>
+                                    <t t-set="product_desc_en" t-value="product_attribute.description_label_en"/>
+                                </t>
+                                <t t-if="product_attribute.labeled_finished_code != ''">
+                                    <t t-set="product_ref_color" t-value="product_attribute.labeled_finished_code"/>
+                                </t>
+                        </t>
+                    </t>
+
+                    <div class="page" align="center" style="float: left;width: 100%;border: 1px; border-style: dotted black;display:table;">
+                        <t t-if="barcode_config.name == 'Etiqueta 10x13'">
+                            <div class="10x13">
+                                <style>
+                                    span, div{
+                                        font-size: 13px;
+                                    }
+                                </style>
+                                <div style="min-height:350px;">
+                                    <!--BARCODE-->
+                                    <div t-if="barcode_config.barcode" style="color:black; max-width: 100%;">
+                                        <div style="max-width: 300px; max-height: 45px;">
+                                            <img t-att-src="'%s&amp;' %(barcode_url)" style="object-fit: fill; width:100%; height:45px; display:block;"/>
+                                        </div>
+                                        <span style="font-size:10px" t-esc="product[0].barcode"/>
+                                    </div>
+                                    <div>
+                                        <div style="width: 75%; display: inline-block; margin-right: 0.5%; text-align:left;">
+                                            <!--REFERENCIA-->
+                                            <div align="left">
+                                                REF / Part Number: <b><span t-field="product[0].default_code"/></b>
+                                            </div>
+                                            <!--CANTIDAD-->
+                                            <div align="left">
+                                                Cantidad / QTY: <b><span t-esc="product[4]"/></b>
+                                            </div>
+                                        </div>
+                                        <!--LONGITUD ALTURA-->
+                                        <div style="width: 22%; display: inline-block;vertical-align:top;text-align:left;">
+                                            <t t-if="product_long">
+                                                L: <b><span t-esc="product_long"/></b>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <!--DESCRIPCIÓN ESPAÑOL E INGLÉS-->
+                                    <div align="left">
+                                        Descripción: <b><span t-if="product_desc_es" t-esc="product_desc_es[:60]"/></b>
+                                        <br/>
+                                        Description: <b><span t-if="product_desc_en" t-esc="product_desc_en[:60]"/></b>
+                                    </div>
+                                    <br/>
+                                    <div align="left">
+                                        <div style="width: 40%; display: inline-block; margin-right: 1%; text-align:left;">
+                                            <!--Acabado / Finish:-->
+                                            <div align="left">
+                                                Acabado / Finish: COD.<b><span t-if="product_ref_color" t-esc="product_ref_color"/></b><br/>
+                                                <t t-if="product_color_es">
+                                                    <b><span t-esc="product_color_es[:20]"/></b> <br/>
+                                                </t>
+                                                <t t-if="product_color_en">
+                                                    <b><span t-esc="product_color_en[:20]"/></b> <br/>
+                                                </t>
+                                                <!--LOGO-->
+                                                <img t-if="company and company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 45px;"/>
+                                            </div>
+                                        </div>
+                                        <div style="width: 28%; display: inline-block; margin-right: 1%; text-align:left;">
+                                            <!--ORDER Y REF CLIENTE-->
+                                            <div style="border: 2px solid black;">
+                                                <t t-if="ref_order">
+                                                    <!-- KLO PV/ <b><span t-esc="ref_order"/></b> <br/> -->
+                                                    <b><span t-esc="ref_order"/></b> <br/>
+                                                </t>
+                                                <t t-if="ref_customer">
+                                                    <!-- KLO Ref.Cliente <b><span t-esc="ref_customer"/></b> <br/> -->
+                                                    <b><span t-esc="ref_customer"/></b> <br/>
+                                                </t>
+                                            </div>
+                                        </div>
+                                        <div style="max-width: 28%; display: inline-block;vertical-align:top;">
+                                            <!--IMÁGENES PRODUCTO-->
+                                            <img t-if="product[0].image_label" t-att-src="image_data_uri(product[0].image_label)" style="max-height: 120px;"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <!--BARCODE2-->
+                                    <div t-if="barcode_config.barcode" style="color:black; max-width: 100%;">
+                                        <div style="max-width: 300px; max-height: 30px;">
+                                            <img t-att-src="'%s&amp;' %(barcode_url)" style="object-fit: fill; width:100%; height:30px; display:block;"/>
+                                        </div>
+                                    </div>
+                                    <div style="width: 72%; display: inline-block; margin-right: 0.5%;">
+                                        <!--REFERENCIA-->
+                                        <div style="font-size: 11px;" align="left">
+                                            REF / Part Number: <b><span style="font-size: 11px;" t-field="product[0].default_code"/></b>
+                                        </div>
+                                        <!--CANTIDAD-->
+                                        <div style="font-size: 11px;" align="left">
+                                            Cantidad / QTY: <b><span style="font-size: 11px;" t-esc="product[4]"/></b>
+                                        </div>
+                                        <br/>
+                                        <!--DESCRIPCIÓN ESPAÑOL E INGLÉS-->
+                                        <div style="font-size: 11px;" align="left">
+                                            Descripción: <b><span style="font-size: 11px;" t-if="product_desc_es" t-esc="product_desc_es[:60]"/></b>
+                                            <br/>
+                                            Description: <b><span style="font-size: 11px;" t-if="product_desc_en" t-esc="product_desc_en[:60]"/></b>
+                                        </div>
+                                        <!--Acabado / Finish:-->
+                                        <div style="font-size: 11px;" align="left">
+                                            Acabado / Finish: COD.<b><span style="font-size: 11px;" t-if="product_ref_color" t-esc="product_ref_color"/></b><br/>
+                                            <t t-if="product_color_es">
+                                                <b><span style="font-size: 11px;" t-esc="product_color_es[:20]"/></b> <br/>
+                                            </t>
+                                            <t t-if="product_color_en">
+                                                <b><span style="font-size: 11px;" t-esc="product_color_en[:20]"/></b> <br/>
+                                            </t>
+                                        </div>
+                                    </div>
+
+                                    <!--LONGITUD ALTURA-->
+                                    <div style="width: 24%; display: inline-block; vertical-align:top;">
+                                        <t t-if="product_long">
+                                            L: <b><span style="font-size: 11px;" t-esc="product_long"/></b>
+                                        </t>
+                                        <br/>
+                                        <!--IMÁGENES PRODUCTO-->
+                                        <img t-if="product[0].image_label" t-att-src="image_data_uri(product[0].image_label)" style="max-height: 100px;"/>
+                                        <!--LOGO-->
+                                        <img t-if="company and company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 40px;"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-elif="barcode_config.name == 'Etiqueta 10x8'">
+                            <div class="10x8">
+                                <style>
+                                    span, div{
+                                        font-size: 14px;
+                                    }
+                                </style>
+                                <!--BARCODE-->
+                                <div t-if="barcode_config.barcode" style="color:black; max-width: 100%;">
+                                    <div style="max-width: 300px; max-height: 65px;">
+                                        <img t-att-src="'%s&amp;' %(barcode_url)" style="object-fit: fill; width:100%; height:50px; display:block;"/>
+                                    </div>
+                                    <span style="font-size:10px" t-esc="product[0].barcode"/>
+                                </div>
+                                <!-- KLO <br/> KLO -->
+                                <div>
+                                    <div style="width: 75%; display: inline-block; margin-right: 0.5%;">
+                                        <!--REFERENCIA-->
+                                        <div align="left">
+                                            REF / Part Number: <b><span t-field="product[0].default_code"/></b>
+                                        </div>
+                                        <!--CANTIDAD-->
+                                        <div align="left">
+                                            Cantidad / QTY: <b><span t-esc="product[4]"/></b>
+                                        </div>
+                                    </div>
+                                    <!--LONGITUD ALTURA-->
+                                    <div style="width: 24%; display: inline-block;vertical-align:top;">
+                                        <t t-if="product_long">
+                                            L: <b><span t-esc="product_long"/></b> <br/>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="width: 100%; display: inline-block; margin-right: 0.5%;">
+                                        <!--DESCRIPCIÓN ESPAÑOL E INGLÉS-->
+                                        <div align="left">
+                                            Descripción: <b><span style="font-size:14px" t-if="product_desc_es" t-esc="product_desc_es[:60]"/></b>
+                                            <br/>
+                                            Description: <b><span style="font-size:14px" t-if="product_desc_en" t-esc="product_desc_en[:60]"/></b>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- KLO <br/> -->
+                                <div style="vertical-align:top;">
+                                    <div style="width: 42%; display: inline-block; margin-right: 0.5%;">
+                                        <!--Acabado / Finish:-->
+                                        <div align="left">
+                                            Acabado / Finish: COD.<b><span t-if="product_ref_color" t-esc="product_ref_color"/></b><br/>
+                                            <t t-if="product_color_es">
+                                                <b><span t-esc="product_color_es[:20]"/></b> <br/>
+                                            </t>
+                                            <t t-if="product_color_en">
+                                                <b><span t-esc="product_color_en[:20]"/></b> <br/>
+                                            </t>
+                                            <!--LOGO-->
+                                            <img t-if="company and company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 45px;"/>
+                                        </div>
+                                    </div>
+                                    <div style="width: 26%; display: inline-block; margin-right: 0.5%;">
+                                        <!--ORDER Y REF CLIENTE-->
+                                        <div style="border: 2px solid black; text-align:left;">
+                                            <t t-if="ref_order">
+                                                <!-- KLO PV/ <b><span t-esc="ref_order"/></b> <br/> -->
+                                                <b><span t-esc="ref_order"/></b> <br/>
+                                            </t>
+                                            <t t-if="ref_customer">
+                                                <!-- KLO Ref.Cliente <b><span t-esc="ref_customer"/></b> <br/> -->
+                                                <b><span t-esc="ref_customer"/></b> <br/>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    <div style="width: 29%; display: inline-block;vertical-align:top;">
+                                        <!--IMÁGENES PRODUCTO-->
+                                        <img t-if="product[0].image_label" t-att-src="image_data_uri(product[0].image_label)" style="max-height: 115px;"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-elif="barcode_config.name == 'Etiqueta 6x35'">
+                            <style>
+                                span, div{
+                                    font-size: 11px;line-height:12px;
+                                }
+                            </style>
+                            <div>
+                                <div align="left" style="width: 69%; display: inline-block;vertical-align:top; text-align:left; margin-right: 0.1%;">
+                                    <div>
+                                        <b><span t-field="product[0].default_code" style="color:black;font-size:10px"/></b>
+                                        <br/>
+                                        <b><span t-if="product_desc_es" t-esc="product_desc_es[:29]"/></b>
+                                        <br/>
+                                        <b><span t-if="product_desc_en" t-esc="product_desc_en[:29]"/></b>
+                                    </div>
+                                    <div style="width: 40mm; display: inline-block;vertical-align:top;">
+                                        <t t-if="product_ref_color">
+                                            <b>COD.<span t-esc="product_ref_color"/> <br/></b>
+                                        </t>
+                                    </div>
+                                        <div style="width: 105px; display: inline-block;">
+                                            <t t-if="product_color_es">
+                                                <b><span t-esc="product_color_es[:20]"/> <br/></b>
+                                            </t>
+                                            <t t-if="product_color_en">
+                                                <b><span t-esc="product_color_en[:20]"/> <br/></b>
+                                            </t>
+                                        </div>
+                                </div>
+                                <div style="width: 30%; display: inline-block;vertical-align:top;text-align:right; margin-top: 0.1%;">
+                                    <div>
+                                        <img t-if="company and company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 24px;"/>
+                                    </div>
+                                    <div style="width: 100%; display: inline-block; vertical-align:top;">
+                                        <t t-if="product_long">
+                                            <b>L: <span t-esc="product_long"/> <br/></b>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div style="width: 73%; display: inline-block; margin-right: 1%; vertical-align:top;">
+                                <div align="left">
+                                    <b><span t-if="product_desc_es" t-esc="product_desc_es[:30]"/></b>
+                                    <br/>
+                                    <b><span t-if="product_desc_en" t-esc="product_desc_en[:30]"/></b>
+                                </div>
+                                <div align="left" style="width: 49%; display: inline-block;">
+                                    <t t-if="product_ref_color">
+                                        <b>COD.<span t-esc="product_ref_color"/> <br/></b>
+                                    </t>
+                                </div>
+                                <div align="left" style="width: 49%; display: inline-block;">
+                                    <t t-if="product_color_es">
+                                        <b><span t-esc="product_color_es[:20]"/> <br/></b>
+                                    </t>
+                                    <t t-if="product_color_en">
+                                        <b><span t-esc="product_color_en[:20]"/> <br/></b>
+                                    </t>
+                                </div>
+                            </div>
+                            <div style="width: 24%; display: inline-block; vertical-align:top;">
+                                <t t-if="product_long">
+                                    <b>L: <span t-esc="product_long"/> <br/></b>
+                                </t>
+                            </div> -->
+                            <div t-if="barcode_config.barcode" style="color:black; width: 100%;">
+                                <br/>
+                                <div style="max-width: 300px; max-height: 50px;">
+                                    <img t-att-src="'%s&amp;' %(barcode_url)" style="object-fit: fill; width:100%; height:33px; display:block;"/>
+                                </div>
+                                <span style="font-size:9px" t-esc="product[0].barcode"/>
+                            </div>
+                        </t>
+                        <t t-elif="barcode_config.name == 'Etiqueta 8x22'">
+                            <style>
+                                span, div{
+                                    font-size: 10px;line-height:10px;
+                                }
+                            </style>
+
+                            <div style="margin-right: 0mm; margin-left: 0mm; margin-top: 2mm;">
+<!--                                <div style="width: 80px; display: inline-block; vertical-align:top;" align="left">-->
+<!--                                    &lt;!&ndash;IMÁGEN QR&ndash;&gt;-->
+<!--                                    <img t-if="product[0].image_label_qrcode" t-att-src="image_data_uri(product[0].image_label_qrcode)" style="max-height: 80px;"/>-->
+<!--                                </div>-->
+                                <img style="width: 19mm; height: 19mm;" align="left" valign="top" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %('QR', product[0].label_qrcode, 150, 150,0)"/>
+
+                                <div style="width: 4mm; display: inline-block; vertical-align:top;" align="left">
+                                    <!--ESPACIO EN BLANCO ENTRE QR Y TEXTO-->
+                                </div>
+
+                                <div style="max-width: 90%; display: inline-block;" align="left">
+                                    <div style="max-width: 100%; display: inline-block; margin-right: 0.0%; margin-left: 0.0%;">
+                                        <!-- KLO <div align="left">
+                                            <b><span t-field="product[0].default_code" style="color:black;font-size:9px"/></b>
+                                        </div>
+                                        KLO -->
+                                        <!-- KLO <div align="left"> -->
+                                        <!-- KLO <div style="max-width: 100%; display: inline-block;" align="left"> -->
+                                        <div style="width: 131px; display: inline-block;" align="left">
+                                            <span t-field="product[0].default_code" style="color:black;font-size:10px;font-weight: bold"/>
+                                            <br/>
+                                            <span t-if="product_desc_es" t-esc="product_desc_es[:28]"/>
+                                            <br/>
+                                            <span t-if="product_desc_en" t-esc="product_desc_en[:28]"/>
+                                        </div>
+                                        <!-- KLO -->
+                                        <div style="width: 103px; display: inline-block;" align="left">
+                                            <t t-if="product_long">
+                                                L: <span t-esc="product_long[:23]"/> <br/>
+                                            </t>
+                                            <t t-if="product_color_es">
+                                                <span t-esc="product_color_es[:23]"/> <br/>
+                                            </t>
+                                            <t t-if="product_color_en">
+                                                <span t-esc="product_color_en[:23]"/> <!-- <br/> -->
+                                            </t>
+                                        </div>
+                                        <!-- KLO -->
+                                    </div>
+                                    <div t-if="barcode_config.barcode" style="color:black; line-height:8px">
+                                        <!-- <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %(barcode_config.barcode_type, product[3], int(barcode_config.display_width), int(barcode_config.display_height),is_humanreadable)"/> -->
+                                        <!-- KLO <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %('EAN13', product[3], 100, 30,0)"/> -->
+                                        <br/>
+                                        <img t-att-src="'%s&amp;' %(barcode_url)"
+                                             style="object-fit: fill; width:100%; height:25px; display:block;"
+                                        />
+                                    </div>
+                                    <div align="center">
+                                        <span style="font-size:9px;" t-esc="product[0].barcode"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-elif="barcode_config.name == 'Etiqueta 8x35'">
+                            <style>
+                                span, div{
+                                    font-size: 11px;line-height:12px;
+                                }
+                            </style>
+                            <div style="margin-right: 0.0%; margin-left: 0.0%;">
+                                <!-- KLO. Bloque de la izquierda con el QR e icono de instrucciones -->
+                                <div style="width: 25mm; display: inline-block; vertical-align:top;
+                                     margin-right: 0mm; margin-left: 0mm; margin-top: 0mm;"
+                                     align="center">
+                                    <!-- KLO. Imagen generada del QR desde código -->
+                                    <img style="width: 23mm; height: 23mm;" align="left" valign="center" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %('QR', product[0].label_qrcode, 120, 120,0)"/>
+                                    <br/>
+                                    <!-- KLO. Icono de instrucciones debajo del QR -->
+                                    <img t-if="product[0].image_label_instructions"
+                                         t-att-src="image_data_uri(product[0].image_label_instructions)"
+                                         style="max-height: 10mm; horizontal-align:center;"
+                                    />
+                                </div>
+                                <!-- KLO Fin -->
+
+                                <div style="width: 4mm; display: inline-block; vertical-align:top;" align="left">
+                                    <!--ESPACIO EN BLANCO ENTRE QR Y TEXTO-->
+                                </div>
+
+                                <!-- KLO. Bloque de la derecha con los datos del producto -->
+                                <div style="max-width: 65%; display: inline-block;" align="left">
+                                    <div align="left"
+                                         style="width: 69%; display: inline-block;vertical-align:top;
+                                         text-align:left; margin-right: 0.1%;"
+                                    >
+                                        <div>
+                                            <b>
+                                                <span t-field="product[0].default_code"
+                                                     style="color:black;font-size:10px"
+                                                />
+                                            </b>
+                                            <br/>
+                                            <b><span t-if="product_desc_es" t-esc="product_desc_es[:29]"/></b>
+                                            <br/>
+                                            <b><span t-if="product_desc_en" t-esc="product_desc_en[:29]"/></b>
+                                        </div>
+                                        <div style="width: 40mm; display: inline-block;vertical-align:top;">
+                                            <t t-if="product_ref_color">
+                                                <b>COD.<span t-esc="product_ref_color"/> <br/></b>
+                                            </t>
+                                        </div>
+                                            <div style="width: 105px; display: inline-block;">
+                                                <t t-if="product_color_es">
+                                                    <b><span t-esc="product_color_es[:20]"/> <br/></b>
+                                                </t>
+                                                <t t-if="product_color_en">
+                                                    <b><span t-esc="product_color_en[:20]"/> <br/></b>
+                                                </t>
+                                            </div>
+                                    </div>
+                                    <div style="width: 30%; display: inline-block;vertical-align:top;text-align:right;
+                                     margin-top: 0.0%;"
+                                    >
+                                        <div>
+                                            <img t-if="company and company.logo"
+                                                 t-att-src="image_data_uri(company.logo)"
+                                                 style="max-height: 24px;"
+                                            />
+                                        </div>
+                                        <div style="width: 100%; display: inline-block; vertical-align:top;">
+                                            <t t-if="product_long">
+                                                <b>L: <span t-esc="product_long"/> <br/></b>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    <div t-if="barcode_config.barcode" style="color:black; max-width: 90%;">
+                                        <br/>
+                                        <div style="max-width: 300px; max-height: 50px;">
+                                            <img t-att-src="'%s&amp;' %(barcode_url)"
+                                                 style="object-fit: fill; width:100%; height:33px; display:block;"
+                                            />
+                                        </div>
+                                        <div align="center">
+                                            <span style="font-size:9px" t-esc="product[0].barcode"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+<!--                        <t t-elif="barcode_config.name == 'Etiqueta 9x25'">-->
+<!--                            <style>-->
+<!--                                span, div{-->
+<!--                                    font-size: 10px;line-height:10px;-->
+<!--                                }-->
+<!--                            </style>-->
+
+<!--                            <div style="width: 100mm; display: inline-block; margin-right: 0.0; margin-left: 0.0;" align="left">-->
+<!--&lt;!&ndash;                                <div style="width: 25mm; display: inline-block; vertical-align:top; horizontal-align:left;">&ndash;&gt;-->
+<!--                                    &lt;!&ndash;IMÁGEN QR&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <img t-if="product[0].image_label_qrcode" t-att-src="image_data_uri(product[0].image_label_qrcode)" style="width: 25mm;" align="left"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+
+<!--                                    &lt;!&ndash; ///////////////////////// &ndash;&gt;-->
+<!--&lt;!&ndash;                                    <div style="color:black; line-height:8px; width:25mm;">&ndash;&gt;-->
+<!--                                        &lt;!&ndash; <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %(barcode_config.barcode_type, product[3], int(barcode_config.display_width), int(barcode_config.display_height),is_humanreadable)"/> &ndash;&gt;-->
+<!--                                         <img style="width: 25mm;" align="left" valign="top" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %('QR', product[3], 150, 150,0)"/>-->
+<!--&lt;!&ndash;                                        <img t-att-src="'%s&amp;' %(barcode_url)"&ndash;&gt;-->
+<!--&lt;!&ndash;                                             style="type: QR; object-fit: fill; width:20mm; height:15mm; display:block; horizontal-align:left;"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        />&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+<!--                                    &lt;!&ndash; ///////////////////////// &ndash;&gt;-->
+
+<!--                                <div style="width: 5mm; display: inline-block; vertical-align:top;" align="left">-->
+<!--                                    &lt;!&ndash;ESPACIO EN BLANCO ENTRE QR Y TEXTO&ndash;&gt;-->
+<!--                                </div>-->
+
+<!--                                <div style="width: 65mm; display: inline-block;" align="left">-->
+<!--&lt;!&ndash;                                    <div style="width: 40mm; display: inline-block; margin-right: 0.0%; margin-left: 0.0%;">&ndash;&gt;-->
+<!--                                        &lt;!&ndash; KLO <div align="left">-->
+<!--                                            <b><span t-field="product[0].default_code" style="color:black;font-size:9px"/></b>-->
+<!--                                        </div>-->
+<!--                                        KLO &ndash;&gt;-->
+<!--                                        &lt;!&ndash; KLO <div align="left"> &ndash;&gt;-->
+<!--                                        &lt;!&ndash; KLO <div style="max-width: 100%; display: inline-block;" align="left"> &ndash;&gt;-->
+<!--                                        <div style="width: 40mm; display: inline-block;" align="left">-->
+<!--                                            <span t-field="product[0].default_code" style="color:black;font-size:10px;font-weight: bold"/>-->
+<!--                                            <br/>-->
+<!--                                            <span t-if="product_desc_es" t-esc="product_desc_es[:28]"/>-->
+<!--                                            <br/>-->
+<!--                                            <span t-if="product_desc_en" t-esc="product_desc_en[:28]"/>-->
+<!--                                        </div>-->
+<!--                                        &lt;!&ndash; KLO &ndash;&gt;-->
+<!--                                        <div style="width: 20mm; display: inline-block;" align="left">-->
+<!--                                            <t t-if="product_long">-->
+<!--                                                L: <span t-esc="product_long[:23]"/> <br/>-->
+<!--                                            </t>-->
+<!--                                            <t t-if="product_color_es">-->
+<!--                                                <span t-esc="product_color_es[:23]"/> <br/>-->
+<!--                                            </t>-->
+<!--                                            <t t-if="product_color_en">-->
+<!--                                                <span t-esc="product_color_en[:23]"/> &lt;!&ndash; <br/> &ndash;&gt;-->
+<!--                                            </t>-->
+<!--                                        </div>-->
+<!--                                        &lt;!&ndash; KLO &ndash;&gt;-->
+<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+<!--                                    <div t-if="barcode_config.barcode" style="color:black; line-height:8px">-->
+<!--                                        &lt;!&ndash; <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %(barcode_config.barcode_type, product[3], int(barcode_config.display_width), int(barcode_config.display_height),is_humanreadable)"/> &ndash;&gt;-->
+<!--                                        &lt;!&ndash; KLO <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %('EAN13', product[3], 100, 30,0)"/> &ndash;&gt;-->
+<!--                                        <br/>-->
+<!--                                        <img t-att-src="'%s&amp;' %(barcode_url)"-->
+<!--                                             style="object-fit: fill; width:100%; height:25px; display:block;"-->
+<!--                                        />-->
+<!--                                    </div>-->
+<!--                                    <div align="center">-->
+<!--                                        <span style="font-size:9px;" t-esc="product[0].barcode"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </t>-->
+                        <!--'Etiqueta 6x22'-->
+                        <t t-else="">
+                            <style>
+                                span, div{
+                                    font-size: 10px;line-height:10px;
+                                }
+                            </style>
+                            <div style="max-width: 100%; display: inline-block; margin-right: 0.0%; margin-left: 0.0%;">
+                                <!-- KLO <div align="left">
+                                    <b><span t-field="product[0].default_code" style="color:black;font-size:9px"/></b>
+                                </div>
+                                KLO -->
+                                <!-- KLO <div align="left"> -->
+                                <!-- KLO <div style="max-width: 100%; display: inline-block;" align="left"> -->
+                                <div style="width: 131px; display: inline-block;" align="left">
+                                    <span t-field="product[0].default_code" style="color:black;font-size:10px;font-weight: bold"/>
+                                    <br/>
+                                    <span t-if="product_desc_es" t-esc="product_desc_es[:28]"/>
+                                    <br/>
+                                    <span t-if="product_desc_en" t-esc="product_desc_en[:28]"/>
+                                </div>
+                                <!-- KLO -->
+                                <div style="width: 103px; display: inline-block;" align="left">
+                                    <t t-if="product_long">
+                                        L: <span t-esc="product_long[:23]"/> <br/>
+                                    </t>
+                                    <t t-if="product_color_es">
+                                        <span t-esc="product_color_es[:23]"/> <br/>
+                                    </t>
+                                    <t t-if="product_color_en">
+                                        <span t-esc="product_color_en[:23]"/> <!-- <br/> -->
+                                    </t>
+                                </div>
+                                <!-- KLO -->
+                            </div>
+                            <!-- KLO <div style="max-width: 49%; display: inline-block;"> -->
+                            <!-- KLO <div style="max-width: 49%; display: inline-block;" align="right">
+                                <t t-if="product_long">
+                                    L: <span t-esc="product_long"/> <br/>
+                                </t>
+                                <t t-if="product_color_es">
+                                    <span t-esc="product_color_es"/> <br/>
+                                </t>
+                                <t t-if="product_color_en">
+                                    <span t-esc="product_color_en"/> <br/>
+                                </t>
+                            </div>
+                            KLO -->
+                            <!-- KLO01 <div t-if="barcode_config.barcode" style="color:black; max-width: 100%;"> KLO01 -->
+                                <!-- KLO <div style="max-width: 300px; max-height: 50px;"> -->
+                                <!-- KLO01 <div style="max-width: 200px; max-height: 50px;"> -->
+                                    <!-- KLO <img t-att-src="'%s&amp;' %(barcode_url)" style="object-fit: fill; width:100%; height:35px; display:block;"/> KLO -->
+                                    <!-- KLO <img t-att-src="'%s&amp;' %(barcode_url)" style="object-fit: fill; width:100%; height:40px; display:block;"/> -->
+                                    <!--KLO <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %(barcode_config.barcode_type,barcode_url,100,40,0)"/> -->
+                                    <!-- KLO01 <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %(barcode_config.barcode_type,product[3],1,1,0)"/>
+                                </div> KLO01 -->
+                                <!--<div t-att-style="'background: url(%s&amp;); background-size: contain; background-repeat: no-repeat; background-position: center center; min-width:300px; height: 50px;' %(barcode_url)" >-->
+                                <!--<img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %(barcode_config.barcode_type, product[3], int(barcode_config.display_width), int(barcode_config.display_height),is_humanreadable)"/>-->
+                            <!-- KLO01 </div> KLO01 -->
+                            <div t-if="barcode_config.barcode" style="color:black; line-height:8px">
+                                <!-- <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %(barcode_config.barcode_type, product[3], int(barcode_config.display_width), int(barcode_config.display_height),is_humanreadable)"/> -->
+                                <!-- KLO <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %('EAN13', product[3], 100, 30,0)"/> -->
+                                <br/>
+                                <img t-att-src="'%s&amp;' %(barcode_url)" style="object-fit: fill; width:100%; height:25px; display:block;"/>
+                                <!-- <br/> -->
+                                <span style="font-size:9px" t-esc="product[0].barcode"/>
+                            </div>
+                        </t>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ORIGINAL
+    <template id="report_product_label">
+        <t t-call="web.html_container">
+            <t t-call="ca_barcode_labels.product_label_layout">
+                <t t-foreach="docs" t-as="product">
+                    <div class="page" align="center" style="float: left;width: 50%;border: 1px; border-style: dotted black;">
+                        <div t-if="barcode_config.company_name"
+                             t-attf-style="color:black;font-size:#{barcode_config.company_name_size or '10px'}">
+                            <span t-field="barcode_config.company_name"/>
+                        </div>
+                        <div t-if="barcode_config.barcode" style="color:black;">
+                            <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=%s' %(barcode_config.barcode_type, product[3], int(barcode_config.display_width), int(barcode_config.display_height),is_humanreadable)"/>
+                        </div>
+                        <div t-if="barcode_config.product_name" t-attf-style="color:black;font-size:#{barcode_config.product_name_size or '10px'}"
+                             align="center">
+                            <span t-field="product[0].name"/>
+                        </div>
+                        <div t-if="barcode_config.product_desc" t-attf-style="color:black;font-size:#{barcode_config.product_desc_size or '10px'}"
+                             align="center">
+                            <span t-field="product[0].description"/>
+                        </div>
+                        <div t-if="barcode_config.product_variant"
+                             t-attf-style="color:black;font-size:#{barcode_config.product_variant_size or '10px'}" align="center">
+                            <span t-esc="product[2]"/>
+                        </div>
+                        <div t-if="barcode_config.lot" align="center">
+                            <span t-esc="product[1]"/>
+                        </div>
+                        <div t-if="barcode_config.product_code" t-attf-style="color:black;font-size:#{barcode_config.product_code_size or '10px'}"
+                             align="center">
+                            <span t-field="product[0].default_code"/>
+                        </div>
+                        <div t-if="barcode_config.price_display"
+                             t-attf-style="color:black;font-size:#{barcode_config.price_display_size or '10px'}">
+                            <t t-if="barcode_config.currency_position == 'before'">
+                                <t t-if="data.get('symbol')">
+                                    <span t-esc="data.get('symbol')"/>
+                                </t>
+                            </t>
+                            <span t-field="product[0].lst_price"/>
+                            <t t-if="barcode_config.currency_position == 'after'">
+                                <t t-if="data.get('symbol')">
+                                    <span t-esc="data.get('symbol')"/>
+                                </t>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    -->
+</odoo>

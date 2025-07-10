@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<template id="s_biz_theme_snazzy_homepage_four_order_features" name="Order Features">
+
+        <section class="biz_theme_snazzy_homepage_four_order_features pt48 pb48 custom_padding_top custom_padding_bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="content_border d-flex align-items-center justify-content-center p-4">
+                            <div class="pr-3 d-flex align-items-center">
+                                <i class="ri ri-shopping-cart-2-line fa-3x"></i>
+                            </div>
+                            <div>
+                                <p>Easy Shipping</p>
+                                <small>On all orders over $50</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="content_border d-flex align-items-center justify-content-center p-4">
+                            <div class="pr-3 d-flex align-items-center">
+                                <i class="ri ri-truck-line fa-3x"></i>
+                            </div>
+                            <div>
+                                <p>Easy Returns</p>
+                                <small>Returns are free within 7 days</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="content_border d-flex align-items-center justify-content-center p-4">
+                            <div class="pr-3 d-flex align-items-center">
+                                <i class="ri ri-lock-line fa-3x"></i>
+                            </div>
+                            <div>
+                                <p>Secure Payment</p>
+                                <small>Your Payment are safe</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="content_border d-flex align-items-center justify-content-center p-4">
+                            <div class="pr-3 d-flex align-items-center">
+                                <i class="icofont icofont-headphone-alt fa-3x"></i>
+                            </div>
+                            <div>
+                                <p>Support 24/7</p>
+                                <small>Contact us all time a day</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="oe_structure oe_empty"></div>
+
+	</template>
+</odoo>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="snazzy_badge_extra_price_inherited" inherit_id="sale.variants" name="Snazzy Badge Extra Price">
+        <xpath expr="//select//span[hasclass('badge-pill')]" position="replace">
+            <t t-if="is_view_active('theme_snazzy.snazzy_b2b_mode') and request.env.user._is_public()">
+            </t>
+            <t t-else="">
+                <span t-if="combination_info_variant['price_extra']" class="badge badge-pill border badge-light">
+                    <span class="text-primary" t-esc="combination_info_variant['price_extra'] > 0 and '+' or '-'"/>
+                    <span t-esc="abs(combination_info_variant['price_extra'])" class="variant_price_extra" style="white-space: nowrap;"
+                        t-options='{
+                            "widget": "monetary",
+                            "display_currency": (pricelist or product).currency_id
+                        }'/>
+                </span>
+            </t>
+        </xpath>
+        <xpath expr="//label[hasclass('col-form-label')]//span[hasclass('badge-pill')]" position="replace">
+            <t t-if="is_view_active('theme_snazzy.snazzy_b2b_mode') and request.env.user._is_public()">
+            </t>
+            <t t-else="">
+                <span class="badge badge-pill badge-light border" style="line-height:16px;" t-if="combination_info_variant['price_extra']">
+                    <span class="text-primary" t-esc="combination_info_variant['price_extra'] > 0 and '+' or '-'"/>
+                    <span t-esc="abs(combination_info_variant['price_extra'])" class="variant_price_extra" style="white-space: nowrap;"
+                        t-options='{
+                            "widget": "monetary",
+                            "display_currency": (pricelist or product).currency_id
+                        }'/>
+                </span>
+            </t>
+        </xpath>
+
+    </template>
+
+    <template id="product_page_variant_inherited" inherit_id="sale.variants" customize_show="True" name="Show Variant Image">
+        <xpath expr="//li[@t-foreach='ptal.product_template_value_ids._only_active()']" position="replace">
+            <li t-foreach="ptal.product_template_value_ids._only_active()" t-as="ptav" class="list-inline-item mr-1">
+                <t t-if="ptav.color_attrib_img">
+                    <label t-attf-style="background-image:url('/web/image/product.template.attribute.value/#{ptav.id}/color_attrib_img/Color')" t-attf-class="css_attribute_color #{'active' if ptav in combination else ''} #{'custom_value' if ptav.is_custom else ''}">
+                        <input type="radio" t-attf-class="js_variant_change  #{ptal.attribute_id.create_variant}" t-att-checked="ptav in combination" t-att-name="'ptal-%s' % ptal.id" t-att-value="ptav.id" t-att-title="ptav.name" t-att-data-value_id="ptav.id" t-att-data-value_name="ptav.name" t-att-data-attribute_name="ptav.attribute_id.name" t-att-data-is_custom="ptav.is_custom" t-att-data-is_single="single" t-att-data-is_single_and_custom="single_and_custom"/>
+                    </label>
+                </t>
+                <t t-else="">
+                    <label t-attf-style="background-color:#{ptav.html_color or ptav.product_attribute_value_id.name if not ptav.is_custom else ''}" t-attf-class="css_attribute_color #{'active' if ptav in combination else ''} #{'custom_value' if ptav.is_custom else ''}">
+                        <input type="radio" t-attf-class="js_variant_change  #{ptal.attribute_id.create_variant}" t-att-checked="ptav in combination" t-att-name="'ptal-%s' % ptal.id" t-att-value="ptav.id" t-att-title="ptav.name" t-att-data-value_id="ptav.id" t-att-data-value_name="ptav.name" t-att-data-attribute_name="ptav.attribute_id.name" t-att-data-is_custom="ptav.is_custom" t-att-data-is_single="single" t-att-data-is_single_and_custom="single_and_custom"/>
+                    </label>
+                </t>
+            </li>
+        </xpath>
+    </template>
+
+</odoo>
