@@ -20,19 +20,21 @@ class StockPicking(models.Model):
             for picking in self:
                 token_kaleidotrans = self._generate_refresh_token()
                 respuesta = self._get_listar_pedidos(token_kaleidotrans)
+                hoy = datetime.today()
+                fecha_hora = hoy.strftime('%Y-%m-%d %H:%M:%S')
                 if respuesta['pedidosCompletos'][0]['pedido']['IdPedido'] == self.servicio_id:
                     resp_mod = self._put_modificar_pedidos(token_kaleidotrans)
                     if resp_mod['code'] != 200:
-                        picking.note_kaleidotrans = resp_mod['error']
+                        picking.note_kaleidotrans = fecha_hora +" -> "+ resp_mod['error'] +"\n"+ picking.note_kaleidotrans
                     else:
-                        picking.note_kaleidotrans = resp_mod['mensaje']
+                        picking.note_kaleidotrans = fecha_hora +" -> "+ resp_mod['mensaje'] +"\n"+picking.note_kaleidotrans
                 else:
                     pedido = self._post_pedidos(token_kaleidotrans)
                     if pedido['code'] != 200:
-                        picking.note_kaleidotrans = pedido['error']
+                        picking.note_kaleidotrans = fecha_hora +" -> "+ pedido['error'] +"\n"+picking.note_kaleidotrans
                     else:
                         picking.servicio_id = pedido["IdServicio"]
-                        picking.note_kaleidotrans = pedido["mensaje"]
+                        picking.note_kaleidotrans = fecha_hora +" -> "+ pedido["mensaje"] +"\n"+picking.note_kaleidotrans
         else:
             self.note_kaleidotrans = "El cargador no está asignado."
 
@@ -51,19 +53,15 @@ class StockPicking(models.Model):
     @api.model
     def _get_poblaciones_dir_ent(self, token_kaleidotrans):
         licencia_code = 'WQQF7T3Q88OBW3BPMB'
-        nombre_localidad = self.partner_id.city
-        nombre_localidad = nombre_localidad.upper()
-        provincia = self.partner_id.state_id.name
-        provincia = provincia.upper()
-        if nombre_localidad and provincia:
+        codPostal = self.partner_id.zip
+        if codPostal:
             url = 'https://portal.kaleidotrans.com/api/MaestrosSecundarios/Poblaciones/listar.php?licencia='+licencia_code+\
-                  '&Nombre='+nombre_localidad+\
-                  '&Provincia='+provincia
+                  '&CodPostal='+codPostal
             headers = {'Authorization': token_kaleidotrans}
             request = requests.get(url, headers=headers)
             response = request.json()
         else:
-            response = {"mensaje": "Dirección de entrega no tiene Localidad o Provincia.",
+            response = {"mensaje": "Dirección de entrega no tiene Código Postal (Poblaciones en KaleidoTrans).",
                         "code": 404}
         return response
 
@@ -81,24 +79,22 @@ class StockPicking(models.Model):
             request = requests.get(url, headers=headers)
             response = request.json()
         else:
-            response = {"mensaje": "Dirección de entrega no tiene CIF.",
+            response = {"mensaje": "Dirección de entrega no tiene CIF (Sitios en KaleidoTrans).",
                         "code": 404}
         return response
 
     @api.model
     def _get_poblaciones_cargador(self, token_kaleidotrans):
         licencia_code = 'WQQF7T3Q88OBW3BPMB'
-        nombre_localidad = self.cmr_loader_id.city
-        provincia = self.cmr_loader_id.state_id.name
-        if nombre_localidad and provincia:
+        codPostal = self.cmr_loader_id.zip
+        if codPostal:
             url = 'https://portal.kaleidotrans.com/api/MaestrosSecundarios/Poblaciones/listar.php?licencia='+licencia_code+\
-                  '&Nombre='+nombre_localidad+\
-                  '&Provincia='+provincia
+                  '&CodPostal='+codPostal
             headers = {'Authorization': token_kaleidotrans}
             request = requests.get(url, headers=headers)
             response = request.json()
         else:
-            response = {"mensaje": "El cargador no tiene Localidad o Provincia.",
+            response = {"mensaje": "El cargador no tiene Código Postal (Poblaciones en KaleidoTrans).",
                         "code": 404}
         return response
 
@@ -116,7 +112,7 @@ class StockPicking(models.Model):
             request = requests.get(url, headers=headers)
             response = request.json()
         else:
-            response = {"mensaje": "El cargador no tiene CIF.",
+            response = {"mensaje": "El cargador no tiene CIF (Sitios en KaleidoTrans).",
                         "code": 404}
         return response
 
@@ -169,11 +165,11 @@ class StockPicking(models.Model):
             poblacion_dir_ent_puntos = poblacion_dir_ent.get("code", 200)
             sitio_dir_ent_sitios = sitio_dir_ent.get("code", 200)
             if poblacion_dir_ent_puntos != 200:
-                response = {"error": "Revise Población de entrega del cliente.",
+                response = {"error": "Revise Cod. Postal de Población de entrega del cliente (Poblaciones en KaleidoTrans).",
                             "code": 404}
                 return response
             if sitio_dir_ent_sitios != 200:
-                response = {"error": "Revise CIF de entrega del cliente.",
+                response = {"error": "Revise CIF de entrega del cliente (Sitios en KaleidoTrans).",
                             "code": 404}
                 return response
             idPunto_dir_ent = poblacion_dir_ent['puntos'][0]['IdPunto']
@@ -183,7 +179,7 @@ class StockPicking(models.Model):
             poblacion_cargador_puntos = poblacion_cargador.get("code", 200)
             sitio_cargador_sitios = sitio_cargador.get("code", 200)
             if poblacion_cargador_puntos != 200:
-                response = {"error": "Revise Población del cargador.",
+                response = {"error": "Revise Cod. Postal de Población del cargador (Poblaciones en KaleidoTrans).",
                             "code": 404}
                 return response
             if sitio_cargador_sitios != 200:
@@ -204,7 +200,7 @@ class StockPicking(models.Model):
                 "estadoPedido": "Servicio",
                 "IdFactura": None,
                 "IdFacturaPro": None,
-                "referencia": self.name,
+                "referencia": sale_name,
                 "referencia2": None,
                 "IdCliente": idCliente,
                 "IdMercancia": None,
@@ -507,11 +503,11 @@ class StockPicking(models.Model):
         poblacion_dir_ent_puntos = poblacion_dir_ent.get("code", 200)
         sitio_dir_ent_sitios = sitio_dir_ent.get("code", 200)
         if poblacion_dir_ent_puntos != 200:
-            response = {"error": "Revise Población de entrega del cliente.",
+            response = {"error": "Revise Cod. Postal de Población de entrega del cliente (Poblaciones en KaleidoTrans).",
                         "code": 404}
             return response
         if sitio_dir_ent_sitios != 200:
-            response = {"error": "Revise CIF de entrega del cliente.",
+            response = {"error": "Revise CIF de entrega del cliente (Sitios en KaleidoTrans).",
                         "code": 404}
             return response
         idPunto_dir_ent = poblacion_dir_ent['puntos'][0]['IdPunto']
@@ -521,7 +517,7 @@ class StockPicking(models.Model):
         poblacion_cargador_puntos = poblacion_cargador.get("code", 200)
         sitio_cargador_sitios = sitio_cargador.get("code", 200)
         if poblacion_cargador_puntos != 200:
-            response = {"error": "Revise Población del cargador.",
+            response = {"error": "Revise Cod. Postal de Población del cargador (Poblaciones en KaleidoTrans).",
                         "code": 404}
             return response
         if sitio_cargador_sitios != 200:
@@ -541,7 +537,7 @@ class StockPicking(models.Model):
                   'IdFactura': None,
                   'IdFacturaPro': None,
                   'IdCliente': idCliente,
-                  'referencia': self.name,
+                  'referencia': sale_name,
                   'referencia2': None,
                   'IdMercancia': None,
                   'IdRutaTipo': None,
