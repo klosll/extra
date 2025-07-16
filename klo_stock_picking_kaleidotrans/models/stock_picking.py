@@ -40,9 +40,9 @@ class StockPicking(models.Model):
 
     @api.model
     def _generate_refresh_token(self):
-        licencia_code = 'WQQF7T3Q88OBW3BPMB'
-        client_id = 'apiklo'
-        client_secret = 'Skop1o#$#'
+        licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
+        client_id = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.client_id')
+        client_secret = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.client_secret')
         values = {'user': client_id, 'password': client_secret}
         url = 'https://portal.kaleidotrans.com/api/Auth/auth.php?licencia='+licencia_code
         headers = {'Content-type': 'application/json'}
@@ -52,7 +52,7 @@ class StockPicking(models.Model):
 
     @api.model
     def _get_poblaciones_dir_ent(self, token_kaleidotrans):
-        licencia_code = 'WQQF7T3Q88OBW3BPMB'
+        licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
         codPostal = self.partner_id.zip
         if codPostal:
             url = 'https://portal.kaleidotrans.com/api/MaestrosSecundarios/Poblaciones/listar.php?licencia='+licencia_code+\
@@ -67,7 +67,7 @@ class StockPicking(models.Model):
 
     @api.model
     def _get_sitios_dir_ent(self, token_kaleidotrans):
-        licencia_code = 'WQQF7T3Q88OBW3BPMB'
+        licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
         cif = self.partner_id.vat
         if cif:
             prefijo = cif[:2]
@@ -85,7 +85,7 @@ class StockPicking(models.Model):
 
     @api.model
     def _get_poblaciones_cargador(self, token_kaleidotrans):
-        licencia_code = 'WQQF7T3Q88OBW3BPMB'
+        licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
         codPostal = self.cmr_loader_id.zip
         if codPostal:
             url = 'https://portal.kaleidotrans.com/api/MaestrosSecundarios/Poblaciones/listar.php?licencia='+licencia_code+\
@@ -100,7 +100,7 @@ class StockPicking(models.Model):
 
     @api.model
     def _get_sitios_cargador(self, token_kaleidotrans):
-        licencia_code = 'WQQF7T3Q88OBW3BPMB'
+        licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
         cif = self.cmr_loader_id.vat
         if cif:
             prefijo = cif[:2]
@@ -137,7 +137,7 @@ class StockPicking(models.Model):
 
     @api.model
     def _get_listar_pedidos(self, token_kaleidotrans):
-        licencia_code = 'WQQF7T3Q88OBW3BPMB'
+        licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
         idPedido = str(self.servicio_id)
         url = 'https://portal.kaleidotrans.com/api/GestionTrafico/Pedidos/listar.php?licencia='+licencia_code+\
               '&IdPedido='+idPedido
@@ -148,7 +148,7 @@ class StockPicking(models.Model):
 
     @api.model
     def _put_modificar_pedidos(self, token_kaleidotrans):
-        licencia_code = 'WQQF7T3Q88OBW3BPMB'
+        licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
         idPedido = self.servicio_id
         if idPedido:
             fecha_realizado = self.custom_date_done
@@ -492,7 +492,7 @@ class StockPicking(models.Model):
 
     @api.model
     def _post_pedidos(self, token_kaleidotrans):
-        licencia_code = 'WQQF7T3Q88OBW3BPMB'
+        licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
         hoy = datetime.today()
         fecha_hora = hoy.strftime('%Y-%m-%d %H:%M:%S')
         fecha = hoy.strftime('%Y-%m-%d')
