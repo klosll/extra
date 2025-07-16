@@ -21,7 +21,7 @@ class StockPicking(models.Model):
             for picking in self:
                 token_kaleidotrans = self._generate_refresh_token()
                 respuesta = self._get_listar_pedidos(token_kaleidotrans)
-                hoy = datetime.now(timezone('Europe/Madrid'))
+                hoy = datetime.now(timezone(self.env.user.tz))
                 fecha_hora = hoy.strftime('%Y-%m-%d %H:%M:%S')
                 if respuesta['pedidosCompletos'][0]['pedido']['IdPedido'] == self.servicio_id:
                     resp_mod = self._put_modificar_pedidos(token_kaleidotrans)
@@ -494,7 +494,7 @@ class StockPicking(models.Model):
     @api.model
     def _post_pedidos(self, token_kaleidotrans):
         licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
-        hoy = datetime.now(timezone('Europe/Madrid'))
+        hoy = datetime.now(timezone(self.env.user.tz))
         fecha_hora = hoy.strftime('%Y-%m-%d %H:%M:%S')
         fecha = hoy.strftime('%Y-%m-%d')
         bultos = self._get_bultos()
