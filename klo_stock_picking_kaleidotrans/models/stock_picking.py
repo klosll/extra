@@ -3,11 +3,12 @@
 
 from odoo import api, fields, models
 from datetime import datetime
+from pytz import timezone
 import json
 import requests
 
 TIMEOUT = 20
-KALEIDOTRANS_TOKEN_ENDPOINT = 'https://portal.kaleidotrans.com/api/Auth/auth.php?licencia=WQQF7T3Q88OBW3BPMB'
+# KALEIDOTRANS_TOKEN_ENDPOINT = 'https://portal.kaleidotrans.com/api/Auth/auth.php?licencia=WQQF7T3Q88OBW3BPMB'
 
 class StockPicking(models.Model):
     _inherit = "stock.picking"
@@ -20,7 +21,7 @@ class StockPicking(models.Model):
             for picking in self:
                 token_kaleidotrans = self._generate_refresh_token()
                 respuesta = self._get_listar_pedidos(token_kaleidotrans)
-                hoy = datetime.today()
+                hoy = datetime.now(timezone('Europe/Madrid'))
                 fecha_hora = hoy.strftime('%Y-%m-%d %H:%M:%S')
                 if respuesta['pedidosCompletos'][0]['pedido']['IdPedido'] == self.servicio_id:
                     resp_mod = self._put_modificar_pedidos(token_kaleidotrans)
@@ -493,7 +494,7 @@ class StockPicking(models.Model):
     @api.model
     def _post_pedidos(self, token_kaleidotrans):
         licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
-        hoy = datetime.today()
+        hoy = datetime.now(timezone('Europe/Madrid'))
         fecha_hora = hoy.strftime('%Y-%m-%d %H:%M:%S')
         fecha = hoy.strftime('%Y-%m-%d')
         bultos = self._get_bultos()
