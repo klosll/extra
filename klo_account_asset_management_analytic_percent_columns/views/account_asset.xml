@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="klo_account_asset_analytic_percent_view_tree">
+        <field name="inherit_id" ref="account_asset_management.account_asset_view_tree" />
+        <field name="name">klo.account.asset.tree.analytic.percent</field>
+        <field name="model">account.asset</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="analytic_distribution"
+                       widget="analytic_distribution"
+                       groups="analytic.group_analytic_accounting"
+                       optional="show"
+                       options="{'product_field': 'product_id', 'account_field': 'account_id'}"
+                />
+                <field name="annual_percentage" digits = "2" string="%" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
