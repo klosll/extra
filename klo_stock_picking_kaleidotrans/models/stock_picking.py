@@ -17,12 +17,12 @@ class StockPicking(models.Model):
     note_kaleidotrans = fields.Text(string='Mensajes KaleidoTrans')
 
     def action_send_kaleidotrans(self):
+        hoy = datetime.now(timezone(self.env.user.tz))
+        fecha_hora = hoy.strftime('%Y-%m-%d %H:%M:%S')
         if self.cmr_loader_id:
             for picking in self:
                 token_kaleidotrans = self._generate_refresh_token()
                 respuesta = self._get_listar_pedidos(token_kaleidotrans)
-                hoy = datetime.now(timezone(self.env.user.tz))
-                fecha_hora = hoy.strftime('%Y-%m-%d %H:%M:%S')
                 if respuesta['pedidosCompletos'][0]['pedido']['IdPedido'] == self.servicio_id:
                     resp_mod = self._put_modificar_pedidos(token_kaleidotrans)
                     if resp_mod['code'] != 200:
@@ -37,7 +37,9 @@ class StockPicking(models.Model):
                         picking.servicio_id = pedido["IdServicio"]
                         picking.note_kaleidotrans = fecha_hora +" -> "+ pedido["mensaje"] +"\n"+picking.note_kaleidotrans
         else:
-            self.note_kaleidotrans = "El cargador no está asignado."
+            if self.note_kaleidotrans == False:
+                self.note_kaleidotrans = ""
+            self.note_kaleidotrans = fecha_hora +" -> El cargador no está asignado." +"\n"+self.note_kaleidotrans
 
     @api.model
     def _generate_refresh_token(self):
@@ -50,6 +52,36 @@ class StockPicking(models.Model):
         request = requests.post(url, data=json.dumps(values), headers=headers)
         response = request.json()
         return response["token"]
+
+    @api.model
+    def _get_cabeza(self, token_kaleidotrans):
+        licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
+        cabeza_matricula = self.cmr_tractor_id.license_plate
+        if cabeza_matricula:
+            url = 'https://portal.kaleidotrans.com/api/MaestrosPrimarios/Vehiculos/listar.php?licencia='+licencia_code+\
+                  '&matricula='+cabeza_matricula
+            headers = {'Authorization': token_kaleidotrans}
+            request = requests.get(url, headers=headers)
+            response = request.json()
+        else:
+            response = {"mensaje": "Cabeza de vehículo no tiene matrícula (Vehículos en KaleidoTrans).",
+                        "code": 404}
+        return response
+
+    @api.model
+    def _get_remolque(self, token_kaleidotrans):
+        licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
+        remolque_matricula = self.cmr_semi_trailer_id.license_plate
+        if remolque_matricula:
+            url = 'https://portal.kaleidotrans.com/api/MaestrosPrimarios/Vehiculos/listar.php?licencia='+licencia_code+\
+                  '&matricula='+remolque_matricula
+            headers = {'Authorization': token_kaleidotrans}
+            request = requests.get(url, headers=headers)
+            response = request.json()
+        else:
+            response = {"mensaje": "Remolque de vehículo no tiene matrícula (Vehículos en KaleidoTrans).",
+                        "code": 404}
+        return response
 
     @api.model
     def _get_poblaciones_dir_ent(self, token_kaleidotrans):
@@ -87,7 +119,12 @@ class StockPicking(models.Model):
     @api.model
     def _get_poblaciones_cargador(self, token_kaleidotrans):
         licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
-        codPostal = self.cmr_loader_id.zip
+        id_cargador = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.idcliente')
+        if id_cargador:
+            cargador = self.env['res.partner'].search([('id', '=', id_cargador)])
+            codPostal = cargador.zip
+        else:
+            codPostal = self.cmr_loader_id.zip
         if codPostal:
             url = 'https://portal.kaleidotrans.com/api/MaestrosSecundarios/Poblaciones/listar.php?licencia='+licencia_code+\
                   '&CodPostal='+codPostal
@@ -102,7 +139,12 @@ class StockPicking(models.Model):
     @api.model
     def _get_sitios_cargador(self, token_kaleidotrans):
         licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
-        cif = self.cmr_loader_id.vat
+        id_cargador = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.idcliente')
+        if id_cargador:
+            cargador = self.env['res.partner'].search([('id', '=', id_cargador)])
+            cif = cargador.vat
+        else:
+            cif = self.cmr_loader_id.vat
         if cif:
             prefijo = cif[:2]
             if prefijo == 'ES':
@@ -161,6 +203,10 @@ class StockPicking(models.Model):
             palletEntrega = self._get_pallet_entrega()
             if not palletEntrega:
                 palletEntrega = 0
+            vehiculo = self._get_cabeza(token_kaleidotrans)
+            id_vehiculo = vehiculo['vehiculos'][0]['IdVehiculo']
+            remolque = self._get_remolque(token_kaleidotrans)
+            id_remolque = remolque['vehiculos'][0]['IdVehiculo']
             poblacion_dir_ent = self._get_poblaciones_dir_ent(token_kaleidotrans)
             sitio_dir_ent = self._get_sitios_dir_ent(token_kaleidotrans)
             poblacion_dir_ent_puntos = poblacion_dir_ent.get("code", 200)
@@ -189,7 +235,7 @@ class StockPicking(models.Model):
                 return response
             idPunto_cargador = poblacion_cargador['puntos'][0]['IdPunto']
             idLugar_cargador = sitio_cargador['sitios'][0]['IdLugar']
-            sale_name = self.sale_id.name
+            sale_name = self.name
             idUsuario = int(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.idusuario'))
             idCliente = int(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.idcliente'))
             precio_cli = float(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.precio_cli'))
@@ -209,8 +255,8 @@ class StockPicking(models.Model):
                 "IdGrupoAlbaran": None,
                 "IdEstado": None,
                 "IdAgenda": None,
-                "IdVehiculo": None,
-                "IdRemolque": None,
+                "IdVehiculo": id_vehiculo,
+                "IdRemolque": id_remolque,
                 "IdRemolque2": None,
                 "IdChofer": None,
                 "IdChofer2": None,
@@ -499,6 +545,10 @@ class StockPicking(models.Model):
         fecha = hoy.strftime('%Y-%m-%d')
         bultos = self._get_bultos()
         palletEntrega = self._get_pallet_entrega()
+        vehiculo = self._get_cabeza(token_kaleidotrans)
+        id_vehiculo = vehiculo['vehiculos'][0]['IdVehiculo']
+        remolque = self._get_remolque(token_kaleidotrans)
+        id_remolque = remolque['vehiculos'][0]['IdVehiculo']
         poblacion_dir_ent = self._get_poblaciones_dir_ent(token_kaleidotrans)
         sitio_dir_ent = self._get_sitios_dir_ent(token_kaleidotrans)
         poblacion_dir_ent_puntos = poblacion_dir_ent.get("code", 200)
@@ -527,7 +577,7 @@ class StockPicking(models.Model):
             return response
         idPunto_cargador = poblacion_cargador['puntos'][0]['IdPunto']
         idLugar_cargador = sitio_cargador['sitios'][0]['IdLugar']
-        sale_name = self.sale_id.name
+        sale_name = self.name
         idUsuario = int(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.idusuario'))
         idCliente = int(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.idcliente'))
         precio_cli = float(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.precio_cli'))
@@ -545,8 +595,8 @@ class StockPicking(models.Model):
                   'IdGrupoAlbaran': None,
                   'IdEstado': None,
                   'IdAgenda': None,
-                  'IdVehiculo': None,
-                  'IdRemolque': None,
+                  'IdVehiculo': id_vehiculo,
+                  'IdRemolque': id_remolque,
                   'IdRemolque2': None,
                   'IdChofer': None,
                   'IdChofer2': None,
