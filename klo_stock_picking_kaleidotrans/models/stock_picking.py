@@ -19,7 +19,12 @@ class StockPicking(models.Model):
     def action_send_kaleidotrans(self):
         hoy = datetime.now(timezone(self.env.user.tz))
         fecha_hora = hoy.strftime('%Y-%m-%d %H:%M:%S')
-        if self.cmr_loader_id:
+        cargador = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.idcliente')
+        if cargador:
+            id_cargador = cargador
+        else:
+            id_cargador = self.cmr_loader_id
+        if id_cargador:
             for picking in self:
                 token_kaleidotrans = self._generate_refresh_token()
                 respuesta = self._get_listar_pedidos(token_kaleidotrans)
