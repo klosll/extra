@@ -139,11 +139,9 @@ class StockPicking(models.Model):
     @api.model
     def _get_poblaciones_cargador(self, token_kaleidotrans):
         licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
-        id_cargador = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.id_cargador')
-        if id_cargador:
-            cargador = self.env['res.partner'].search([('id', '=', id_cargador)])
-            codPostal = cargador.zip
-        else:
+        company = self.env.company
+        codPostal = company.zip
+        if not codPostal:
             codPostal = self.cmr_loader_id.zip
         if codPostal:
             url = 'https://portal.kaleidotrans.com/api/MaestrosSecundarios/Poblaciones/listar.php?licencia='+licencia_code+\
@@ -159,11 +157,9 @@ class StockPicking(models.Model):
     @api.model
     def _get_sitios_cargador(self, token_kaleidotrans):
         licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
-        id_cargador = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.id_cargador')
-        if id_cargador:
-            cargador = self.env['res.partner'].search([('id', '=', id_cargador)])
-            cif = cargador.vat
-        else:
+        company = self.env.company
+        cif = company.vat
+        if not cif:
             cif = self.cmr_loader_id.vat
         if cif:
             prefijo = cif[:2]
@@ -224,8 +220,8 @@ class StockPicking(models.Model):
             if not palletEntrega:
                 palletEntrega = 0
             conductor = self._get_conductor(token_kaleidotrans)
-            id_conductor = conductor.get("code", 200)
-            if id_conductor != 200:
+            id_conductor_puntos = conductor.get("code", 200)
+            if id_conductor_puntos != 200:
                 response = {"error": "Revise NIF del Conductor (Conductores en KaleidoTrans).",
                             "code": 404}
                 return response
@@ -253,6 +249,7 @@ class StockPicking(models.Model):
                 response = {"error": "Revise CIF de entrega del cliente (Sitios en KaleidoTrans).",
                             "code": 404}
                 return response
+            id_conductor = conductor['choferes'][0]['IdChofer']
             id_vehiculo = vehiculo['vehiculos'][0]['IdVehiculo']
             id_remolque = remolque['vehiculos'][0]['IdVehiculo']
             idPunto_dir_ent = poblacion_dir_ent['puntos'][0]['IdPunto']
@@ -294,7 +291,7 @@ class StockPicking(models.Model):
                 "IdVehiculo": id_vehiculo,
                 "IdRemolque": id_remolque,
                 "IdRemolque2": None,
-                "IdChofer": None,
+                "IdChofer": id_conductor,
                 "IdChofer2": None,
                 "IdProveedor": None,
                 "IdPuntoIntermedio": None,
@@ -586,8 +583,8 @@ class StockPicking(models.Model):
         if not palletEntrega:
             palletEntrega = 0
         conductor = self._get_conductor(token_kaleidotrans)
-        id_conductor = conductor.get("code", 200)
-        if id_conductor != 200:
+        id_conductor_puntos = conductor.get("code", 200)
+        if id_conductor_puntos != 200:
             response = {"error": "Revise NIF del Conductor (Conductores en KaleidoTrans).",
                         "code": 404}
             return response
@@ -615,6 +612,7 @@ class StockPicking(models.Model):
             response = {"error": "Revise CIF de entrega del cliente (Sitios en KaleidoTrans).",
                         "code": 404}
             return response
+        id_conductor = conductor['choferes'][0]['IdChofer']
         id_vehiculo = vehiculo['vehiculos'][0]['IdVehiculo']
         id_remolque = remolque['vehiculos'][0]['IdVehiculo']
         idPunto_dir_ent = poblacion_dir_ent['puntos'][0]['IdPunto']
@@ -654,7 +652,7 @@ class StockPicking(models.Model):
                   'IdVehiculo': id_vehiculo,
                   'IdRemolque': id_remolque,
                   'IdRemolque2': None,
-                  'IdChofer': None,
+                  'IdChofer': id_conductor,
                   'IdChofer2': None,
                   'IdProveedor': None,
                   'KmCarga': None,
