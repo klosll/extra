@@ -274,6 +274,7 @@ class StockPicking(models.Model):
             precio_cli = float(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.precio_cli'))
             iva_cli = float(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.iva_cli'))
             importe_cli = float(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.importe_cli'))
+            peso_envio = self.shipping_weight
             values = {
                 "IdPedido": idPedido,
                 "FechaCreacion": fecha,
@@ -460,7 +461,7 @@ class StockPicking(models.Model):
                         "IdMercancia": None,
                         "MercanciaManual": None,
                         "CambioPalets": None,
-                        "PesoVolumen": "10",
+                        "PesoVolumen": peso_envio,
                         "Observaciones": None,
                         "Bultos": bultos,
                         "PaletEntrega": palletEntrega,
@@ -519,7 +520,7 @@ class StockPicking(models.Model):
                         "IdMercancia": None,
                         "MercanciaManual": None,
                         "CambioPalets": None,
-                        "PesoVolumen": "10",
+                        "PesoVolumen": peso_envio,
                         "Observaciones": None,
                         "Bultos": bultos,
                         "PaletEntrega": palletEntrega,
@@ -637,6 +638,7 @@ class StockPicking(models.Model):
         precio_cli = float(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.precio_cli'))
         iva_cli = float(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.iva_cli'))
         importe_cli = float(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.importe_cli'))
+        peso_envio = self.shipping_weight
         values = {'FechaCreacion': fecha,
                   'estadoPedido': 'Servicio',
                   'IdFactura': None,
@@ -820,7 +822,7 @@ class StockPicking(models.Model):
                         'IdMercancia': None,
                         'MercanciaManual': None,
                         'CambioPalets': None,
-                        'PesoVolumen': '10 KG',
+                        'PesoVolumen': peso_envio,
                         'Observaciones': None,
                         'Bultos': bultos,
                         'PaletEntrega': palletEntrega,
@@ -878,7 +880,7 @@ class StockPicking(models.Model):
                         'IdMercancia': None,
                         'MercanciaManual': None,
                         'CambioPalets': None,
-                        'PesoVolumen': '10 KG',
+                        'PesoVolumen': peso_envio,
                         'Observaciones': None,
                         'Bultos': bultos,
                         'PaletEntrega': palletEntrega,
