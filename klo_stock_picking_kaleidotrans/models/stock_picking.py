@@ -343,7 +343,7 @@ class StockPicking(models.Model):
                 "IdZonaDestino": None,
                 "IdUsuario": 1,
                 "PrecioPro": None,
-                "PrecioCli": precio_cli,
+                "PrecioCli": None,
                 "IdConceptoPro": None,
                 "IdConceptoCli": None,
                 "IdUMPro": None,
@@ -402,7 +402,7 @@ class StockPicking(models.Model):
                 "impEmpleado": None,
                 "PorcEmpleado": None,
                 "EmpLiquidado": 0,
-                "lineasPrecio": [
+                "lineasPedidoPrecio": [
                     {
                         "Id_pedido": idPedido,
                         "id_linea": 1,
@@ -702,7 +702,7 @@ class StockPicking(models.Model):
                   'IdZonaDestino': None,
                   'IdUsuario': 1,
                   'PrecioPro': None,
-                  'PrecioCli': precio_cli,
+                  'PrecioCli': None,
                   'IdConceptoPro': None,
                   'IdConceptoCli': None,
                   'IdUMPro': None,
