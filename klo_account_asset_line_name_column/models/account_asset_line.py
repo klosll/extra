@@ -8,11 +8,3 @@ class AccountAssetLine(models.Model):
     _inherit = "account.asset.line"
 
     analytic_account_name = fields.Char(related='asset_id.analytic_account_name', store=True)
-    # analytic_account_name = fields.Many2one(
-    #     string="Nombre de Cuenta Analítica",
-    #     comodel_name="account.asset",
-    #     store=True
-    # )
-    # analytic_account_name = fields.Many2one("account.asset",
-    #                                         string="Nombre de Cuenta Analítica",
-    #                                         store=True)
