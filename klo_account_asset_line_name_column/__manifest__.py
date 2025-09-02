@@ -12,7 +12,7 @@
     "website": "https://www.klo.es",
     "installable": True,
     "auto_install": False,
-    "depends": ["account", "account_asset_line_menu"],
+    "depends": ["account", "account_asset_line_menu", "klo_account_asset_management_analytic_percent_columns"],
     "data": [
         "views/account_asset_line_views.xml",
     ],

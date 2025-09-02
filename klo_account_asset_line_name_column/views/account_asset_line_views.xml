@@ -8,6 +8,9 @@
             <xpath expr="//field[@name='asset_id']" position="before">
                 <field name="name" readonly="1" optional="show" />
             </xpath>
+            <xpath expr="//field[@name='asset_id']" position="after">
+                <field name="analytic_account_name" optional="show" />
+            </xpath>
         </field>
     </record>
 </odoo>
