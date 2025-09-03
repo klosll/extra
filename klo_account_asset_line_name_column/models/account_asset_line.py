@@ -7,4 +7,8 @@ from odoo import fields, models
 class AccountAssetLine(models.Model):
     _inherit = "account.asset.line"
 
-    analytic_account_name = fields.Char(related='asset_id.analytic_account_name', store=True)
+    analytic_account_name = fields.Char(
+        related='asset_id.analytic_account_name',
+        string="Primera analítica",
+        store=True
+    )

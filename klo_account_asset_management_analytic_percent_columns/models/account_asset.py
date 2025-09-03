@@ -9,7 +9,7 @@ class AccountAsset(models.Model):
     _inherit = "account.asset"
 
     analytic_account_name = fields.Char(
-        string="Nombre de Cuenta Analítica",
+        string="Primera analítica",
         compute="_compute_analytic_account_name",
         store=True
     )
