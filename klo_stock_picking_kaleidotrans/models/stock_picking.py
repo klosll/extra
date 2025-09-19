@@ -32,19 +32,21 @@ class StockPicking(models.Model):
                 respuesta = self._get_listar_pedidos(token_kaleidotrans)
                 if respuesta['pedidosCompletos'][0]['pedido']['IdPedido'] == self.servicio_id:
                     resp_mod = self._put_modificar_pedidos(token_kaleidotrans)
-                    if resp_mod['code'] != 200:
-                        picking.note_kaleidotrans = fecha_hora +" -> "+ resp_mod['error'] +"\n"+ picking.note_kaleidotrans
+                    resp_mod_cod = resp_mod.get("code", 200)
+                    if resp_mod_cod != 200:
+                        picking.note_kaleidotrans = fecha_hora +" -> "+ resp_mod['error'] +"\n"+str(picking.note_kaleidotrans)
                     else:
-                        picking.note_kaleidotrans = fecha_hora +" -> "+ resp_mod['mensaje'] +"\n"+picking.note_kaleidotrans
+                        picking.note_kaleidotrans = fecha_hora +" -> "+ resp_mod['mensaje'] +"\n"+str(picking.note_kaleidotrans)
                 else:
                     pedido = self._post_pedidos(token_kaleidotrans)
-                    if pedido['code'] != 200:
-                        picking.note_kaleidotrans = fecha_hora +" -> "+ pedido['error'] +"\n"+picking.note_kaleidotrans
+                    pedido_cod = pedido.get("code", 200)
+                    if pedido_cod != 200:
+                        picking.note_kaleidotrans = fecha_hora +" -> "+ pedido['error'] +"\n"+str(picking.note_kaleidotrans)
                     else:
                         picking.servicio_id = pedido["IdServicio"]
-                        picking.note_kaleidotrans = fecha_hora +" -> "+ pedido['mensaje'] +"\n"+picking.note_kaleidotrans
+                        picking.note_kaleidotrans = fecha_hora + " -> " + pedido['mensaje'] + "\n" + str(picking.note_kaleidotrans)
         else:
-            self.note_kaleidotrans = fecha_hora +" -> El cargador no está asignado." +"\n"+self.note_kaleidotrans
+            self.note_kaleidotrans = fecha_hora +" -> El cargador no está asignado." +"\n"+str(self.note_kaleidotrans)
 
     @api.model
     def _generate_refresh_token(self):
