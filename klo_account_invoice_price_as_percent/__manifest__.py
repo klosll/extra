@@ -12,6 +12,8 @@
     ],
     "excludes": [],
     "data": [
+        "views/account_report.xml",
+        "views/report_invoice.xml",
         "report/account_invoice_report.xml",
     ],
     "installable": True,

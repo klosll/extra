@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <template id="klo_report_invoice_document_price_as_percent" inherit_id="account.report_invoice_document">
+    <template id="klo_report_invoice_document_price_as_percent" inherit_id="account.report_invoice_document" primary="True">
         <!-- El precio unitario se multiplica por 100 al ser un % y no un precio -->
         <xpath expr="//span[@t-field='line.price_unit']" position="replace">
             <span class="text-nowrap">
