@@ -11,6 +11,6 @@ class HrEmployeeDocument(models.Model):
     employee_active = fields.Boolean(
         string='Empleado Activo',
         related='employee_ref.active',
-        store=True,
+        store=False,
         readonly=True,
     )
