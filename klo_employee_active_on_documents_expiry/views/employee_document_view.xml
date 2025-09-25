@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="klo_employee_documents_tree_view_inherit" model="ir.ui.view">
+        <field name="name">klo.hr.employee.document.tree.inherit</field>
+        <field name="model">hr.employee.document</field>
+        <field name="inherit_id" ref="oh_employee_documents_expiry.employee_documents_tree_view"/>
+        <field name="arch" type="xml">
+            <!-- Ejemplo: añadir un campo después de 'expiry_date' -->
+            <field name="expiry_date" position="after">
+                <field name="employee_active"/>
+            </field>
+        </field>
+    </record>
+</odoo>
