@@ -184,16 +184,24 @@ class StockPicking(models.Model):
         response = 0
         for bulto in lista_bultos:
             domain = [('product_id.default_code', '=', bulto)]
-            for line in self.move_line_ids.filtered_domain(domain):
-                response = response + line.qty_done
+            if self.state == 'done':
+                for line in self.move_line_ids.filtered_domain(domain):
+                    response = response + line.qty_done
+            else:
+                for line in self.move_line_ids.filtered_domain(domain):
+                    response = response + line.product_uom_qty
         return response
 
     @api.model
     def _get_pallet_entrega(self):
         domain = [('product_id.product_tmpl_id.palet', '=', True)]
         response = 0
-        for line in self.move_line_ids.filtered_domain(domain):
-            response = response + line.qty_done
+        if self.state == 'done':
+            for line in self.move_line_ids.filtered_domain(domain):
+                response = response + line.qty_done
+        else:
+            for line in self.move_line_ids.filtered_domain(domain):
+                response = response + line.product_uom_qty
         return response
 
     @api.model
@@ -221,24 +229,33 @@ class StockPicking(models.Model):
             palletEntrega = self._get_pallet_entrega()
             if not palletEntrega:
                 palletEntrega = 0
-            conductor = self._get_conductor(token_kaleidotrans)
-            id_conductor_puntos = conductor.get("code", 200)
-            if id_conductor_puntos != 200:
-                response = {"error": "Revise NIF del Conductor (Conductores en KaleidoTrans).",
-                            "code": 404}
-                return response
-            vehiculo = self._get_cabeza(token_kaleidotrans)
-            id_vehiculo_puntos = vehiculo.get("code", 200)
-            if id_vehiculo_puntos != 200:
-                response = {"error": "Revise matrícula de Cabeza de vehículo (Vehículos en KaleidoTrans).",
-                            "code": 404}
-                return response
-            remolque = self._get_remolque(token_kaleidotrans)
-            id_remolque_puntos = remolque.get("code", 200)
-            if id_remolque_puntos != 200:
-                response = {"error": "Revise matrícula de Remolque de vehículo (Vehículos en KaleidoTrans).",
-                            "code": 404}
-                return response
+            id_conductor = None
+            id_vehiculo = None
+            id_remolque = None
+            if self.crm_driver_id:
+                conductor = self._get_conductor(token_kaleidotrans)
+                id_conductor_puntos = conductor.get("code", 200)
+                if id_conductor_puntos != 200:
+                    response = {"error": "Revise NIF del Conductor (Conductores en KaleidoTrans).",
+                                "code": 404}
+                    return response
+                id_conductor = conductor['choferes'][0]['IdChofer']
+            if self.cmr_tractor_id:
+                vehiculo = self._get_cabeza(token_kaleidotrans)
+                id_vehiculo_puntos = vehiculo.get("code", 200)
+                if id_vehiculo_puntos != 200:
+                    response = {"error": "Revise matrícula de Cabeza de vehículo (Vehículos en KaleidoTrans).",
+                                "code": 404}
+                    return response
+                id_vehiculo = vehiculo['vehiculos'][0]['IdVehiculo']
+            if self.cmr_semi_trailer_id:
+                remolque = self._get_remolque(token_kaleidotrans)
+                id_remolque_puntos = remolque.get("code", 200)
+                if id_remolque_puntos != 200:
+                    response = {"error": "Revise matrícula de Remolque de vehículo (Vehículos en KaleidoTrans).",
+                                "code": 404}
+                    return response
+                id_remolque = remolque['vehiculos'][0]['IdVehiculo']
             poblacion_dir_ent = self._get_poblaciones_dir_ent(token_kaleidotrans)
             sitio_dir_ent = self._get_sitios_dir_ent(token_kaleidotrans)
             poblacion_dir_ent_puntos = poblacion_dir_ent.get("code", 200)
@@ -251,9 +268,6 @@ class StockPicking(models.Model):
                 response = {"error": "Revise CIF de entrega del cliente (Sitios en KaleidoTrans).",
                             "code": 404}
                 return response
-            id_conductor = conductor['choferes'][0]['IdChofer']
-            id_vehiculo = vehiculo['vehiculos'][0]['IdVehiculo']
-            id_remolque = remolque['vehiculos'][0]['IdVehiculo']
             idPunto_dir_ent = poblacion_dir_ent['puntos'][0]['IdPunto']
             idLugar_dir_ent = sitio_dir_ent['sitios'][0]['IdLugar']
             poblacion_cargador = self._get_poblaciones_cargador(token_kaleidotrans)
@@ -270,7 +284,7 @@ class StockPicking(models.Model):
                 return response
             idPunto_cargador = poblacion_cargador['puntos'][0]['IdPunto']
             idLugar_cargador = sitio_cargador['sitios'][0]['IdLugar']
-            sale_name = self.name
+            referencia = self.sale_id.name +" - "+ self.name
             idUsuario = int(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.idusuario'))
             idCliente = int(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.idcliente'))
             precio_cli = float(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.precio_cli'))
@@ -283,7 +297,7 @@ class StockPicking(models.Model):
                 "estadoPedido": "Servicio",
                 "IdFactura": None,
                 "IdFacturaPro": None,
-                "referencia": sale_name,
+                "referencia": referencia,
                 "referencia2": None,
                 "IdCliente": idCliente,
                 "IdMercancia": None,
@@ -459,7 +473,7 @@ class StockPicking(models.Model):
                         "Cantidad": "0.00000000",
                         "CantidadReal": "0.00000000",
                         "IdUnidadMedida": None,
-                        "RefereCarDes": sale_name,
+                        "RefereCarDes": referencia,
                         "IdMercancia": None,
                         "MercanciaManual": None,
                         "CambioPalets": None,
@@ -518,7 +532,7 @@ class StockPicking(models.Model):
                         "Cantidad": "0.00000000",
                         "CantidadReal": "0.00000000",
                         "IdUnidadMedida": None,
-                        "RefereCarDes": sale_name,
+                        "RefereCarDes": referencia,
                         "IdMercancia": None,
                         "MercanciaManual": None,
                         "CambioPalets": None,
@@ -585,24 +599,33 @@ class StockPicking(models.Model):
         palletEntrega = self._get_pallet_entrega()
         if not palletEntrega:
             palletEntrega = 0
-        conductor = self._get_conductor(token_kaleidotrans)
-        id_conductor_puntos = conductor.get("code", 200)
-        if id_conductor_puntos != 200:
-            response = {"error": "Revise NIF del Conductor (Conductores en KaleidoTrans).",
-                        "code": 404}
-            return response
-        vehiculo = self._get_cabeza(token_kaleidotrans)
-        id_vehiculo_puntos = vehiculo.get("code", 200)
-        if id_vehiculo_puntos != 200:
-            response = {"error": "Revise matrícula de Cabeza de vehículo (Vehículos en KaleidoTrans).",
-                        "code": 404}
-            return response
-        remolque = self._get_remolque(token_kaleidotrans)
-        id_remolque_puntos = remolque.get("code", 200)
-        if id_remolque_puntos != 200:
-            response = {"error": "Revise matrícula de Remolque de vehículo (Vehículos en KaleidoTrans).",
-                        "code": 404}
-            return response
+        id_conductor = None
+        id_vehiculo = None
+        id_remolque = None
+        if self.crm_driver_id:
+            conductor = self._get_conductor(token_kaleidotrans)
+            id_conductor_puntos = conductor.get("code", 200)
+            if id_conductor_puntos != 200:
+                response = {"error": "Revise NIF del Conductor (Conductores en KaleidoTrans).",
+                            "code": 404}
+                return response
+            id_conductor = conductor['choferes'][0]['IdChofer']
+        if self.cmr_tractor_id:
+            vehiculo = self._get_cabeza(token_kaleidotrans)
+            id_vehiculo_puntos = vehiculo.get("code", 200)
+            if id_vehiculo_puntos != 200:
+                response = {"error": "Revise matrícula de Cabeza de vehículo (Vehículos en KaleidoTrans).",
+                            "code": 404}
+                return response
+            id_vehiculo = vehiculo['vehiculos'][0]['IdVehiculo']
+        if self.cmr_semi_trailer_id:
+            remolque = self._get_remolque(token_kaleidotrans)
+            id_remolque_puntos = remolque.get("code", 200)
+            if id_remolque_puntos != 200:
+                response = {"error": "Revise matrícula de Remolque de vehículo (Vehículos en KaleidoTrans).",
+                            "code": 404}
+                return response
+            id_remolque = remolque['vehiculos'][0]['IdVehiculo']
         poblacion_dir_ent = self._get_poblaciones_dir_ent(token_kaleidotrans)
         sitio_dir_ent = self._get_sitios_dir_ent(token_kaleidotrans)
         poblacion_dir_ent_puntos = poblacion_dir_ent.get("code", 200)
@@ -615,9 +638,6 @@ class StockPicking(models.Model):
             response = {"error": "Revise CIF de entrega del cliente (Sitios en KaleidoTrans).",
                         "code": 404}
             return response
-        id_conductor = conductor['choferes'][0]['IdChofer']
-        id_vehiculo = vehiculo['vehiculos'][0]['IdVehiculo']
-        id_remolque = remolque['vehiculos'][0]['IdVehiculo']
         idPunto_dir_ent = poblacion_dir_ent['puntos'][0]['IdPunto']
         idLugar_dir_ent = sitio_dir_ent['sitios'][0]['IdLugar']
         poblacion_cargador = self._get_poblaciones_cargador(token_kaleidotrans)
@@ -634,7 +654,7 @@ class StockPicking(models.Model):
             return response
         idPunto_cargador = poblacion_cargador['puntos'][0]['IdPunto']
         idLugar_cargador = sitio_cargador['sitios'][0]['IdLugar']
-        sale_name = self.name
+        referencia = self.sale_id.name +" - "+ self.name
         idUsuario = int(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.idusuario'))
         idCliente = int(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.idcliente'))
         precio_cli = float(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.precio_cli'))
@@ -646,7 +666,7 @@ class StockPicking(models.Model):
                   'IdFactura': None,
                   'IdFacturaPro': None,
                   'IdCliente': idCliente,
-                  'referencia': sale_name,
+                  'referencia': referencia,
                   'referencia2': None,
                   'IdMercancia': None,
                   'IdRutaTipo': None,
@@ -820,7 +840,7 @@ class StockPicking(models.Model):
                         'Cantidad': None,
                         'CantidadReal': None,
                         'IdUnidadMedida': None,
-                        'RefereCarDes': sale_name,
+                        'RefereCarDes': referencia,
                         'IdMercancia': None,
                         'MercanciaManual': None,
                         'CambioPalets': None,
@@ -878,7 +898,7 @@ class StockPicking(models.Model):
                         'Cantidad': None,
                         'CantidadReal': None,
                         'IdUnidadMedida': None,
-                        'RefereCarDes': sale_name,
+                        'RefereCarDes': referencia,
                         'IdMercancia': None,
                         'MercanciaManual': None,
                         'CambioPalets': None,
