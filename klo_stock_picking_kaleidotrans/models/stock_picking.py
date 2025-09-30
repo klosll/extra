@@ -60,20 +60,20 @@ class StockPicking(models.Model):
         response = request.json()
         return response["token"]
 
-    @api.model
-    def _get_conductor(self, token_kaleidotrans):
-        licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
-        conductor_nif = self.crm_driver_id.vat
-        if conductor_nif:
-            url = 'https://portal.kaleidotrans.com/api/MaestrosPrimarios/Conductores/listar.php?licencia='+licencia_code+\
-                  '&NIF='+conductor_nif
-            headers = {'Authorization': token_kaleidotrans}
-            request = requests.get(url, headers=headers)
-            response = request.json()
-        else:
-            response = {"mensaje": "El Conductor no tiene NIF (Conductores en KaleidoTrans).",
-                        "code": 404}
-        return response
+    # @api.model
+    # def _get_conductor(self, token_kaleidotrans):
+    #     licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
+    #     conductor_nif = self.crm_driver_id.vat
+    #     if conductor_nif:
+    #         url = 'https://portal.kaleidotrans.com/api/MaestrosPrimarios/Conductores/listar.php?licencia='+licencia_code+\
+    #               '&NIF='+conductor_nif
+    #         headers = {'Authorization': token_kaleidotrans}
+    #         request = requests.get(url, headers=headers)
+    #         response = request.json()
+    #     else:
+    #         response = {"mensaje": "El Conductor no tiene NIF (Conductores en KaleidoTrans).",
+    #                     "code": 404}
+    #     return response
 
     @api.model
     def _get_cabeza(self, token_kaleidotrans):
@@ -232,14 +232,15 @@ class StockPicking(models.Model):
             id_conductor = None
             id_vehiculo = None
             id_remolque = None
-            if self.crm_driver_id:
-                conductor = self._get_conductor(token_kaleidotrans)
-                id_conductor_puntos = conductor.get("code", 200)
-                if id_conductor_puntos != 200:
-                    response = {"error": "Revise NIF del Conductor (Conductores en KaleidoTrans).",
-                                "code": 404}
-                    return response
-                id_conductor = conductor['choferes'][0]['IdChofer']
+            # No se envía el conductor. Anulamos la asignación pero dejamos el código por si
+            # if self.crm_driver_id:
+            #     conductor = self._get_conductor(token_kaleidotrans)
+            #     id_conductor_puntos = conductor.get("code", 200)
+            #     if id_conductor_puntos != 200:
+            #         response = {"error": "Revise NIF del Conductor (Conductores en KaleidoTrans).",
+            #                     "code": 404}
+            #         return response
+            #     id_conductor = conductor['choferes'][0]['IdChofer']
             if self.cmr_tractor_id:
                 vehiculo = self._get_cabeza(token_kaleidotrans)
                 id_vehiculo_puntos = vehiculo.get("code", 200)
@@ -602,14 +603,15 @@ class StockPicking(models.Model):
         id_conductor = None
         id_vehiculo = None
         id_remolque = None
-        if self.crm_driver_id:
-            conductor = self._get_conductor(token_kaleidotrans)
-            id_conductor_puntos = conductor.get("code", 200)
-            if id_conductor_puntos != 200:
-                response = {"error": "Revise NIF del Conductor (Conductores en KaleidoTrans).",
-                            "code": 404}
-                return response
-            id_conductor = conductor['choferes'][0]['IdChofer']
+        # No se envía el conductor. Anulamos la asignación pero dejamos el código por si
+        # if self.crm_driver_id:
+        #     conductor = self._get_conductor(token_kaleidotrans)
+        #     id_conductor_puntos = conductor.get("code", 200)
+        #     if id_conductor_puntos != 200:
+        #         response = {"error": "Revise NIF del Conductor (Conductores en KaleidoTrans).",
+        #                     "code": 404}
+        #         return response
+        #     id_conductor = conductor['choferes'][0]['IdChofer']
         if self.cmr_tractor_id:
             vehiculo = self._get_cabeza(token_kaleidotrans)
             id_vehiculo_puntos = vehiculo.get("code", 200)
