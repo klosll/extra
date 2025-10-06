@@ -184,11 +184,10 @@ class StockPicking(models.Model):
         response = 0
         for bulto in lista_bultos:
             domain = [('product_id.default_code', '=', bulto)]
-            if self.state == 'done':
-                for line in self.move_line_ids.filtered_domain(domain):
+            for line in self.move_line_ids.filtered_domain(domain):
+                if line.qty_done != 0:
                     response = response + line.qty_done
-            else:
-                for line in self.move_line_ids.filtered_domain(domain):
+                else:
                     response = response + line.product_uom_qty
         return response
 
@@ -196,11 +195,10 @@ class StockPicking(models.Model):
     def _get_pallet_entrega(self):
         domain = [('product_id.product_tmpl_id.palet', '=', True)]
         response = 0
-        if self.state == 'done':
-            for line in self.move_line_ids.filtered_domain(domain):
+        for line in self.move_line_ids.filtered_domain(domain):
+            if line.qty_done != 0:
                 response = response + line.qty_done
-        else:
-            for line in self.move_line_ids.filtered_domain(domain):
+            else:
                 response = response + line.product_uom_qty
         return response
 
