@@ -241,16 +241,16 @@ class StockPicking(models.Model):
             #     id_conductor = conductor['choferes'][0]['IdChofer']
             if self.cmr_tractor_id:
                 vehiculo = self._get_cabeza(token_kaleidotrans)
-                id_vehiculo_puntos = vehiculo.get("code", 200)
-                if id_vehiculo_puntos != 200:
+                id_vehiculo_puntos = vehiculo.get("vehiculos", 200)
+                if id_vehiculo_puntos == 200:
                     response = {"error": "Revise matrícula de Cabeza de vehículo (Vehículos en KaleidoTrans).",
                                 "code": 404}
                     return response
                 id_vehiculo = vehiculo['vehiculos'][0]['IdVehiculo']
             if self.cmr_semi_trailer_id:
                 remolque = self._get_remolque(token_kaleidotrans)
-                id_remolque_puntos = remolque.get("code", 200)
-                if id_remolque_puntos != 200:
+                id_remolque_puntos = remolque.get("vehiculos", 200)
+                if id_remolque_puntos == 200:
                     response = {"error": "Revise matrícula de Remolque de vehículo (Vehículos en KaleidoTrans).",
                                 "code": 404}
                     return response
@@ -612,16 +612,16 @@ class StockPicking(models.Model):
         #     id_conductor = conductor['choferes'][0]['IdChofer']
         if self.cmr_tractor_id:
             vehiculo = self._get_cabeza(token_kaleidotrans)
-            id_vehiculo_puntos = vehiculo.get("code", 200)
-            if id_vehiculo_puntos != 200:
+            id_vehiculo_puntos = vehiculo.get("vehiculos", 200)
+            if id_vehiculo_puntos == 200:
                 response = {"error": "Revise matrícula de Cabeza de vehículo (Vehículos en KaleidoTrans).",
                             "code": 404}
                 return response
             id_vehiculo = vehiculo['vehiculos'][0]['IdVehiculo']
         if self.cmr_semi_trailer_id:
             remolque = self._get_remolque(token_kaleidotrans)
-            id_remolque_puntos = remolque.get("code", 200)
-            if id_remolque_puntos != 200:
+            id_remolque_puntos = remolque.get("vehiculos", 200)
+            if id_remolque_puntos == 200:
                 response = {"error": "Revise matrícula de Remolque de vehículo (Vehículos en KaleidoTrans).",
                             "code": 404}
                 return response
