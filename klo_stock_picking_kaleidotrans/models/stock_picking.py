@@ -158,11 +158,10 @@ class StockPicking(models.Model):
 
     @api.model
     def _get_sitios_cargador(self, token_kaleidotrans):
+        # Se envía siempre el CIF de la compañía aunque haya un cargador asignado.
         licencia_code = self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.licencia')
         company = self.env.company
-        cif = self.cmr_loader_id.vat
-        if not cif:
-            cif = company.vat
+        cif = company.vat
         if cif:
             prefijo = cif[:2]
             if prefijo == 'ES':
@@ -173,7 +172,7 @@ class StockPicking(models.Model):
             request = requests.get(url, headers=headers)
             response = request.json()
         else:
-            response = {"mensaje": "El cargador no tiene CIF (Sitios en KaleidoTrans).",
+            response = {"mensaje": "El cargador no tiene CIF (Sitios en KaleidoTrans). Revise el CIF de la compañía.",
                         "code": 404}
         return response
 
