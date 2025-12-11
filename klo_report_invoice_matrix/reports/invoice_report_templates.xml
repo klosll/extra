@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="invoice_report_dot_matrix">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                    <t t-call="klo_report_invoice_matrix.invoice_report_dot_matrix_document" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+
+        <!-- QWeb Reports. Acción para llamar al modelo de factura matricial. -->
+        <record id="action_report_sale_invoice_dot_matrix" model="ir.actions.report">
+           <field name="name">Invoices (Dot Matrix)</field>
+           <field name="model">account.move</field>
+           <field name="report_type">qweb-pdf</field>
+           <field name="report_name">klo_report_invoice_matrix.invoice_report_dot_matrix</field>
+           <field name="report_file">klo_report_invoice_matrix.invoice_report_dot_matrix</field>
+           <field name="binding_model_id" ref="account.model_account_move"/>
+           <field name="binding_type">report</field>
+           <field name="paperformat_id" ref="klo_report_invoice_matrix.paperformat_dot_matrix_printer_invoice_reports"/>
+        </record>
+    </data>
+</odoo>

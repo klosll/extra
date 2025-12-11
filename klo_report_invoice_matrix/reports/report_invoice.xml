@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="invoice_report_dot_matrix_document"
+            inherit_id="account.report_invoice_document"
+            name="Factura matricial"
+            primary="True"
+  >
+    <xpath expr="//t/div" position="attributes">
+        <attribute name="style">
+            font-family: monospace; font-size: 12px; padding: 0; margin: 0;
+        </attribute>
+    </xpath>
+<!--            font-family: monospace; font-size: 12px; padding: 0; margin: 0;-->
+<!--            width: 8.5in; height: 12in; min-height: 12in; box-sizing: border-box;-->
+      <!-- Otros ajustes aquí -->
+  </template>
+</odoo>
