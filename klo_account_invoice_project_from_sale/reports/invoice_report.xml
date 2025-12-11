@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="klo_report_invoice_document_project" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[@name='origin']" position="after">
+            <div class="col" t-if="o.project_id" name="project">
+                <strong>Project</strong>
+                <div t-field="o.project_id">PR001</div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
