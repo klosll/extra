@@ -4,6 +4,7 @@
     'name': 'KLO - Invoice dot matrix report',
     'version': '18.0.0.1',
     'summary': 'Invoice dot matrix report',
+    'category': 'Accounting/Accounting',
     "license": "AGPL-3",
     'author': 'KLO Ingenieria Informatica S.L.L.',
     'website': 'https://www.klo.es',
