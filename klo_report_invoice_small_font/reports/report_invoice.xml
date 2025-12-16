@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="klo_invoice_report_small_font" inherit_id="account.report_invoice_document">
+
+    <xpath expr="//t[@t-set='o'][@t-value='o.with_context(lang=lang)']" position="before">
+        <t t-set="font_size" t-value="request.env['ir.config_parameter'].sudo().get_param('klo.report_small_font', '8')"/>
+        <style>
+            /* Forzar tamaño dinámico en todo el documento */
+            body, body * {
+                font-size: <t t-esc="font_size"/>px !important;
+            }
+
+            /* Ajustar padding para compensar el tamaño reducido */
+            .table th, .table td {
+                padding: 1px;
+            }
+
+            /* Títulos proporcionales */
+            h1 { font-size: <t t-esc="int(font_size) * 1.5"/>px !important; }
+            h2 { font-size: <t t-esc="int(font_size) * 1.25"/>px !important; }
+            h3 { font-size: <t t-esc="int(font_size) * 1.125"/>px !important; }
+
+            /* Mejorar legibilidad con fuente monoespaciada */
+            body {
+                font-family: 'Courier New', monospace;
+                line-height: 1.2;
+            }
+        </style>
+    </xpath>
+
+  </template>
+</odoo>
