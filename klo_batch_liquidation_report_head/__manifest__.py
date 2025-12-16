@@ -3,7 +3,7 @@
 
 {
     "name": "KLO Batch Liquidation Report With Head",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.1.0",
     "category": "Sales",
     "license": "AGPL-3",
     "author": "AvanzOSC",
