@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="config_param_minimal_layout_small_font_footer" model="ir.config_parameter" forcecreate="False">
+            <field name="key">klo.report_layout_small_font_footer</field>
+            <field name="value">8</field>
+        </record>
+    </data>
+</odoo>
