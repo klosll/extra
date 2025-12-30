@@ -39,36 +39,36 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "<span>Container</span>"
-msgstr "<span>Envases</span>"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "<span>Lot</span>"
-msgstr "<span>Lote</span>"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "<span>Packaging Qty</span>"
-msgstr "<span>Cant. Paquetes</span>"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "<span>Packaging</span>"
-msgstr "<span>Empaquetado</span>"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "<span>Product</span>"
-msgstr "<span>Producto</span>"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "<span>Quantity</span>"
-msgstr "<span>Cantidad</span>"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.external_layout_standard_picking_report_head
@@ -86,7 +86,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "<strong>Client Ref:</strong>"
-msgstr "<strong>Referencia Cliente:</strong>"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.external_layout_standard_picking_report_head
@@ -97,7 +97,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "<strong>Date Done:</strong>"
-msgstr "<strong>Fecha realizada:</strong>"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.external_layout_standard_picking_report_head
@@ -126,18 +126,18 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "Carrier:"
-msgstr "Método de envío:"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model:ir.model.fields,field_description:klo_batch_liquidation_report_head.field_stock_picking__display_name
 msgid "Display Name"
-msgstr "Nombre mostrado"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "Driver:"
-msgstr "Chofer:"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model:ir.model.fields,field_description:klo_batch_liquidation_report_head.field_stock_picking__id
@@ -147,19 +147,19 @@ msgstr ""
 #. module: klo_batch_liquidation_report_head
 #: model:ir.model.fields,field_description:klo_batch_liquidation_report_head.field_stock_picking____last_update
 msgid "Last Modified on"
-msgstr "Última modificación el"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "License Plate Head:"
-msgstr "Matrícula cabeza"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "License Plate Trailer:"
-msgstr "Matrícula remolque"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.external_layout_standard_picking_report_head
@@ -170,24 +170,24 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "Origin:"
-msgstr "Documento origen:"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model:ir.actions.report,name:klo_batch_liquidation_report_head.action_report_picking_grouped_by_product
 msgid "Paasa Picking With header Grouped By Product"
-msgstr "Albarán PAASA con Cabecera agrupado por producto"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "Phone:"
-msgstr "Teléfono:"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "Picking Nº:"
-msgstr "Nº de albarán:"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.external_layout_standard_picking_report_head
@@ -197,10 +197,10 @@ msgstr ""
 #. module: klo_batch_liquidation_report_head
 #: model:ir.model,name:klo_batch_liquidation_report_head.model_stock_picking
 msgid "Transfer"
-msgstr "Albarán"
+msgstr ""
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "Transporter:"
-msgstr "Transportista:"
+msgstr ""
