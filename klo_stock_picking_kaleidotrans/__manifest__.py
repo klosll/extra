@@ -12,6 +12,7 @@
         "stock",
     ],
     "data": [
+        "data/ir_config_parameter_data.xml",
         "views/stock_picking_view.xml",
     ],
     "installable": True,

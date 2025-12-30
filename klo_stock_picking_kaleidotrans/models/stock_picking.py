@@ -355,7 +355,7 @@ class StockPicking(models.Model):
                 "IdTarifa": None,
                 "IdZonaOrigen": None,
                 "IdZonaDestino": None,
-                "IdUsuario": 1,
+                "IdUsuario": idUsuario,   #1,
                 "PrecioPro": None,
                 "PrecioCli": None,
                 "IdConceptoPro": None,
@@ -582,7 +582,21 @@ class StockPicking(models.Model):
             url = 'https://portal.kaleidotrans.com/api/GestionTrafico/Pedidos/modificar.php?licencia=' + licencia_code
             headers = {'Authorization': token_kaleidotrans}
             request = requests.put(url, data=json.dumps(values), headers=headers)
-            response = request.json()
+            # response = request.json()
+
+            try:
+                response = request.json()
+            except json.JSONDecodeError:
+                # Si falla, intentar extraer el JSON del texto
+                text = request.text
+                # Buscar el último { que indica el inicio del JSON
+                json_start = text.rfind('{')
+                if json_start != -1:
+                    json_str = text[json_start:]
+                    response = json.loads(json_str)
+                else:
+                    response = {"error": "Respuesta inválida del servidor", "code": 500, "raw": text}
+
             return response
 
     @api.model
@@ -653,7 +667,7 @@ class StockPicking(models.Model):
             return response
         idPunto_cargador = poblacion_cargador['puntos'][0]['IdPunto']
         idLugar_cargador = sitio_cargador['sitios'][0]['IdLugar']
-        referencia = self.sale_id.name +" - "+ self.name
+        referencia = (self.sale_id.name or "")+" - "+ self.name
         idUsuario = int(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.idusuario'))
         idCliente = int(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.idcliente'))
         precio_cli = float(self.env['ir.config_parameter'].sudo().get_param('kaleidotrans.precio_cli'))
@@ -721,7 +735,7 @@ class StockPicking(models.Model):
                   'IdTarifa': None,
                   'IdZonaOrigen': None,
                   'IdZonaDestino': None,
-                  'IdUsuario': 1,
+                  'IdUsuario': idUsuario, # 1,
                   'PrecioPro': None,
                   'PrecioCli': None,
                   'IdConceptoPro': None,
@@ -948,5 +962,20 @@ class StockPicking(models.Model):
         url = 'https://portal.kaleidotrans.com/api/GestionTrafico/Pedidos/insertar.php?licencia='+licencia_code
         headers = {'Authorization': token_kaleidotrans}
         request = requests.post(url, data=json.dumps(values), headers=headers)
-        response = request.json()
+        # response = request.json()
+
+        # Extraer solo la parte JSON de la respuesta
+        try:
+            response = request.json()
+        except json.JSONDecodeError:
+            # Si falla, intentar extraer el JSON del texto
+            text = request.text
+            # Buscar el último { que indica el inicio del JSON
+            json_start = text.rfind('{')
+            if json_start != -1:
+                json_str = text[json_start:]
+                response = json.loads(json_str)
+            else:
+                response = {"error": "Respuesta inválida del servidor", "code": 500, "raw": text}
+
         return response
