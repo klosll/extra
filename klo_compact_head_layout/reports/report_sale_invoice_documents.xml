@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <template id="klo_invoice_report_document_compact" inherit_id="account.report_invoice_document">
+    <xpath expr="//div[@class='row'][1]" position="replace"/>
+  </template>
+
+  <template id="klo_report_saleorder_document_compact" inherit_id="sale.report_saleorder_document">
+    <xpath expr="//t[@t-set='address']" position="replace"/>
+    <xpath expr="//t[@t-set='information_block']" position="replace"/>
+  </template>
+
+</odoo>

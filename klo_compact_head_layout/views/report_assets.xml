@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Heredar el layout externo de forma genérica para todos los documentos -->
+    <template id="klo_external_layout" inherit_id="web.external_layout">
+        <xpath expr="//t[@t-if='company.external_report_layout_id'] | //t[@t-else='else']" position="replace">
+            <t t-call="klo_compact_head_layout.klo_external_layout_compact"><t t-out="0"/></t>
+        </xpath>
+    </template>
+</odoo>
