@@ -3,7 +3,7 @@
   <template id="klo_invoice_report_small_font_body" inherit_id="account.report_invoice_document">
 
     <xpath expr="//t[@t-set='o'][@t-value='o.with_context(lang=lang)']" position="before">
-        <t t-set="font_size" t-value="request.env['ir.config_parameter'].sudo().get_param('klo.report_small_font_body', '8')"/>
+        <t t-set="font_size" t-value="request.env['ir.config_parameter'].sudo().get_param('klo.invoice_report_small_font_body', '8')"/>
         <style>
             /* Forzar tamaño dinámico en todo el documento */
             body, body * {
