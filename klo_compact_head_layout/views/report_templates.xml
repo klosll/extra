@@ -24,7 +24,8 @@
                         </div>
                     </div>
 
-                    <!-- Dirección de entrega (si existe). Solo lo imprime si es Pedido/presupuesto o Factura -->
+                    <!-- Dirección de entrega (si existe). Solo lo imprime si es Pedido/presupuesto o Factura
+                    Si se trata de Entrega (albarán) entonces sí imprime la dirección de entrega -->
                     <div class="col-3">
                         <t t-if="o and o._name in ['sale.order', 'account.move'] and o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)">
                             <strong>Dirección de entrega:</strong><br/>
@@ -32,6 +33,13 @@
                             <t t-if="o.partner_shipping_id.street"><span t-esc="o.partner_shipping_id.street"/><br/></t>
                             <t t-esc="o.partner_shipping_id.zip"/> <t t-esc="o.partner_shipping_id.city"/>
                             <t t-if="o.partner_shipping_id.country_id"><br/><t t-esc="o.partner_shipping_id.country_id.name"/></t>
+                        </t>
+                        <t t-elif="o and o._name == 'stock.picking'">
+                            <strong>Dirección de entrega:</strong><br/>
+                            <div t-esc="o.partner_id.name"/>
+                            <t t-if="o.partner_id.street"><span t-esc="o.partner_id.street"/><br/></t>
+                            <t t-esc="o.partner_id.zip"/> <t t-esc="o.partner_id.city"/>
+                            <t t-if="o.partner_id.country_id"><br/><t t-esc="o.partner_id.country_id.name"/></t>
                         </t>
                     </div>
 

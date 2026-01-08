@@ -10,4 +10,9 @@
     <xpath expr="//t[@t-set='information_block']" position="replace"/>
   </template>
 
+  <template id="klo_report_delivery_document_compact" inherit_id="stock.report_delivery_document">
+        <xpath expr="//t[@t-set='address']" position="replace">
+        </xpath>
+  </template>
+
 </odoo>

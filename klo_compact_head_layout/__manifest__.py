@@ -16,7 +16,7 @@
     'data': [
         "views/report_templates.xml",
         "views/report_assets.xml",
-        "reports/report_sale_invoice_documents.xml",
+        "reports/report_sale_picking_invoice_documents.xml",
     ],
     "installable": True,
     "application" : False,
