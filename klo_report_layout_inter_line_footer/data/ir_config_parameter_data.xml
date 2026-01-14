@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="config_param_layout_inter_line_footer" model="ir.config_parameter" forcecreate="False">
+            <!--
+            1.0 = sin espacio adicional entre líneas
+            1.2 = 20% de espacio adicional (recomendado)
+            1.5 = 50% de espacio adicional
+            -->
+            <field name="key">klo.report_layout_inter_line_footer</field>
+            <field name="value">1.0</field>
+        </record>
+    </data>
+</odoo>

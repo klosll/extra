@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="klo_minimal_layout_small_font_footer" inherit_id="web.minimal_layout">
+        <xpath expr="//head" position="inside">
+            <t t-set="footer_inter_line" t-value="request.env['ir.config_parameter'].sudo().get_param('klo.report_layout_inter_line_footer', '1.0')"/>
+            <style>
+                .o_footer_content {
+                    <!--
+                    1.0 = sin espacio adicional entre líneas
+                    1.2 = 20% de espacio adicional (recomendado)
+                    1.5 = 50% de espacio adicional
+                    -->
+                    line-height: <t t-out="footer_inter_line"/> !important;
+                }
+            </style>
+        </xpath>
+    </template>
+</odoo>
