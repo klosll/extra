@@ -2,7 +2,7 @@
 <odoo>
     <template id="klo_minimal_layout_small_font_header" inherit_id="web.minimal_layout">
         <xpath expr="//head" position="inside">
-            <t t-set="header_font_size" t-value="request.env['ir.config_parameter'].sudo().get_param('klo.report_layout_small_font_header', '10')"/>
+            <t t-set="header_font_size" t-value="request.env['ir.config_parameter'].sudo().get_param('klo.report_layout_small_font_header', '12')"/>
             <style>
                 .header {
                     font-size: <t t-out="header_font_size"/>px !important;
