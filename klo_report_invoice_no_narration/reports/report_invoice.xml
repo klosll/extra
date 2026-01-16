@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="klo_invoice_report_no_narration" inherit_id="account.report_invoice_document">
+
+    <xpath expr="//div[@name='comment']" position="replace">
+        <div class="text-muted mb-3" t-attf-style="#{'text-align:justify;text-justify:inter-word;' if o.company_id.terms_type != 'html' else ''}" t-if="not is_html_empty(o.narration)" name="comment">
+        </div>
+    </xpath>
+
+  </template>
+</odoo>
