@@ -20,7 +20,8 @@ class AccountMove(models.Model):
         related="sale_order_id.project_id",
         string="Project",
         store=True,
-        readonly=True,
+        copy=False,
+        readonly=False,
     )
 
     @api.depends('invoice_line_ids.sale_line_ids')
