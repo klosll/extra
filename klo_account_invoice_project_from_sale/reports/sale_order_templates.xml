@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="klo_saleorder_report_project" inherit_id="sale.report_saleorder_document">
+
+    <xpath expr="//div[@id='informations']" position="inside">
+        <div t-if="doc.project_id" class="col" name="project_id">
+            <strong>Proyecto</strong>
+            <div t-field="doc.project_id">Nº proyecto</div>
+        </div>
+    </xpath>
+
+  </template>
+</odoo>
