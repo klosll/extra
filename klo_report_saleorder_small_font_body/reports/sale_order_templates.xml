@@ -25,7 +25,24 @@
                 font-family: 'Courier New', monospace;
                 line-height: 1.2;
             }
+
+            /* Tamaño específico para el título del documento */
+            .document-title, .document-title * {
+                font-size: <t t-esc="int(font_size) * 1.5"/>px !important;
+            }
         </style>
+    </xpath>
+
+    <!-- Añade atributo inline al campo que imprime el nombre/número del pedido para que sea más grande -->
+    <xpath expr="//t[@t-set='layout_document_title']" position="replace">
+        <t t-set="layout_document_title">
+            <div class="document-title">
+                <span t-if="is_proforma">Pro-Forma Invoice # </span>
+                <span t-elif="doc.state in ['draft','sent']">Quotation # </span>
+                <span t-else="">Order # </span>
+                <span t-field="doc.name">SO0000</span>
+            </div>
+        </t>
     </xpath>
 
   </template>
