@@ -25,7 +25,19 @@
                 font-family: 'Courier New', monospace;
                 line-height: 1.2;
             }
+
+            /* Tamaño específico para el título del documento */
+            .document-title, .document-title * {
+                font-size: <t t-esc="int(font_size) * 1.5"/>px !important;
+            }
         </style>
+    </xpath>
+
+    <!-- Añade atributo inline al campo que imprime el nombre/número de la entrega para que sea más grande -->
+    <xpath expr="//h2" position="replace">
+        <div class="document-title">
+            <span t-field="o.name">WH/OUT/0001</span>
+        </div>
     </xpath>
 
   </template>
