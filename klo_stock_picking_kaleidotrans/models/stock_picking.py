@@ -30,7 +30,14 @@ class StockPicking(models.Model):
             for picking in self:
                 token_kaleidotrans = self._generate_refresh_token()
                 respuesta = self._get_listar_pedidos(token_kaleidotrans)
-                if respuesta['pedidosCompletos'][0]['pedido']['IdPedido'] == self.servicio_id:
+
+                # Validar que la respuesta tenga la estructura esperada
+                if (respuesta and
+                    isinstance(respuesta.get('pedidosCompletos'), list) and
+                    len(respuesta['pedidosCompletos']) > 0 and
+                    respuesta['pedidosCompletos'][0].get('pedido') and
+                    respuesta['pedidosCompletos'][0]['pedido'].get('IdPedido') == self.servicio_id):
+
                     resp_mod = self._put_modificar_pedidos(token_kaleidotrans)
                     resp_mod_cod = resp_mod.get("code", 200)
                     if resp_mod_cod != 200:
