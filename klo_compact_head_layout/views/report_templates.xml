@@ -48,6 +48,8 @@
                         <div class="col-3" style="margin-bottom: 5px; font-size: {{font_size}}px; word-wrap: break-word; overflow-wrap: break-word;">
                             <strong>Dirección de entrega:</strong><br/>
                             <div t-esc="o.partner_shipping_id.name" style="word-break: break-word;"/>
+                            <t t-if="o.partner_shipping_id.comercial">(<span t-esc="o.partner_shipping_id.comercial"/>)<br/></t>
+                            <span>CIF/NIF: </span><t t-esc="o.partner_shipping_id.vat"/><br/>
                             <t t-if="o.partner_shipping_id.street"><span t-esc="o.partner_shipping_id.street"/><br/></t>
                             <t t-esc="o.partner_shipping_id.zip"/> <t t-esc="o.partner_shipping_id.city"/>
                             <t t-if="o.partner_shipping_id.country_id"><br/><t t-esc="o.partner_shipping_id.country_id.name"/></t>
@@ -57,6 +59,8 @@
                         <div class="col-3" style="margin-bottom: 5px; font-size: {{font_size}}px; word-wrap: break-word; overflow-wrap: break-word;">
                             <strong>Dirección de entrega:</strong><br/>
                             <div t-esc="o.partner_id.name" style="word-break: break-word;"/>
+                            <t t-if="o.partner_id.comercial">(<span t-esc="o.partner_id.comercial"/>)<br/></t>
+                            <span>CIF/NIF: </span><t t-esc="o.partner_id.vat"/><br/>
                             <t t-if="o.partner_id.street"><span t-esc="o.partner_id.street"/><br/></t>
                             <t t-esc="o.partner_id.zip"/> <t t-esc="o.partner_id.city"/>
                             <t t-if="o.partner_id.country_id"><br/><t t-esc="o.partner_id.country_id.name"/></t>
@@ -68,6 +72,8 @@
                         <t t-if="o and o.partner_id">
                             <strong>Cliente:</strong><br/>
                             <div t-esc="o.partner_id.name" style="word-break: break-word;"/>
+                            <t t-if="o.partner_id.comercial">(<span t-esc="o.partner_id.comercial"/>)<br/></t>
+                            <span>CIF/NIF: </span><t t-esc="o.partner_id.vat"/><br/>
                             <t t-if="o.partner_id.street"><span t-esc="o.partner_id.street"/><br/></t>
                             <t t-esc="o.partner_id.zip"/> <t t-esc="o.partner_id.city"/>
                             <t t-if="o.partner_id.country_id"><br/><t t-esc="o.partner_id.country_id.name"/></t>
