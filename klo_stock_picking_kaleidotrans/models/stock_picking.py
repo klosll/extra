@@ -592,8 +592,6 @@ class StockPicking(models.Model):
             # response = request.json()
 
             try:
-                response = request.json()
-            except json.JSONDecodeError:
                 # Si falla, intentar extraer el JSON del texto
                 text = request.text
                 # Buscar el último { que indica el inicio del JSON
@@ -603,6 +601,8 @@ class StockPicking(models.Model):
                     response = json.loads(json_str)
                 else:
                     response = {"error": "Respuesta inválida del servidor", "code": 500, "raw": text}
+            except json.JSONDecodeError:
+                response = request.json()
 
             return response
 
@@ -973,8 +973,6 @@ class StockPicking(models.Model):
 
         # Extraer solo la parte JSON de la respuesta
         try:
-            response = request.json()
-        except json.JSONDecodeError:
             # Si falla, intentar extraer el JSON del texto
             text = request.text
             # Buscar el último { que indica el inicio del JSON
@@ -984,5 +982,7 @@ class StockPicking(models.Model):
                 response = json.loads(json_str)
             else:
                 response = {"error": "Respuesta inválida del servidor", "code": 500, "raw": text}
+        except json.JSONDecodeError:
+            response = request.json()
 
         return response
