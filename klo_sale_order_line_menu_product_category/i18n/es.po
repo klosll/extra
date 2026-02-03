@@ -1,0 +1,40 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* klo_sale_order_line_menu_product_category
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-03 10:03+0000\n"
+"PO-Revision-Date: 2026-02-03 10:03+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: klo_sale_order_line_menu_product_category
+#: model:ir.model.fields,help:klo_sale_order_line_menu_product_category.field_sale_order_line__date_order
+msgid ""
+"Creation date of draft/sent orders,\n"
+"Confirmation date of confirmed orders."
+msgstr ""
+"Fecha de creación de borradores/pedidos enviados,\n"
+"Fecha de confirmación de pedidos confirmados."
+
+#. module: klo_sale_order_line_menu_product_category
+#: model:ir.model.fields,field_description:klo_sale_order_line_menu_product_category.field_sale_order_line__date_order
+msgid "Order Date"
+msgstr "Fecha"
+
+#. module: klo_sale_order_line_menu_product_category
+#: model:ir.model.fields,field_description:klo_sale_order_line_menu_product_category.field_sale_order_line__product_categ_id
+msgid "Product Category"
+msgstr "Categoría de producto"
+
+#. module: klo_sale_order_line_menu_product_category
+#: model:ir.model,name:klo_sale_order_line_menu_product_category.model_sale_order_line
+msgid "Sale order line model"
+msgstr "Línea de pedido de venta"
