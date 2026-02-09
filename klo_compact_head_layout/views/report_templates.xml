@@ -41,68 +41,70 @@
                         </ul>
                     </div>
 
-
                     <!-- Dirección de entrega (si existe). Solo lo imprime si es Pedido/presupuesto o Factura
                     Si se trata de Entrega (albarán) entonces sí imprime la dirección de entrega -->
-                    <t t-if="o and o._name in ['sale.order', 'account.move'] and o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)">
-                        <div class="col-3" style="margin-bottom: 5px; font-size: {{font_size}}px; word-wrap: break-word; overflow-wrap: break-word;">
-                            <strong>Dirección de entrega:</strong><br/>
-                            <div t-esc="o.partner_shipping_id.name" style="word-break: break-word;"/>
-                            <t t-if="o.partner_shipping_id.comercial">(<span t-esc="o.partner_shipping_id.comercial"/>)<br/></t>
-                            <span>CIF/NIF: </span><t t-esc="o.partner_shipping_id.vat"/><br/>
-                            <t t-if="o.partner_shipping_id.street"><span t-esc="o.partner_shipping_id.street"/><br/></t>
-                            <t t-esc="o.partner_shipping_id.zip"/> <t t-esc="o.partner_shipping_id.city"/>
-                            <t t-if="o.partner_shipping_id.country_id"><br/><t t-esc="o.partner_shipping_id.country_id.name"/></t>
-                        </div>
-                    </t>
-                    <t t-elif="o and o._name == 'stock.picking'">
-                        <div class="col-3" style="margin-bottom: 5px; font-size: {{font_size}}px; word-wrap: break-word; overflow-wrap: break-word;">
-                            <strong>Dirección de entrega:</strong><br/>
-                            <div t-esc="o.partner_id.name" style="word-break: break-word;"/>
-                            <t t-if="o.partner_id.comercial">(<span t-esc="o.partner_id.comercial"/>)<br/></t>
-                            <span>CIF/NIF: </span><t t-esc="o.partner_id.vat"/><br/>
-                            <t t-if="o.partner_id.street"><span t-esc="o.partner_id.street"/><br/></t>
-                            <t t-esc="o.partner_id.zip"/> <t t-esc="o.partner_id.city"/>
-                            <t t-if="o.partner_id.country_id"><br/><t t-esc="o.partner_id.country_id.name"/></t>
-                        </div>
-                    </t>
-
-                    <!-- Dirección del cliente -->
-                    <div class="col-3" style="margin-bottom: 5px; font-size: {{font_size}}px; word-wrap: break-word; overflow-wrap: break-word;">
-                        <!-- Caso específico: account.payment.order -->
-                        <t t-if="o._name == 'account.payment.order'">
-                            <t t-if="o.payment_line_ids">
-                                <t t-set="partners" t-value="o.payment_line_ids.mapped('partner_id')"/>
-                                <t t-if="len(partners) == 1">
-                                    <t t-set="partner" t-value="partners[0]"/>
-                                    <strong>Cliente:</strong><br/>
-                                    <div t-esc="partner.name" style="word-break: break-word;"/>
-                                    <t t-if="partner.vat"><span>CIF/NIF: </span><span t-esc="partner.vat"/><br/></t>
-                                    <t t-if="partner.street"><span t-esc="partner.street"/><br/></t>
-                                    <t t-if="partner.zip or partner.city">
-                                        <span t-if="partner.zip" t-esc="partner.zip"/> <span t-if="partner.city" t-esc="partner.city"/>
-                                    </t>
-                                    <t t-if="partner.country_id"><br/><span t-esc="partner.country_id.name"/></t>
-                                </t>
-                                <t t-elif="len(partners) > 1">
-                                    <strong>Clientes:</strong><br/>
-                                    <div style="word-break: break-word;">Varios contactos (<t t-esc="len(partners)"/>)</div>
-                                </t>
-                            </t>
+                    <t t-if="o">
+                        <t t-set="o_model" t-value="o._name"/>
+                        <t t-if="o_model in ['sale.order', 'account.move'] and o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)">
+                            <div class="col-3" style="margin-bottom: 5px; font-size: {{font_size}}px; word-wrap: break-word; overflow-wrap: break-word;">
+                                <strong>Dirección de entrega:</strong><br/>
+                                <div t-esc="o.partner_shipping_id.name" style="word-break: break-word;"/>
+                                <t t-if="o.partner_shipping_id.comercial">(<span t-esc="o.partner_shipping_id.comercial"/>)<br/></t>
+                                <span>CIF/NIF: </span><t t-esc="o.partner_shipping_id.vat"/><br/>
+                                <t t-if="o.partner_shipping_id.street"><span t-esc="o.partner_shipping_id.street"/><br/></t>
+                                <t t-esc="o.partner_shipping_id.zip"/> <t t-esc="o.partner_shipping_id.city"/>
+                                <t t-if="o.partner_shipping_id.country_id"><br/><t t-esc="o.partner_shipping_id.country_id.name"/></t>
+                            </div>
                         </t>
-                        <!-- Caso general: otros modelos con partner_id (código original) -->
-                        <t t-else="">
-                            <t t-if="o and o.partner_id">
-                                <strong>Cliente:</strong><br/>
+                        <t t-if="o_model == 'stock.picking'">
+                            <div class="col-3" style="margin-bottom: 5px; font-size: {{font_size}}px; word-wrap: break-word; overflow-wrap: break-word;">
+                                <strong>Dirección de entrega:</strong><br/>
                                 <div t-esc="o.partner_id.name" style="word-break: break-word;"/>
                                 <t t-if="o.partner_id.comercial">(<span t-esc="o.partner_id.comercial"/>)<br/></t>
                                 <span>CIF/NIF: </span><t t-esc="o.partner_id.vat"/><br/>
                                 <t t-if="o.partner_id.street"><span t-esc="o.partner_id.street"/><br/></t>
                                 <t t-esc="o.partner_id.zip"/> <t t-esc="o.partner_id.city"/>
                                 <t t-if="o.partner_id.country_id"><br/><t t-esc="o.partner_id.country_id.name"/></t>
-                            </t>
+                            </div>
                         </t>
-                    </div>
+
+                        <!-- Dirección del cliente -->
+                        <div class="col-3" style="margin-bottom: 5px; font-size: {{font_size}}px; word-wrap: break-word; overflow-wrap: break-word;">
+                            <!-- Caso específico: account.payment.order -->
+                            <t t-if="o_model == 'account.payment.order'">
+                                <t t-if="o.payment_line_ids">
+                                    <t t-set="partners" t-value="o.payment_line_ids.mapped('partner_id')"/>
+                                    <t t-if="len(partners) == 1">
+                                        <t t-set="partner" t-value="partners[0]"/>
+                                        <strong>Cliente:</strong><br/>
+                                        <div t-esc="partner.name" style="word-break: break-word;"/>
+                                        <t t-if="partner.vat"><span>CIF/NIF: </span><span t-esc="partner.vat"/><br/></t>
+                                        <t t-if="partner.street"><span t-esc="partner.street"/><br/></t>
+                                        <t t-if="partner.zip or partner.city">
+                                            <span t-if="partner.zip" t-esc="partner.zip"/> <span t-if="partner.city" t-esc="partner.city"/>
+                                        </t>
+                                        <t t-if="partner.country_id"><br/><span t-esc="partner.country_id.name"/></t>
+                                    </t>
+                                    <t t-elif="len(partners) > 1">
+                                        <strong>Clientes:</strong><br/>
+                                        <div style="word-break: break-word;">Varios contactos (<t t-esc="len(partners)"/>)</div>
+                                    </t>
+                                </t>
+                            </t>
+                            <!-- Caso general: otros modelos con partner_id -->
+                            <t t-else="">
+                                <t t-if="o.partner_id">
+                                    <strong>Cliente:</strong><br/>
+                                    <div t-esc="o.partner_id.name" style="word-break: break-word;"/>
+                                    <t t-if="o.partner_id.comercial">(<span t-esc="o.partner_id.comercial"/>)<br/></t>
+                                    <span>CIF/NIF: </span><t t-esc="o.partner_id.vat"/><br/>
+                                    <t t-if="o.partner_id.street"><span t-esc="o.partner_id.street"/><br/></t>
+                                    <t t-esc="o.partner_id.zip"/> <t t-esc="o.partner_id.city"/>
+                                    <t t-if="o.partner_id.country_id"><br/><t t-esc="o.partner_id.country_id.name"/></t>
+                                </t>
+                            </t>
+                        </div>
+                    </t>
                 </div>
 
                 <!-- Contenido del body -->
