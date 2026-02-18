@@ -1,0 +1,9 @@
+*.pyc
+*.pyo
+__pycache__/
+*.mo
+*.pot
+*~
+.*.swp
+.DS_Store
+

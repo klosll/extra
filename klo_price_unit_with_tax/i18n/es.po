@@ -1,0 +1,31 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* klo_price_unit_with_tax
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-17 12:00:00\n"
+"PO-Revision-Date: 2026-02-17 12:00:00\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: klo_price_unit_with_tax
+#: model:ir.model.fields,field_description:klo_price_unit_with_tax.field_sale_order_line__price_unit_with_tax
+msgid "Unit Price with Tax"
+msgstr "Precio Unitario con Impuesto"
+
+#. module: klo_price_unit_with_tax
+#: model:ir.model.fields,help:klo_price_unit_with_tax.field_sale_order_line__price_unit_with_tax
+msgid "Unit price including taxes"
+msgstr "Precio unitario con impuestos incluidos"
+
+#. module: klo_price_unit_with_tax
+#: model:ir.model,name:klo_price_unit_with_tax.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea de pedido de venta"
+

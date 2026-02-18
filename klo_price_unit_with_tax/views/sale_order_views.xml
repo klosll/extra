@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add price_unit_with_tax field in sale order form view -->
+    <record id="view_order_form_inherit_price_unit_with_tax" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.price.unit.with.tax</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Add field in form view after price_unit -->
+            <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="after">
+                <field name="price_unit_with_tax"/>
+            </xpath>
+            <!-- Add field in list view after price_unit -->
+            <xpath expr="//field[@name='order_line']/list//field[@name='price_unit']" position="after">
+                <field name="price_unit_with_tax" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+
