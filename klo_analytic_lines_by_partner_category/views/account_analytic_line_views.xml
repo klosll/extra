@@ -10,14 +10,6 @@
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="partner_category_ids" string="Categoría del Contacto"/>
             </xpath>
-            <!-- Añadir agrupación por categoría del contacto en el grupo Group By -->
-            <xpath expr="//group[@name='groupby']" position="inside">
-                <filter
-                    string="Categoría del Contacto"
-                    name="partner_category"
-                    context="{'group_by': 'partner_category_ids'}"
-                />
-            </xpath>
         </field>
     </record>
 </odoo>
