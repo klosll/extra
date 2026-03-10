@@ -1,0 +1,91 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║                  GUÍA RÁPIDA DE INSTALACIÓN                       ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+📦 MÓDULO: Invoice Shipping Sale Type
+📍 UBICACIÓN: /opt/odoo14_paasa/odoo/extra-addons/extra/klo_invoice_shipping_sale_type
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 INSTALACIÓN RÁPIDA
+
+1️⃣  Reiniciar Odoo:
+    sudo systemctl restart odoo14
+
+2️⃣  En Odoo (modo desarrollador activado):
+    → Ir a: Aplicaciones
+    → Clic en: "Actualizar lista de aplicaciones"
+    → Buscar: "Invoice Shipping Sale Type"
+    → Clic en: "Instalar"
+
+3️⃣  Activar la columna:
+    → Ir a: Contabilidad > Clientes > Facturas
+    → Clic en el icono de columnas (≡)
+    → Activar: "Tipo de pedido de venta"
+
+4️⃣  Filtrar y Agrupar:
+    → Usar filtros personalizados para filtrar por tipo
+    → Usar "Agrupar por" para agrupar por tipo de pedido
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 INSTALACIÓN EN MODO DESARROLLO
+
+cd /opt/odoo14_paasa/odoo
+./odoo-bin -u klo_invoice_shipping_sale_type -d nombre_base_datos
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ VERIFICAR ANTES DE INSTALAR
+
+./verify_module.sh
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 DOCUMENTACIÓN DISPONIBLE
+
+• README.md        - Descripción general
+• INSTALL.md       - Guía de instalación detallada
+• TECHNICAL.md     - Documentación técnica
+• CHANGELOG.md     - Registro de cambios
+• STATUS.md        - Estado del módulo
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 ¿QUÉ HACE ESTE MÓDULO?
+
+Agrega una nueva columna en la vista de lista de Facturas de Venta que
+muestra el tipo de pedido de venta de la dirección de entrega del cliente.
+
+Campo: shipping_sale_type
+Origen: partner_shipping_id.sale_type
+Tipo: Char (texto)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ CARACTERÍSTICAS
+
+✓ Actualización automática cuando cambia la dirección de entrega
+✓ Campo almacenado para búsquedas rápidas
+✓ Permite filtrado por tipo de pedido de venta
+✓ Permite agrupación por tipo de pedido de venta
+✓ Columna opcional (oculta por defecto)
+✓ Traducciones al español incluidas
+✓ Compatible con Odoo 14.0
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 DEPENDENCIAS REQUERIDAS
+
+• account (Contabilidad)
+• sale (Ventas)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📞 SOPORTE
+
+Manuel Calomarde Gómez - KLO Ingeniería Informática S.L.L.
+https://www.klo.es
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

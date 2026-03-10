@@ -1,0 +1,150 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║              ✅ MÓDULO COMPLETADO Y RENOMBRADO                    ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+📦 NOMBRE DEL MÓDULO: klo_invoice_shipping_sale_type
+📂 UBICACIÓN: /opt/odoo14_paasa/odoo/extra-addons/extra/klo_invoice_shipping_sale_type
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔄 HISTORIAL DE CAMBIOS
+
+1. ❌ Primera versión descartada:
+   - Campo: partner_shipping_category_ids (Many2many)
+   - Relación: partner_shipping_id.category_id
+
+2. ✅ Segunda versión implementada:
+   - Campo: shipping_sale_type (Char)
+   - Relación: partner_shipping_id.sale_type
+
+3. ✅ Corrección de autor:
+   - Autor: Manuel Calomarde Gómez - KLO Ingeniería Informática S.L.L.
+   - Website: https://www.klo.es
+
+4. ✅ Renombrado del módulo:
+   - Nombre anterior: klo_invoice_shipping_category
+   - Nombre nuevo: klo_invoice_shipping_sale_type
+   - Icono estándar klo_ agregado
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 INFORMACIÓN FINAL DEL MÓDULO
+
+Nombre completo: Invoice Shipping Sale Type
+Nombre técnico: klo_invoice_shipping_sale_type
+Versión: 14.0.1.0.0
+Categoría: Accounting
+Autor: Manuel Calomarde Gómez - KLO Ingeniería Informática S.L.L.
+Website: https://www.klo.es
+Licencia: LGPL-3
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 FUNCIONALIDAD IMPLEMENTADA
+
+Campo técnico: shipping_sale_type
+Tipo de campo: Char (texto)
+Etiqueta español: "Tipo de pedido de venta"
+Etiqueta inglés: "Sale Order Type"
+Origen de datos: partner_shipping_id.sale_type
+
+Características:
+✅ Campo computed con @api.depends
+✅ Almacenado en base de datos (store=True)
+✅ Permite filtrado en la vista de lista
+✅ Permite agrupación en la vista de lista
+✅ Actualización automática cuando cambia partner_shipping_id
+✅ Validación con hasattr() para evitar errores
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📁 ESTRUCTURA DEL MÓDULO
+
+klo_invoice_shipping_sale_type/
+├── __init__.py                     # Inicializador principal
+├── __manifest__.py                 # Configuración del módulo
+├── README.md                       # Documentación general
+├── INSTALL.md                      # Guía de instalación
+├── TECHNICAL.md                    # Documentación técnica
+├── CHANGELOG.md                    # Registro de cambios
+├── STATUS.md                       # Estado del módulo
+├── QUICKSTART.txt                  # Guía rápida
+├── RESUMEN_CAMBIOS.txt             # Resumen de cambios
+├── AUTOR_CONFIG.md                 # Configuración de autor
+├── NOTA_SALE_TYPE.md               # Nota sobre requisitos
+├── verify_module.sh                # Script de verificación
+├── i18n/
+│   └── es.po                       # Traducciones español
+├── models/
+│   ├── __init__.py
+│   └── account_move.py             # Modelo extendido
+├── security/
+│   └── ir.model.access.csv         # Permisos
+├── static/
+│   └── description/
+│       ├── icon.png                # Icono estándar klo_
+│       └── index.html              # Descripción HTML
+└── views/
+    └── account_move_views.xml      # Vista extendida
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ VERIFICACIONES COMPLETADAS
+
+✓ Sintaxis Python correcta
+✓ Sintaxis XML correcta
+✓ Traducciones actualizadas
+✓ Sin referencias al nombre antiguo
+✓ Icono presente (icon.png)
+✓ Autor correcto en todos los archivos
+✓ Website correcto en todos los archivos
+✓ Documentación completa
+✓ Script de verificación funcional
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 INSTRUCCIONES DE INSTALACIÓN
+
+1. Reiniciar Odoo:
+   sudo systemctl restart odoo14
+
+2. En Odoo (modo desarrollador):
+   - Ir a: Aplicaciones
+   - Clic: "Actualizar lista de aplicaciones"
+   - Buscar: "Invoice Shipping Sale Type"
+   - Clic: "Instalar"
+
+3. Activar columna:
+   - Ir a: Contabilidad > Clientes > Facturas
+   - Clic: Icono de columnas (≡)
+   - Activar: "Tipo de pedido de venta"
+
+4. Usar funcionalidades:
+   - Filtrar por tipo de pedido de venta
+   - Agrupar por tipo de pedido de venta
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️  REQUISITO IMPORTANTE
+
+El campo 'sale_type' debe existir en el modelo res.partner.
+Ver el archivo: NOTA_SALE_TYPE.md para más información.
+
+Si el campo no existe:
+- El módulo funcionará sin errores (usa hasattr())
+- Pero el campo shipping_sale_type estará vacío
+- Se recomienda crear el campo antes de instalar
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📞 SOPORTE
+
+Manuel Calomarde Gómez - KLO Ingeniería Informática S.L.L.
+Website: https://www.klo.es
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ ESTADO FINAL: MÓDULO COMPLETADO Y LISTO PARA INSTALAR
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

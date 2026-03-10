@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #714B67;
+            border-bottom: 2px solid #714B67;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #875A7B;
+            margin-top: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        ul {
+            line-height: 1.8;
+        }
+        .screenshot {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Invoice Shipping Sale Type</h1>
+
+    <div class="section">
+        <h2>Descripción</h2>
+        <p>
+            Este módulo agrega una nueva columna en la vista de lista de Facturas de Venta
+            que muestra el tipo de pedido de venta de la dirección de entrega del cliente.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Características</h2>
+        <ul>
+            <li><strong>Nueva columna</strong>: "Tipo de pedido de venta" en la vista de árbol de facturas</li>
+            <li><strong>Campo computed</strong>: shipping_sale_type que obtiene el valor desde partner_shipping_id.sale_type</li>
+            <li><strong>Campo almacenado</strong>: Permite filtrado y agrupación</li>
+            <li><strong>Columna opcional</strong>: La columna está oculta por defecto pero puede activarse desde la vista</li>
+            <li><strong>Filtrado</strong>: Filtrar facturas por tipo de pedido de venta</li>
+            <li><strong>Agrupación</strong>: Agrupar facturas por tipo de pedido de venta</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Uso</h2>
+        <ol>
+            <li>Ir a Contabilidad > Clientes > Facturas</li>
+            <li>En la vista de lista, haga clic en el icono de columnas opcionales</li>
+            <li>Active la columna "Tipo de pedido de venta"</li>
+            <li>La columna mostrará el tipo de pedido asociado a la dirección de entrega de cada factura</li>
+            <li>Use los filtros y agrupaciones para organizar las facturas por tipo</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>Créditos</h2>
+        <p><strong>Autor:</strong> Manuel Calomarde Gómez - KLO Ingeniería Informática S.L.L.</p>
+        <p><strong>Website:</strong> <a href="https://www.klo.es">www.klo.es</a></p>
+        <p><strong>Versión:</strong> 14.0.1.0.0</p>
+        <p><strong>Licencia:</strong> LGPL-3</p>
+    </div>
+</body>
+</html>
+
