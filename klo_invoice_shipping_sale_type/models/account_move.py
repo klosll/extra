@@ -3,13 +3,19 @@
 from odoo import models, fields, api
 
 
+# -*- coding: utf-8 -*-
+
+from odoo import models, fields, api
+
+
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
     shipping_sale_type = fields.Many2one(
         comodel_name='sale.order.type',
-        string='Tipo de pedido de entrega',
+        string='Tipo de pedido de venta',
         compute='_compute_shipping_sale_type',
+        search='_search_shipping_sale_type',
         readonly=True,
         help='Tipo de pedido de venta de la dirección de entrega'
     )
@@ -23,3 +29,7 @@ class AccountMove(models.Model):
             else:
                 record.shipping_sale_type = False
 
+    def _search_shipping_sale_type(self, operator, value):
+        """Permite buscar/filtrar por el tipo de pedido de la dirección de entrega"""
+        partners = self.env['res.partner'].search([('sale_type', operator, value)])
+        return [('partner_shipping_id', 'in', partners.ids)]

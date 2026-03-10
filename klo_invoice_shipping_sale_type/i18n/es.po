@@ -6,15 +6,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-09 12:00:00\n"
-"PO-Revision-Date: 2026-03-09 12:00:00\n"
+"POT-Creation-Date: 2026-03-10 08:32+0000\n"
+"PO-Revision-Date: 2026-03-10 08:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: klo_invoice_shipping_sale_type
+#: model:ir.model.fields,field_description:klo_invoice_shipping_sale_type.field_account_move__display_name
+msgid "Display Name"
+msgstr "Mostrar nombre"
+
+#. module: klo_invoice_shipping_sale_type
+#: model:ir.model.fields,field_description:klo_invoice_shipping_sale_type.field_account_move__id
+msgid "ID"
+msgstr "Identificador"
 
 #. module: klo_invoice_shipping_sale_type
 #: model:ir.model,name:klo_invoice_shipping_sale_type.model_account_move
@@ -22,12 +31,20 @@ msgid "Journal Entry"
 msgstr "Asiento contable"
 
 #. module: klo_invoice_shipping_sale_type
-#: model:ir.model.fields,field_description:klo_invoice_shipping_sale_type.field_account_move__shipping_sale_type
-msgid "Sale Order Type"
-msgstr "Tipo pedido dir. entrega"
+#: model:ir.model.fields,field_description:klo_invoice_shipping_sale_type.field_account_move____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
 
 #. module: klo_invoice_shipping_sale_type
+#: model:ir.model.fields,help:klo_invoice_shipping_sale_type.field_account_bank_statement_line__shipping_sale_type
 #: model:ir.model.fields,help:klo_invoice_shipping_sale_type.field_account_move__shipping_sale_type
-msgid "Sale type from the shipping address partner"
-msgstr "Tipo de pedido de venta de la dirección de entrega"
+#: model:ir.model.fields,help:klo_invoice_shipping_sale_type.field_account_payment__shipping_sale_type
+msgid "Tipo de pedido de venta de la dirección de entrega"
+msgstr ""
 
+#. module: klo_invoice_shipping_sale_type
+#: model:ir.model.fields,field_description:klo_invoice_shipping_sale_type.field_account_bank_statement_line__shipping_sale_type
+#: model:ir.model.fields,field_description:klo_invoice_shipping_sale_type.field_account_move__shipping_sale_type
+#: model:ir.model.fields,field_description:klo_invoice_shipping_sale_type.field_account_payment__shipping_sale_type
+msgid "Tipo de pedido de venta"
+msgstr ""
