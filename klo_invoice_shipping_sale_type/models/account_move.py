@@ -13,7 +13,7 @@ class AccountMove(models.Model):
 
     shipping_sale_type = fields.Many2one(
         comodel_name='sale.order.type',
-        string='Tipo de pedido de venta',
+        string='Tipo pedido dir entrega',
         compute='_compute_shipping_sale_type',
         search='_search_shipping_sale_type',
         readonly=True,

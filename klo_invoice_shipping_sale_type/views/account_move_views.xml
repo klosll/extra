@@ -10,7 +10,7 @@
             <field name="arch" type="xml">
                 <!-- Add the new column after the partner_id field -->
                 <xpath expr="//field[@name='partner_id']" position="after">
-                    <field name="shipping_sale_type" string="Tipo de pedido de venta" optional="hide"/>
+                    <field name="shipping_sale_type" string="Tipo pedido dir entrega" optional="hide"/>
                 </xpath>
             </field>
         </record>

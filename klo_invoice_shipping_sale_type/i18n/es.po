@@ -46,5 +46,5 @@ msgstr ""
 #: model:ir.model.fields,field_description:klo_invoice_shipping_sale_type.field_account_bank_statement_line__shipping_sale_type
 #: model:ir.model.fields,field_description:klo_invoice_shipping_sale_type.field_account_move__shipping_sale_type
 #: model:ir.model.fields,field_description:klo_invoice_shipping_sale_type.field_account_payment__shipping_sale_type
-msgid "Tipo de pedido de venta"
+msgid "Tipo pedido dir entrega"
 msgstr ""
