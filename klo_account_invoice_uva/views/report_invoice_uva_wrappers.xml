@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--
+            Herencia del wrapper report_invoice para activar el template UVA.
+            Cuando _get_name_invoice_report() devuelva el nombre del template UVA,
+            se renderiza klo_report_invoice_document_uva en lugar del estándar.
+            Esto permite que el botón "Imprimir" de la factura UVA use automáticamente
+            el informe especializado sin ninguna acción adicional del usuario.
+        -->
+        <template id="klo_inherit_report_invoice" inherit_id="account.report_invoice">
+            <xpath expr="//t[@t-if]" position="after">
+                <t t-elif="o._get_name_invoice_report() == 'klo_account_invoice_uva.klo_report_invoice_document_uva'"
+                   t-call="klo_account_invoice_uva.klo_report_invoice_document_uva"
+                   t-lang="lang"/>
+            </xpath>
+        </template>
+
+        <!--
+            Herencia del wrapper report_invoice_with_payments para la versión
+            con los pagos ya registrados en la factura.
+        -->
+        <template id="klo_inherit_report_invoice_with_payments" inherit_id="account.report_invoice_with_payments">
+            <xpath expr="//t[@t-if]" position="after">
+                <t t-elif="o._get_name_invoice_report() == 'klo_account_invoice_uva.klo_report_invoice_document_uva'"
+                   t-call="klo_account_invoice_uva.klo_report_invoice_document_uva"
+                   t-lang="lang"/>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>
+

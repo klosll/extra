@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Vista especializada para facturas de uva.
+        Hereda de account.view_move_form con mode="primary" para ser independiente
+        (no afecta a la vista estándar de facturas).
+        Se activa cuando el diario tiene 'Es para uva' marcado.
+    -->
+    <record id="view_move_form_uva" model="ir.ui.view">
+        <field name="name">klo.account.move.form.uva</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+
+            <!-- ===== COLUMNA: Etiqueta (name) → oculta por defecto ===== -->
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='name'][@widget='section_and_note_text']"
+                   position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+
+            <!-- ===== COLUMNA: Cuenta (account_id) → oculta por defecto ===== -->
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='account_id']"
+                   position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+
+            <!-- ===== COLUMNA: Cantidad (quantity) → oculta por defecto ===== -->
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='quantity'][@optional]"
+                   position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+
+            <!-- ===== COLUMNAS UVA: Grado, Kilos, €/kilogrado, Kilogrados
+                 Se insertan antes de 'Importe' (price_unit) ===== -->
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='price_unit']"
+                   position="before">
+                <field name="grado"
+                       string="Grado"
+                       optional="show"/>
+                <field name="kilos"
+                       string="Kilos"
+                       optional="show"/>
+                <field name="precio_kilogrado"
+                       string="€/kilogrado"
+                       optional="show"/>
+                <field name="kilogrados"
+                       string="Kilogrados"
+                       optional="show"/>
+            </xpath>
+
+            <!-- ===== COLUMNA: Importe (price_unit) → renombrado y visible ===== -->
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='price_unit']"
+                   position="attributes">
+                <attribute name="string">Importe</attribute>
+            </xpath>
+
+            <!-- ===== COLUMNA: Impuestos (tax_ids) → oculta por defecto ===== -->
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='tax_ids'][@widget='many2many_tags']"
+                   position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!--
+        Herencia de la vista base de lista de facturas para añadir el campo
+        es_para_uva como campo invisible. Al heredar de view_invoice_tree (la
+        vista base), el campo estará disponible en TODAS las listas de facturas
+        (clientes, proveedores, etc.) que heredan de ella.
+        El campo invisible no se muestra como columna pero sus datos se cargan
+        en el cliente, permitiendo que el parche JavaScript del ListController
+        lo lea directamente en record.data sin llamada extra al servidor.
+    -->
+    <record id="view_invoice_list_es_para_uva" model="ir.ui.view">
+        <field name="name">klo.account.move.list.es_para_uva</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <!-- Añadimos el campo después de move_type (que ya es invisible)
+                 para que los datos estén disponibles en el cliente JS -->
+            <xpath expr="//field[@name='move_type']" position="after">
+                <field name="es_para_uva" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+

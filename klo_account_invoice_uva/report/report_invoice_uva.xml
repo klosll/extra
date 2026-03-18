@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Template QWeb especializado para facturas de uva.
+        Hereda de account.report_invoice_document con primary="True" para ser
+        completamente independiente y no afectar al informe estándar de facturas.
+        Se activa automáticamente cuando el diario tiene 'Es para uva' marcado.
+
+        Columnas de las líneas:
+          Descripción | Grado | Kilos | €/Kilogrado | Kilogrados | Importe
+    -->
+    <template id="klo_report_invoice_document_uva"
+              inherit_id="account.report_invoice_document"
+              primary="True">
+
+        <!-- =========================================================== -->
+        <!-- CABECERAS DE LA TABLA                                       -->
+        <!-- =========================================================== -->
+
+        <!-- "Description" → "Descripción" -->
+        <xpath expr="//th[@name='th_description']/span" position="replace">
+            <span>Descripción</span>
+        </xpath>
+
+        <!-- "Quantity" → cuatro columnas UVA: Grado, Kilos, €/Kilogrado, Kilogrados -->
+        <xpath expr="//th[@name='th_quantity']" position="replace">
+            <th name="th_grado" class="text-end"><span>Grado (°)</span></th>
+            <th name="th_kilos" class="text-end"><span>Kilos</span></th>
+            <th name="th_precio_kilogrado" class="text-end"><span>€/Kilogrado</span></th>
+            <th name="th_kilogrados" class="text-end"><span>Kilogrados</span></th>
+        </xpath>
+
+        <!-- "Unit Price" → "Importe" -->
+        <xpath expr="//th[@name='th_priceunit']/span" position="replace">
+            <span>Importe</span>
+        </xpath>
+
+        <!-- Eliminar cabecera de Impuestos (no aplica en facturas de uva) -->
+        <xpath expr="//th[@name='th_taxes']" position="replace">
+            <th/>
+        </xpath>
+
+        <!-- Eliminar cabecera de Importe subtotal (no aplica en facturas de uva) -->
+        <xpath expr="//th[@name='th_subtotal']" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </xpath>
+
+        <!-- =========================================================== -->
+        <!-- CELDAS DE DATOS DE LAS LÍNEAS DE FACTURA                   -->
+        <!-- =========================================================== -->
+
+        <!--
+            Reemplazamos el bloque completo de la línea productiva para:
+              - Mostrar Descripción (line.name)
+              - Mostrar los cuatro campos UVA: grado, kilos, precio_kilogrado, kilogrados
+              - Mostrar el Importe (price_subtotal / price_total según configuración fiscal)
+              - Eliminar las celdas de Cantidad, Precio unitario, Descuento e Impuestos
+        -->
+        <xpath expr="//t[@name='account_invoice_line_accountable']" position="replace">
+            <t t-if="line.display_type == 'product'" name="account_invoice_line_accountable">
+
+                <!-- Descripción del artículo / variedad de uva -->
+                <td name="account_invoice_line_name">
+                    <span t-field="line.name" t-options="{'widget': 'text'}"/>
+                </td>
+
+                <!-- Grado -->
+                <td class="text-end">
+                    <span t-field="line.grado"/>
+                </td>
+
+                <!-- Kilos -->
+                <td class="text-end">
+                    <span t-field="line.kilos"/>
+                </td>
+
+                <!-- €/Kilogrado -->
+                <td class="text-end">
+                    <span t-field="line.precio_kilogrado"/>
+                </td>
+
+                <!-- Kilogrados (= Kilos × Grado) -->
+                <td class="text-end">
+                    <span t-field="line.kilogrados"/>
+                </td>
+
+                <!-- Importe total de la línea -->
+                <td class="text-end o_price_total">
+                    <span class="text-nowrap"
+                          t-field="line.price_subtotal"
+                          groups="account.group_show_line_subtotals_tax_excluded"/>
+                    <span class="text-nowrap"
+                          t-field="line.price_total"
+                          groups="account.group_show_line_subtotals_tax_included"/>
+                </td>
+
+            </t>
+        </xpath>
+
+    </template>
+
+</odoo>
+

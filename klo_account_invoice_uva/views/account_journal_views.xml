@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Herencia del formulario de diario para añadir el campo 'Es para uva' -->
+    <record id="view_account_journal_form_uva" model="ir.ui.view">
+        <field name="name">account.journal.form.uva</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <!-- Añadimos el check 'Es para uva' en el grupo principal junto al tipo de diario -->
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="es_para_uva"
+                       attrs="{'invisible': [('type', '!=', 'sale')]}"
+                       widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
