@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- KLO. Añade "Cliente de venta" a la cabecera de la factura -->
     <record id="klo_view_move_final_partner_form" model="ir.ui.view">
         <field name="name">klo.account.move.final.partner.form</field>
         <field name="model">account.move</field>
@@ -10,4 +11,19 @@
             </xpath>
         </field>
     </record>
+
+    <!-- KLO. Añade "Cliente de venta" a las líneas de factura (árbol editable) -->
+    <record id="klo_view_move_line_sale_partner_form" model="ir.ui.view">
+        <field name="name">klo.account.move.line.sale.partner.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='analytic_account_id']" position="after">
+                <field name="sale_partner_id" optional="hide" string="Cliente de venta"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>
+
+
+

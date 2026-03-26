@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- KLO. Añade "Cliente de venta" al formulario de apuntes analíticos -->
+    <record id="klo_view_account_analytic_line_form_sale_partner" model="ir.ui.view">
+        <field name="name">klo.account.analytic.line.form.sale.partner</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="account.view_account_analytic_line_form_inherit_account"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="sale_partner_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- KLO. Añade "Cliente de venta" a la vista lista de apuntes analíticos -->
+    <record id="klo_view_account_analytic_line_tree_sale_partner" model="ir.ui.view">
+        <field name="name">klo.account.analytic.line.tree.sale.partner</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="account.view_account_analytic_line_tree_inherit_account"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="sale_partner_id" optional="hide" string="Cliente de venta"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- KLO. Añade "Cliente de venta" en la ventana de distribución analítica de líneas de factura -->
+    <record id="klo_view_move_line_distribution_sale_partner" model="ir.ui.view">
+        <field name="name">klo.account.move.line.distribution.sale.partner</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account_analytic_distribution.account_move_line_distribution_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='analytic_line_ids']//tree//field[@name='account_id']" position="after">
+                <field name="sale_partner_id" string="Cliente de venta"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
+
