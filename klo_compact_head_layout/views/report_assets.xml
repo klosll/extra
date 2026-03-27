@@ -2,8 +2,11 @@
 <odoo>
     <!-- Heredar el layout externo de forma genérica para todos los documentos -->
     <template id="klo_external_layout" inherit_id="web.external_layout">
-        <xpath expr="//t[@t-if='company.external_report_layout_id'] | //t[@t-else='else']" position="replace">
+        <!-- 1. Reemplaza la rama t-if del selector de layout por el layout compacto -->
+        <xpath expr="//t[@t-if='company.external_report_layout_id']" position="replace">
             <t t-call="klo_compact_head_layout.klo_external_layout_compact"><t t-out="0"/></t>
         </xpath>
+        <!-- 2. Elimina la rama t-else del layout estándar para evitar doble renderizado -->
+        <xpath expr="//t[@t-else='else'][@t-call='web.external_layout_standard']" position="replace"/>
     </template>
 </odoo>
