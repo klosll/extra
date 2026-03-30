@@ -11,6 +11,7 @@
     'author': 'Manuel Calomarde Gomez - KLO Ingenieria Informatica S.L.L.',
     'depends': ['account'],
     'data': [
+        'data/decimal_precision.xml',
         'views/account_journal_views.xml',
         'views/account_move_uva_views.xml',
         'report/report_invoice_uva.xml',

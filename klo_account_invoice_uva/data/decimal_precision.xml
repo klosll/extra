@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="1">
+
+    <!-- Precisión decimal para €/Kilogrado: 5 decimales -->
+    <record
+        forcecreate="True"
+        id="decimal_precision_precio_kilogrado"
+        model="decimal.precision"
+    >
+        <field name="name">Precio Kilogrado</field>
+        <field name="digits">5</field>
+    </record>
+
+    <!-- Precisión decimal para Kilogrados: 0 decimales -->
+    <record
+        forcecreate="True"
+        id="decimal_precision_kilogrados"
+        model="decimal.precision"
+    >
+        <field name="name">Kilogrados</field>
+        <field name="digits">0</field>
+    </record>
+
+</odoo>
