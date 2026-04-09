@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Heredar la vista de formulario para añadir el campo turno -->
+    <record id="mrp_production_form_view_turno" model="ir.ui.view">
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="custom_mrp_descarga.mrp_production_form_view" />
+        <field name="arch" type="xml">
+            <!-- Añadir el campo después del campo bom_id, visible solo en despiece -->
+            <field name="bom_id" position="before">
+                <field name="turno" required="1" attrs="{'invisible': [('quartering', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Heredar la vista de árbol mrp_production_quartering_tree_view para añadir el campo turno -->
+    <record id="mrp_production_quartering_tree_view_turno" model="ir.ui.view">
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="custom_mrp_descarga.mrp_production_quartering_tree_view" />
+        <field name="arch" type="xml">
+            <!-- Añadir el campo después del campo name en la vista tree -->
+            <field name="name" position="after">
+                <field name="turno" optional="show" />
+            </field>
+        </field>
+    </record>
+
+    <!-- Heredar la vista de búsqueda para añadir la opción de agrupación por turno -->
+    <record id="view_mrp_production_filter_turno" model="ir.ui.view">
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="custom_mrp_descarga.view_mrp_production_filter" />
+        <field name="arch" type="xml">
+            <!-- Añadir el filtro de búsqueda -->
+            <field name="lot_producing_id" position="after">
+                <field name="turno" />
+            </field>
+            <!-- Añadir la opción de agrupación -->
+            <filter name="groupby_saca_date" position="after">
+                <filter
+                    string="Turno"
+                    name="groupby_turno"
+                    domain="[]"
+                    context="{'group_by': 'turno'}"
+                />
+            </filter>
+        </field>
+    </record>
+
+</odoo>
+
