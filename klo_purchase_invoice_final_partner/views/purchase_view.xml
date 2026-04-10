@@ -19,4 +19,19 @@
             </xpath>
         </field>
     </record>
+
+    <!-- KLO. Añade "Cliente de venta" a las líneas de pedido de compra (árbol editable) -->
+    <record id="klo_purchase_order_line_sale_partner_form" model="ir.ui.view">
+        <field name="name">klo.purchase.order.line.sale.partner.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']//tree//field[@name='account_analytic_id']" position="after">
+                <field name="sale_partner_id" optional="hide" string="Cliente de venta"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>
+
+
+
