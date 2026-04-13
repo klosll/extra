@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Herencia del QWeb de Presupuesto/Pedido (sale.report_saleorder_document).
+        Sustituye la columna "Unit Price" para mostrar el precio unitario SIN IVA,
+        calculado mediante el campo computado price_unit_untaxed de sale.order.line.
+    -->
+    <template id="report_saleorder_document_untaxed_price"
+              inherit_id="sale.report_saleorder_document">
+
+        <!-- Reemplazamos la celda del precio unitario en el cuerpo de la tabla -->
+        <xpath expr="//td[@name='td_priceunit']" position="replace">
+            <td name="td_priceunit" class="text-end text-nowrap">
+                <span
+                    t-out="line.price_unit_untaxed"
+                    t-options='{"widget": "monetary", "display_currency": doc.currency_id}'
+                >3</span>
+            </td>
+        </xpath>
+
+    </template>
+
+    <!--
+        Herencia del template del portal de ventas (sale.sale_order_portal_content).
+        Sustituye la columna "Unit Price" en la vista previa (action_preview_sale_order)
+        para mostrar también el precio unitario SIN IVA.
+    -->
+    <template id="sale_order_portal_content_untaxed_price"
+              inherit_id="sale.sale_order_portal_content">
+
+        <!-- Reemplazamos el div del precio unitario (con/sin tachado por descuento) -->
+        <xpath expr="//div[@t-field='line.price_unit']" position="replace">
+            <div
+                t-if="line.discount &gt;= 0"
+                t-field="line.price_unit_untaxed"
+                t-att-style="line.discount and 'text-decoration: line-through' or None"
+                t-att-class="(line.discount and 'text-danger' or '') + ' text-end'"
+            />
+        </xpath>
+
+        <!-- Reemplazamos el cálculo del precio con descuento aplicado -->
+        <xpath expr="//div[@t-if='line.discount']" position="replace">
+            <div t-if="line.discount">
+                <t t-out="(1 - line.discount / 100.0) * line.price_unit_untaxed"
+                   t-options='{"widget": "float", "decimal_precision": "Product Price"}'/>
+            </div>
+        </xpath>
+
+    </template>
+
+</odoo>
+
