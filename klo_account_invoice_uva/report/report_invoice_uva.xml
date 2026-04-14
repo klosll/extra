@@ -7,8 +7,16 @@
         completamente independiente y no afectar al informe estándar de facturas.
         Se activa automáticamente cuando el diario tiene 'Es para uva' marcado.
 
-        Columnas de las líneas:
-          Descripción | Grado | Kilos | €/Kilogrado | Kilogrados | Importe
+        Estructura de columnas:
+          - Descripción: Nombre del producto/variedad de uva
+          - Grado: Graduación alcohólica en grados
+          - Kilos: Peso en kilogramos
+          - €/Kilogrado: Precio por kilogrado
+          - Kilogrados: Resultado de Kilos × Grado
+          - Importe: Precio total de la línea (€/Kilogrado × Kilogrados × 1.000)
+
+        Las columnas estándar de Cantidad, Precio Unitario, Descuento e Impuestos
+        se eliminan por completo para facturas de uva.
     -->
     <template id="klo_report_invoice_document_uva"
               inherit_id="account.report_invoice_document"
@@ -31,19 +39,18 @@
             <th name="th_kilogrados" class="text-end"><span>Kilogrados</span></th>
         </xpath>
 
-        <!-- "Unit Price" → "Importe" -->
-        <xpath expr="//th[@name='th_priceunit']/span" position="replace">
-            <span>Importe</span>
-        </xpath>
+        <!-- Eliminar la columna "Unit Price" (no se usa en facturas de uva) -->
+        <xpath expr="//th[@name='th_priceunit']" position="replace"/>
+
+        <!-- Eliminar la columna opcional de Descuento (no aplica en facturas de uva) -->
+        <xpath expr="//th[@name='th_price_unit']" position="replace"/>
 
         <!-- Eliminar cabecera de Impuestos (no aplica en facturas de uva) -->
-        <xpath expr="//th[@name='th_taxes']" position="replace">
-            <th/>
-        </xpath>
+        <xpath expr="//th[@name='th_taxes']" position="replace"/>
 
-        <!-- Eliminar cabecera de Importe subtotal (no aplica en facturas de uva) -->
-        <xpath expr="//th[@name='th_subtotal']" position="attributes">
-            <attribute name="style">display:none;</attribute>
+        <!-- Reemplazar "Amount/Total Price" → "Importe" y moverla al final -->
+        <xpath expr="//th[@name='th_subtotal']/span" position="replace">
+            <span>Importe</span>
         </xpath>
 
         <!-- =========================================================== -->
@@ -85,7 +92,7 @@
                     <span t-field="line.kilogrados"/>
                 </td>
 
-                <!-- Importe total de la línea -->
+                <!-- Importe total de la línea (columna th_subtotal) -->
                 <td class="text-end o_price_total">
                     <span class="text-nowrap"
                           t-field="line.price_subtotal"
