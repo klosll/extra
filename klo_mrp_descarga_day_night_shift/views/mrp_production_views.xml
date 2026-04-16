@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <!-- Añadir el campo después del campo bom_id, visible solo en despiece -->
             <field name="bom_id" position="before">
-                <field name="turno" required="1" attrs="{'invisible': [('quartering', '=', False)]}"/>
+                <field name="turno" attrs="{'invisible': [('quartering', '=', False)], 'required': [('quartering', '=', True)]}"/>
             </field>
         </field>
     </record>
