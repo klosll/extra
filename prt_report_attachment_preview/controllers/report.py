@@ -26,6 +26,7 @@ from werkzeug import urls
 from werkzeug.wrappers import Response
 
 from odoo import http
+from odoo.exceptions import MissingError
 from odoo.http import request, route
 from odoo.tools.safe_eval import safe_eval
 from odoo.tools.safe_eval import time as safe_time
@@ -77,9 +78,16 @@ class CxReportController(ReportController):
         """
         report_name = "report"
         if docids:
-            records = request.env[report.model].browse(docids)
-            record_count = len(docids)
-            if record_count == 1 and report.sudo().print_report_name:
+            try:
+                records = request.env[report.model].browse(docids)
+                records = records.exists()
+            except Exception:
+                records = request.env[report.model]
+            record_count = len(records)
+            if record_count == 0:
+                # All IDs were non-existent (e.g. picking ID passed to product.template report)
+                report_name = report.name
+            elif record_count == 1 and report.sudo().print_report_name:
                 # Single record
                 print_report_name = report.sudo().print_report_name
                 extra_ctx = self._get_extra_context_for_single_record(
@@ -160,7 +168,16 @@ class CxReportController(ReportController):
             try:
                 doc_ids = [int(i) for i in docids.split(",")]
                 records = request.env[report.model].browse(doc_ids)
-                records.check_access_rule("read")
+                try:
+                    records.check_access_rule("read")
+                except MissingError:
+                    # Some records don't exist (e.g. picking ID passed to a
+                    # product.template report). Filter to existing records only;
+                    # the report will use the data dict with the correct IDs.
+                    existing = records.exists()
+                    if existing:
+                        existing.check_access_rule("read")
+                    doc_ids = existing.ids
             except (ValueError, AttributeError):
                 return request.not_found()
 
