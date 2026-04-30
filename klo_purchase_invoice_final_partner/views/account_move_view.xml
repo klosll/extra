@@ -13,13 +13,33 @@
     </record>
 
     <!-- KLO. Añade "Cliente de venta" a las líneas de factura (árbol editable) -->
+    <!-- KLO. optional="show": visible por defecto para garantizar que el cliente web
+         siempre incluya el campo en el payload al guardar/onchange. Con optional="hide"
+         el cliente web Odoo 15 (OWL) no incluía el campo en los vals de líneas nuevas
+         cuando la columna estaba oculta, provocando que create() asignara el valor de
+         la cabecera sobreescribiendo el que el usuario había asignado manualmente. -->
     <record id="klo_view_move_line_sale_partner_form" model="ir.ui.view">
         <field name="name">klo.account.move.line.sale.partner.form</field>
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='analytic_account_id']" position="after">
-                <field name="sale_partner_id" optional="hide" string="Cliente de venta"/>
+                <field name="sale_partner_id" optional="show" string="Cliente de venta"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- KLO. Añade default_sale_partner_id al contexto de invoice_line_ids para que al añadir
+         una nueva línea ya tenga el valor de la cabecera como valor por defecto en la UI.
+         El contexto base de invoice_line_ids no incluye default_move_id, por lo que es
+         necesario propagar sale_partner_id explícitamente desde la cabecera. -->
+    <record id="klo_view_move_invoice_line_context" model="ir.ui.view">
+        <field name="name">klo.account.move.invoice.line.context</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']" position="attributes">
+                <attribute name="context">{'default_move_type': context.get('default_move_type'), 'journal_id': journal_id, 'default_partner_id': commercial_partner_id, 'default_currency_id': currency_id or company_currency_id, 'default_sale_partner_id': sale_partner_id}</attribute>
             </xpath>
         </field>
     </record>
