@@ -58,6 +58,8 @@
                                 <t t-if="o.partner_shipping_id.street"><span t-esc="o.partner_shipping_id.street"/><br/></t>
                                 <t t-esc="o.partner_shipping_id.zip"/> <t t-esc="o.partner_shipping_id.city"/>
                                 <t t-if="o.partner_shipping_id.country_id"><br/><t t-esc="o.partner_shipping_id.country_id.name"/></t>
+                                <t t-if="o.partner_shipping_id.phone"><br/><span>Tfno.: </span><t t-esc="o.partner_shipping_id.phone"/></t>
+                                <t t-if="o.partner_shipping_id.email"><br/><span>e-mail: </span><t t-esc="o.partner_shipping_id.email"/></t>
                             </div>
                         </t>
                         <!-- Bloque dirección de entrega: albaranes -->
@@ -70,6 +72,8 @@
                                 <t t-if="o.partner_id.street"><span t-esc="o.partner_id.street"/><br/></t>
                                 <t t-esc="o.partner_id.zip"/> <t t-esc="o.partner_id.city"/>
                                 <t t-if="o.partner_id.country_id"><br/><t t-esc="o.partner_id.country_id.name"/></t>
+                                <t t-if="o.partner_id.phone"><br/><span>Tfno.: </span><t t-esc="o.partner_id.phone"/></t>
+                                <t t-if="o.partner_id.email"><br/><span>e-mail: </span><t t-esc="o.partner_id.email"/></t>
                             </div>
                         </t>
 
@@ -91,6 +95,8 @@
                                             <span t-if="partner.zip" t-esc="partner.zip"/> <span t-if="partner.city" t-esc="partner.city"/>
                                         </t>
                                         <t t-if="partner.country_id"><br/><span t-esc="partner.country_id.name"/></t>
+                                        <t t-if="partner.phone"><span>Tfno.: </span><span t-esc="partner.phone"/><br/></t>
+                                        <t t-if="partner.email"><span>e-mail: </span><span t-esc="partner.email"/><br/></t>
                                     </t>
                                     <t t-elif="len(partners) > 1">
                                         <strong>Clientes:</strong><br/>
@@ -108,6 +114,8 @@
                                     <t t-if="o.partner_id.street"><span t-esc="o.partner_id.street"/><br/></t>
                                     <t t-esc="o.partner_id.zip"/> <t t-esc="o.partner_id.city"/>
                                     <t t-if="o.partner_id.country_id"><br/><t t-esc="o.partner_id.country_id.name"/></t>
+                                    <t t-if="o.partner_id.phone"><br/><span>Tfno.: </span><t t-esc="o.partner_id.phone"/></t>
+                                    <t t-if="o.partner_id.email"><br/><span>e-mail: </span><t t-esc="o.partner_id.email"/></t>
                                 </t>
                             </t>
                         </div>
