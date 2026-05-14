@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    KLO. Plantilla QWeb para factura rectificativa con importes en negativo.
+    HEREDA de account.report_invoice_document (primary="True"):
+      - No modifica el original: account.report_invoice_document queda intacto.
+      - Cualquier cambio upstream en el original se aplica automáticamente aquí.
+      - Solo se declaran los 6 diff necesarios para presentar los importes en negativo.
+
+    DIFERENCIAS respecto al original:
+    1. line.quantity        → negado con t-esc="-line.quantity"
+    2. current_subtotal     → acumulado con - en lugar de + (tax_excluded)
+    3. current_subtotal     → acumulado con - en lugar de + (tax_included)
+    4. line.price_subtotal  → negado con fmt_amount() (tax_excluded)
+    5. line.price_total     → negado con fmt_amount() (tax_included)
+    6. t-call document_tax_totals → reemplazado por versión inline que usa fmt_amount()
+       para negar Base, Impuestos y Total directamente desde tax_totals positivo.
+-->
+<odoo>
+    <data>
+        <!-- KLO. Template heredado (primary) de account.report_invoice_document.
+             primary="True" establece mode='primary' en ir.ui.view, lo que impide que
+             estos XPath se apliquen automáticamente al padre cuando se renderiza
+             account.report_invoice_document directamente. Al llamar a este template
+             por su propio ID, Odoo combina parent + estos cambios. -->
+        <template id="report_invoice_negative_document"
+                  inherit_id="account.report_invoice_document"
+                  primary="True">
+
+            <!-- KLO. 1. Cantidad: en negativo -->
+            <xpath expr="//span[@t-field='line.quantity']" position="replace">
+                <span t-esc="-line.quantity"/>
+                <span t-field="line.product_uom_id" groups="uom.group_uom"/>
+            </xpath>
+
+            <!-- KLO. 2. Acumulador subtotal de sección (base imponible): restar en lugar de sumar -->
+            <xpath expr="//t[@t-set='current_subtotal'][@groups='account.group_show_line_subtotals_tax_excluded']" position="replace">
+                <t t-set="current_subtotal" t-value="current_subtotal - line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+            </xpath>
+
+            <!-- KLO. 3. Acumulador subtotal de sección (precio total con IVA): restar en lugar de sumar -->
+            <xpath expr="//t[@t-set='current_subtotal'][@groups='account.group_show_line_subtotals_tax_included']" position="replace">
+                <t t-set="current_subtotal" t-value="current_subtotal - line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+            </xpath>
+
+            <!-- KLO. 4. Importe de línea (base imponible): en negativo con formato moneda -->
+            <xpath expr="//span[@t-field='line.price_subtotal']" position="replace">
+                <span class="text-nowrap" groups="account.group_show_line_subtotals_tax_excluded">
+                    <t t-esc="fmt_amount(-line.price_subtotal, o.currency_id)"/>
+                </span>
+            </xpath>
+
+            <!-- KLO. 5. Importe de línea (precio total con IVA): en negativo con formato moneda -->
+            <xpath expr="//span[@t-field='line.price_total']" position="replace">
+                <span class="text-nowrap" groups="account.group_show_line_subtotals_tax_included">
+                    <t t-esc="fmt_amount(-line.price_total, o.currency_id)"/>
+                </span>
+            </xpath>
+
+            <!-- KLO. 6. Totales del pie (Base, IVA, Total): reemplazar t-call de document_tax_totals
+                 con versión inline que usa fmt_amount para negar los importes directamente.
+                 tax_totals sigue siendo json.loads(o.tax_totals_json) con valores positivos;
+                 los negamos al vuelo con fmt_amount(-importe, currency). -->
+            <xpath expr="//t[@t-call='account.document_tax_totals']" position="replace">
+                <!-- KLO. Subtotales (Base imponible) -->
+                <t t-foreach="tax_totals['subtotals']" t-as="subtotal">
+                    <tr class="border-black o_subtotal">
+                        <td><strong t-esc="subtotal['name']"/></td>
+                        <td class="text-right">
+                            <span t-att-class="oe_subtotal_footer_separator"
+                                  t-esc="fmt_amount(-subtotal['amount'], o.currency_id)"/>
+                        </td>
+                    </tr>
+                    <!-- KLO. Grupos de impuestos para este subtotal -->
+                    <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
+                    <t t-foreach="tax_totals['groups_by_subtotal'][subtotal_to_show]" t-as="amount_by_group">
+                        <tr>
+                            <t t-if="len(tax_totals['groups_by_subtotal'][subtotal_to_show]) > 1 or (tax_totals['amount_untaxed'] != amount_by_group['tax_group_base_amount'])">
+                                <td>
+                                    <span t-esc="amount_by_group['tax_group_name']"/>
+                                    <span class="text-nowrap"> on
+                                        <t t-esc="fmt_amount(-amount_by_group['tax_group_base_amount'], o.currency_id)"/>
+                                    </span>
+                                </td>
+                                <td class="text-right o_price_total">
+                                    <span class="text-nowrap" t-esc="fmt_amount(-amount_by_group['tax_group_amount'], o.currency_id)"/>
+                                </td>
+                            </t>
+                            <t t-else="">
+                                <td><span class="text-nowrap" t-esc="amount_by_group['tax_group_name']"/></td>
+                                <td class="text-right o_price_total">
+                                    <span class="text-nowrap" t-esc="fmt_amount(-amount_by_group['tax_group_amount'], o.currency_id)"/>
+                                </td>
+                            </t>
+                        </tr>
+                    </t>
+                </t>
+                <!-- KLO. Total final en negativo -->
+                <tr class="border-black o_total">
+                    <td><strong>Total</strong></td>
+                    <td class="text-right">
+                        <span t-esc="fmt_amount(-tax_totals['amount_total'], o.currency_id)"/>
+                    </td>
+                </tr>
+            </xpath>
+
+        </template>
+
+        <template id="report_invoice_negative">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-if="o.move_type == 'out_refund'">
+                        <t t-set="lang" t-value="o.partner_id.lang"/>
+                        <t t-call="klo_account_invoice_report_negative.report_invoice_negative_document" t-lang="lang"/>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

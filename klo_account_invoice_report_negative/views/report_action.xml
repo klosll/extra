@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    KLO. Acción de reporte para factura rectificativa con importes en negativo.
+
+    binding_domain: [('move_type', '=', 'out_refund')]
+    → El botón "Imprimir" solo aparece cuando la factura es una rectificativa a cliente.
+    binding_view_types: form
+    → Solo visible en la vista formulario (no en lista).
+-->
+<odoo>
+    <data>
+        <record id="action_report_invoice_negative" model="ir.actions.report">
+            <field name="name">Factura rectificativa (negativo)</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">klo_account_invoice_report_negative.report_invoice_negative</field>
+            <field name="report_file">klo_account_invoice_report_negative.report_invoice_negative</field>
+            <field name="print_report_name">(object._get_report_base_filename())</field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_type">report</field>
+            <field name="binding_view_types">form</field>
+            <!-- KLO. Nota: ir.actions.report en Odoo 15 no soporta binding_domain.
+                 El reporte aparece en el menú Imprimir de todos los account.move.
+                 La plantilla QWeb ya incluye un guard: solo genera contenido si move_type='out_refund'. -->
+            <field name="groups_id" eval="[(4, ref('account.group_account_invoice')),
+ (4, ref('account.group_account_readonly'))]"/>
+        </record>
+    </data>
+</odoo>
+
+
