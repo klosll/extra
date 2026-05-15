@@ -2,7 +2,9 @@
 <odoo>
 
   <template id="klo_invoice_report_document_no_origin" inherit_id="account.report_invoice_document">
-      <xpath expr="//div[@name='origin']" position="replace"/>
+      <xpath expr="//div[@name='origin']" position="attributes">
+          <attribute name="t-if">False</attribute>
+      </xpath>
   </template>
 
 </odoo>
