@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2026 KLO Ingeniería Informática S.L.L.
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+
+    <!-- Añade columnas 'Enviado' y 'Entregas firmadas' en la lista de pedidos de venta -->
+    <record id="view_saleorder_sended_signed_tree" model="ir.ui.view">
+        <field name="name">klo.sale.order.list.sended.signed</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree" />
+        <field name="arch" type="xml">
+            <!-- 'Enviado' después de invoice_status -->
+            <field name="invoice_status" position="after">
+                <field
+                    name="is_email_sent"
+                    string="Enviado"
+                    optional="show"
+                    widget="boolean"
+                    readonly="1"
+                />
+                <field
+                    name="delivery_signed_status"
+                    string="Entregas firmadas"
+                    optional="show"
+                    widget="badge"
+                    decoration-success="delivery_signed_status == 'yes'"
+                    decoration-warning="delivery_signed_status == 'partial'"
+                    decoration-danger="delivery_signed_status == 'no'"
+                    readonly="1"
+                />
+            </field>
+        </field>
+    </record>
+
+</odoo>
+
