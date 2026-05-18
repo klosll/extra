@@ -22,6 +22,26 @@
     </record>
 
     <!--
+        Vista 3: Añade project_id como columna opcional (visible por defecto)
+        en la lista de pedidos de venta, después de partner_id.
+    -->
+    <record id="view_saleorder_tree_project" model="ir.ui.view">
+        <field name="name">klo.sale.order.list.project</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree" />
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field
+                    name="project_id"
+                    groups="project.group_project_user"
+                    optional="show"
+                    readonly="1"
+                />
+            </field>
+        </field>
+    </record>
+
+    <!--
         Vista 2: Añade project_id después de payment_mode_id con dominio filtrado
         por partner_id. Incluye proyectos sin cliente asignado (False) para
         permitir asignar proyectos genéricos.
