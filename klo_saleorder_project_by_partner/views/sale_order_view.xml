@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2026 KLO Ingeniería Informática S.L.L.
+    License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+
+    <!--
+        Vista 1: Oculta el project_id de la posición original (antes de journal_id)
+        que pone sale_project, y aplica el dominio filtrado por partner_id.
+    -->
+    <record id="view_saleorder_project_by_partner" model="ir.ui.view">
+        <field name="name">klo.sale.order.form.project.by.partner</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_project.view_order_form_inherit_sale_project" />
+        <field name="arch" type="xml">
+            <!-- Ocultar el project_id en la posición original (antes de journal_id) -->
+            <field name="project_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!--
+        Vista 2: Añade project_id después de payment_mode_id con dominio filtrado
+        por partner_id. Incluye proyectos sin cliente asignado (False) para
+        permitir asignar proyectos genéricos.
+    -->
+    <record id="view_saleorder_project_after_payment_mode" model="ir.ui.view">
+        <field name="name">klo.sale.order.form.project.after.payment.mode</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <field name="payment_mode_id" position="after">
+                <field
+                    name="project_id"
+                    groups="project.group_project_user"
+                    domain="[('allow_billable', '=', True), ('partner_id', 'in', [partner_id, False])]"
+                    context="{'default_allow_billable': True, 'default_partner_id': partner_id}"
+                    options="{'no_create': False}"
+                />
+            </field>
+        </field>
+    </record>
+
+</odoo>
+
