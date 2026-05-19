@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Hereda el pivot de Análisis de Ventas y añade la medida "P. ponderado uni." -->
+    <record id="view_order_product_pivot_ponderate" model="ir.ui.view">
+        <field name="name">sale.report.pivot.klo.ponderate</field>
+        <field name="model">sale.report</field>
+        <field name="inherit_id" ref="sale.view_order_product_pivot"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='price_subtotal']" position="after">
+                <field name="precio_ponderado_unitario" type="measure" string="P. ponderado uni."/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
