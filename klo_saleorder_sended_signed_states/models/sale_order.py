@@ -29,16 +29,22 @@ class SaleOrder(models.Model):
     )
 
     def action_quotation_sent(self):
-        """Sobrescribe para marcar el pedido como enviado por email."""
+        """Sobrescribe para marcar el pedido como enviado por email (botón 'Marcar como enviado')."""
         res = super().action_quotation_sent()
         self.write({"is_email_sent": True})
         return res
 
-    def action_quotation_send(self):
-        """Sobrescribe para marcar como enviado cuando se envía desde el wizard de email."""
-        res = super().action_quotation_send()
-        # El envío real ocurre en action_quotation_sent, pero si el wizard
-        # confirma el envío también lo marcamos aquí como respaldo.
+    @api.returns('mail.message', lambda value: value.id)
+    def message_post(self, **kwargs):
+        """Sobrescribe message_post para detectar el envío real del email desde el wizard.
+
+        Odoo 18: cuando el usuario pulsa 'Enviar' en el wizard de email del presupuesto,
+        se llama a message_post con el contexto mark_so_as_sent=True.
+        Este es el único punto fiable para capturar el envío real por correo.
+        """
+        res = super().message_post(**kwargs)
+        if self.env.context.get('mark_so_as_sent'):
+            self.filtered(lambda o: o.state in ('draft', 'sent')).write({"is_email_sent": True})
         return res
 
     @api.depends(
