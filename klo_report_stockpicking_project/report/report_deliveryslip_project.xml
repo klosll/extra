@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--
+        Hereda el QWeb de albarán de entrega (stock.report_delivery_document)
+        Añade el campo Proyecto (project_id) a la derecha del campo Pedido (origin)
+        en la cabecera del documento, dentro del div#informations
+    -->
+    <template id="report_delivery_document_project"
+              inherit_id="stock.report_delivery_document">
+
+        <xpath expr="//div[@name='div_origin']" position="after">
+            <div t-if="o.project_id" class="col col-3 mw-100 mb-2" name="div_project">
+                <strong>Proyecto</strong>
+                <div t-field="o.project_id" class="m-0"/>
+            </div>
+        </xpath>
+
+    </template>
+</odoo>
+
