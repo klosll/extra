@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista lista: columna opcional solo lectura.
+         En Odoo 15 se ancla tras el campo 'state' (último campo visible del tree
+         account.view_invoice_tree), ya que 'move_sent_values' de Odoo 18 no existe. -->
+    <record id="view_invoice_tree_facturae_status" model="ir.ui.view">
+        <field name="name">account.move.list.facturae.status</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="after">
+                <field name="is_facturae_generated"
+                       string="Facturae"
+                       widget="boolean_toggle"
+                       readonly="1"
+                       optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Vista formulario: campo informativo en la pestaña "Facturae" del módulo OCA.
+         En Odoo 15 (l10n_es_facturae) la pestaña Facturae hereda de
+         l10n_es_aeat.view_move_form y contiene el grupo de adjuntos
+         l10n_es_facturae_attachment_ids. Se añade el campo antes de ese grupo. -->
+    <record id="view_move_form_facturae_status" model="ir.ui.view">
+        <field name="name">account.move.form.facturae.status</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="l10n_es_facturae.view_move_form"/>
+        <field name="arch" type="xml">
+            <field name="facturae_file_reference" position="after">
+                <field name="is_facturae_generated"
+                       string="Facturae generada"
+                       readonly="0"/>
+            </field>
+        </field>
+    </record>
+</odoo>
+
