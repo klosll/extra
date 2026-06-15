@@ -6,7 +6,7 @@
         "_setDefaultValue usaba moment() (hora local) en lugar de moment.utc(), "
         "provocando que al seleccionar un rango de fechas aparecieran datos del día anterior."
     ),
-    "version": "15.0.1.0.0",
+    "version": "15.0.1.0.1",
     "author": "KLO Ingeniería Informática S.L.L.",
     "website": "https://www.klo.es",
     "category": "Technical",
@@ -17,7 +17,7 @@
         "web.assets_backend": [
             # KLO. Carga DESPUÉS de date_range (garantizado por dependencia de módulo)
             # para sobreescribir el método _setDefaultValue con la corrección UTC
-            "klo_date_range_error_correction/static/src/js/klo_date_range_fix.esm.js",
+            "klo_date_range_error_fix/static/src/js/klo_date_range_fix.esm.js",
         ],
     },
     "installable": True,
