@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================
+         Vista LIST base (product): menú Compra > Configuración > Tarifas de proveedor.
+         Los cambios aplicados aquí también se propagan a la vista primary
+         purchase.product_supplierinfo_tree_view2 (pestaña Compra del producto),
+         por lo que NO es necesario heredarla por separado.
+         ============================================================ -->
+    <record id="product_supplierinfo_tree_view_purchase_date" model="ir.ui.view">
+        <field name="name">product.supplierinfo.list.klo.purchase_date</field>
+        <field name="model">product.supplierinfo</field>
+        <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+        <field name="arch" type="xml">
+            <!-- Añadir columna "Fecha" después del precio, visible por defecto -->
+            <xpath expr="//field[@name='price']" position="after">
+                <field name="purchase_date" string="Fecha" optional="show" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- ============================================================
+         Vista FORM de product.supplierinfo: añadir purchase_date en grupo Pricelist
+         ============================================================ -->
+    <record id="product_supplierinfo_form_view_purchase_date" model="ir.ui.view">
+        <field name="name">product.supplierinfo.form.klo.purchase_date</field>
+        <field name="model">product.supplierinfo</field>
+        <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_start']" position="before">
+                <field name="purchase_date" string="Fecha última compra" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+
