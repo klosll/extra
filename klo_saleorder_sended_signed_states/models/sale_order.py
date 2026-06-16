@@ -28,6 +28,22 @@ class SaleOrder(models.Model):
         help="Estado de firma de las entregas de salida asociadas al pedido.",
     )
 
+    delivery_delivered_status = fields.Selection(
+        selection=[
+            ("no", "No"),
+            ("yes", "Sí"),
+            ("partial", "Parcialmente"),
+        ],
+        string="Enviada/entregada",
+        compute="_compute_delivery_delivered_status",
+        store=True,
+        help=(
+            "Sí: pedido confirmado y todas sus entregas validadas. "
+            "Parcialmente: confirmado con algunas entregas validadas y otras no. "
+            "No: no confirmado o confirmado pero ninguna entrega validada."
+        ),
+    )
+
     def action_quotation_sent(self):
         """Sobrescribe para marcar el pedido como enviado por email (botón 'Marcar como enviado')."""
         res = super().action_quotation_sent()
@@ -46,6 +62,32 @@ class SaleOrder(models.Model):
         if self.env.context.get('mark_so_as_sent'):
             self.filtered(lambda o: o.state in ('draft', 'sent')).write({"is_email_sent": True})
         return res
+
+    @api.depends(
+        "state",
+        "picking_ids.state",
+        "picking_ids.location_dest_id.usage",
+    )
+    def _compute_delivery_delivered_status(self):
+        for order in self:
+            if order.state not in ("sale", "done"):
+                order.delivery_delivered_status = "no"
+                continue
+
+            customer_pickings = order.picking_ids.filtered(
+                lambda p: p.location_dest_id.usage == "customer"
+            )
+            if not customer_pickings:
+                order.delivery_delivered_status = "no"
+                continue
+
+            done = customer_pickings.filtered(lambda p: p.state == "done")
+            if len(done) == len(customer_pickings):
+                order.delivery_delivered_status = "yes"
+            elif done:
+                order.delivery_delivered_status = "partial"
+            else:
+                order.delivery_delivered_status = "no"
 
     @api.depends(
         "picking_ids",

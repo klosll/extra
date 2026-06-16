@@ -29,6 +29,18 @@ Añade dos columnas opcionales (visibles por defecto) en la lista de pedidos de 
 - **Descripción:** Estado de firma de las entregas de salida al cliente (`location_dest_id.usage == 'customer'`) en estado `done`.
 - **Depende de:** `picking_ids.state`, `picking_ids.is_signed`, `picking_ids.location_dest_id.usage`
 
+### Campo 3: `delivery_delivered_status` — "Enviada/entregada"
+- **Tipo:** `Selection` (calculado y almacenado)
+- **Valores:**
+  - `no` → "No" (rojo)
+  - `partial` → "Parcialmente" (naranja)
+  - `yes` → "Sí" (verde)
+- **Descripción:** Indica si las entregas al cliente del pedido han sido validadas.
+  - `yes`: pedido confirmado (`state` en `sale`/`done`) y todas las entregas al cliente en estado `done`.
+  - `partial`: pedido confirmado y algunas entregas validadas y otras no.
+  - `no`: pedido no confirmado, o confirmado pero ninguna entrega validada.
+- **Depende de:** `state`, `picking_ids.state`, `picking_ids.location_dest_id.usage`
+
 ---
 
 ## Dependencias

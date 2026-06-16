@@ -21,6 +21,16 @@
                     readonly="1"
                 />
                 <field
+                    name="delivery_delivered_status"
+                    string="Enviada/entregada"
+                    optional="show"
+                    widget="badge"
+                    decoration-success="delivery_delivered_status == 'yes'"
+                    decoration-warning="delivery_delivered_status == 'partial'"
+                    decoration-danger="delivery_delivered_status == 'no'"
+                    readonly="1"
+                />
+                <field
                     name="delivery_signed_status"
                     string="Entregas firmadas"
                     optional="show"
