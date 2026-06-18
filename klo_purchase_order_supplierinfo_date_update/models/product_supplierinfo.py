@@ -8,7 +8,7 @@ class SupplierInfo(models.Model):
     _inherit = "product.supplierinfo"
 
     purchase_date = fields.Date(
-        string="Fecha",
+        string="F. última compra",
         readonly=True,
         copy=False,
         help="Fecha de la última compra confirmada de este producto al proveedor.",

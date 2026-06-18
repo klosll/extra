@@ -13,7 +13,7 @@
 
 ## Descripción
 
-Extiende la funcionalidad del módulo OCA `purchase_order_supplierinfo_update` añadiendo el campo **`purchase_date`** ("Fecha") en el modelo `product.supplierinfo`.
+Extiende la funcionalidad del módulo OCA `purchase_order_supplierinfo_update` añadiendo el campo **`purchase_date`** ("F. última compra") en el modelo `product.supplierinfo`.
 
 Este campo almacena la **fecha de la última compra confirmada** del producto al proveedor, y se actualiza automáticamente cada vez que el módulo OCA actualiza el precio del proveedor (al confirmar un pedido de compra cuya línea es la más reciente para ese par producto/proveedor).
 
@@ -26,7 +26,7 @@ Este campo almacena la **fecha de la última compra confirmada** del producto al
 | **Modelo** | `product.supplierinfo` |
 | **Nombre técnico** | `purchase_date` |
 | **Tipo** | `Date` |
-| **String (etiqueta)** | `Fecha` / `Fecha última compra` |
+| **String (etiqueta)** | `F. última compra` |
 | **readonly** | `True` |
 | **copy** | `False` |
 | **Se actualiza** | Al confirmar un pedido de compra, cuando la línea es la más reciente para ese producto/proveedor |

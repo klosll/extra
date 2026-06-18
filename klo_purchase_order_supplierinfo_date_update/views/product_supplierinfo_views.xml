@@ -14,7 +14,7 @@
         <field name="arch" type="xml">
             <!-- Añadir columna "Fecha" después del precio, visible por defecto -->
             <xpath expr="//field[@name='price']" position="after">
-                <field name="purchase_date" string="Fecha" optional="show" readonly="1"/>
+                <field name="purchase_date" string="F. última compra" optional="show" readonly="1"/>
             </xpath>
         </field>
     </record>
@@ -29,7 +29,7 @@
         <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='date_start']" position="before">
-                <field name="purchase_date" string="Fecha última compra" readonly="1"/>
+                <field name="purchase_date" string="F. última compra" readonly="1"/>
             </xpath>
         </field>
     </record>
