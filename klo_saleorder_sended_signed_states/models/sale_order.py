@@ -34,7 +34,7 @@ class SaleOrder(models.Model):
             ("yes", "Sí"),
             ("partial", "Parcialmente"),
         ],
-        string="Enviada/entregada",
+        string="Entregas validadas",
         compute="_compute_delivery_delivered_status",
         store=True,
         help=(

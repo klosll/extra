@@ -29,7 +29,7 @@ Añade dos columnas opcionales (visibles por defecto) en la lista de pedidos de 
 - **Descripción:** Estado de firma de las entregas de salida al cliente (`location_dest_id.usage == 'customer'`) en estado `done`.
 - **Depende de:** `picking_ids.state`, `picking_ids.is_signed`, `picking_ids.location_dest_id.usage`
 
-### Campo 3: `delivery_delivered_status` — "Enviada/entregada"
+### Campo 3: `delivery_delivered_status` — "Entregas validadas"
 - **Tipo:** `Selection` (calculado y almacenado)
 - **Valores:**
   - `no` → "No" (rojo)
