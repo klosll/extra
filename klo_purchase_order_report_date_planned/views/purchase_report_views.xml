@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_purchase_order_search_date_planned" model="ir.ui.view">
+        <field name="name">purchase.report.search.date_planned</field>
+        <field name="model">purchase.report</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_search"/>
+        <field name="arch" type="xml">
+            <!-- Añadir filtro de fecha por Fecha de Recepción junto a los otros filtros de fecha -->
+            <filter name="filter_date_approve" position="after">
+                <filter name="filter_date_planned" date="date_planned" string="Fecha de recepción"/>
+            </filter>
+            <!-- Añadir agrupación por Fecha de Recepción en el grupo Group By -->
+            <filter name="group_date_approve_month" position="after">
+                <filter string="Fecha de recepción" name="group_date_planned_month" context="{'group_by': 'date_planned:month'}"/>
+            </filter>
+        </field>
+    </record>
+</odoo>
