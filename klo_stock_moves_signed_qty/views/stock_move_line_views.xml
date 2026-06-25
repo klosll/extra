@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Hereda la vista lista del historial de movimientos de stock
+        y añade la columna "Cantidad neta" con totalización al pie.
+
+        Vista base en Odoo 18: stock.stock_move_line_view_tree (módulo stock)
+    -->
+    <record id="stock_move_line_signed_qty_tree" model="ir.ui.view">
+        <field name="name">stock.move.line.signed.qty.tree</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.stock_move_line_view_tree"/>
+        <field name="arch" type="xml">
+
+            <!--
+                Insertamos la columna "Cantidad neta" justo después
+                de la columna estándar "qty_done" (Cantidad).
+                El atributo sum="Saldo neto" genera el total al pie de la lista.
+            -->
+            <xpath expr="//field[@name='qty_done']" position="after">
+                <field
+                    name="signed_qty"
+                    string="Cantidad neta"
+                    sum="Saldo neto"
+                    optional="show"
+                    decoration-success="signed_qty &gt; 0"
+                    decoration-danger="signed_qty &lt; 0"
+                    decoration-muted="signed_qty == 0"
+                />
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
