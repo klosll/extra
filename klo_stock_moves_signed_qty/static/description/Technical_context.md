@@ -80,7 +80,7 @@ klo_stock_moves_signed_qty/
 #### Métodos añadidos
 
 ```python
-@api.depends('qty_done', 'location_id', 'location_dest_id', 'state')
+@api.depends('quantity', 'location_id', 'location_dest_id', 'state')
 def _compute_signed_qty(self):
     """
     Lógica de signo basada en el tipo de ubicación (usage):
@@ -88,13 +88,17 @@ def _compute_signed_qty(self):
       - src == 'internal' y dst != 'internal'  →  salida  (-qty)
       - ambos iguales (ambos internos o ninguno) →  0
     Cantidad base:
-      - state == 'done'  →  qty_done
-      - cualquier otro  →  reserved_qty
+      - En Odoo 18, qty_done y reserved_qty se unifican en el campo `quantity`.
+        Se usa `quantity` directamente para todos los estados.
     """
 ```
 
 **Dependencias del compute:**  
-`qty_done`, `location_id` (usage), `location_dest_id` (usage), `state`
+`quantity`, `location_id` (usage), `location_dest_id` (usage), `state`
+
+> **Nota de migración Odoo 18:** Los campos `qty_done` y `reserved_qty` de `stock.move.line`
+> fueron eliminados en Odoo 18 y reemplazados por un único campo `quantity`. El campo `state`
+> sigue disponible como campo relacionado de `move_id.state`.
 
 **Campos de ubicación relevantes en Odoo:**  
 `location_id.usage` y `location_dest_id.usage`. El valor `'internal'` identifica
@@ -105,17 +109,20 @@ ubicaciones de almacén propio. Otros valores comunes: `'supplier'`, `'customer'
 
 ## Vistas modificadas
 
-### `stock.stock_move_line_view_tree` — Lista del historial de movimientos
+### `stock.stock_move_line_view_tree` → `stock.view_move_line_tree` — Lista del historial de movimientos
 
 **Archivo:** `views/stock_move_line_views.xml`  
 **ID del registro:** `stock_move_line_signed_qty_tree`  
 **Modelo:** `stock.move.line`  
-**Hereda:** `stock.stock_move_line_view_tree` (módulo `stock`, Odoo core)
+**Hereda:** `stock.view_move_line_tree` (módulo `stock`, Odoo core)
+
+> **Nota de migración Odoo 18:** El ID externo de la vista lista cambió de
+> `stock.stock_move_line_view_tree` (Odoo ≤17) a `stock.view_move_line_tree` (Odoo 18).
 
 #### XPath aplicado
 
 ```xml
-<xpath expr="//field[@name='qty_done']" position="after">
+<xpath expr="//field[@name='quantity']" position="after">
     <field
         name="signed_qty"
         string="Cantidad neta"
@@ -129,9 +136,12 @@ ubicaciones de almacén propio. Otros valores comunes: `'supplier'`, `'customer'
 ```
 
 **Motivo del cambio:** Se inserta la columna `signed_qty` justo a la derecha de la
-columna estándar `qty_done` (Cantidad). El atributo `sum` genera automáticamente el
+columna estándar `quantity` (Cantidad). El atributo `sum` genera automáticamente el
 total al pie de la lista. Las decoraciones colorean las filas según el signo
 (verde = entrada, rojo = salida, gris = sin movimiento neto).
+
+> **Nota de migración Odoo 18:** El campo de la vista base pasó de llamarse `qty_done`
+> a `quantity`, por lo que el XPath apunta a `//field[@name='quantity']`.
 
 ---
 
@@ -171,13 +181,14 @@ No hay dependencias de otros módulos `klo_*`. El módulo solo depende del core 
   El signo se determina exclusivamente por `location_id.usage` y
   `location_dest_id.usage` comparados con el valor `'internal'`.
 
-- **Cantidad base:** Para movimientos `done` se usa `qty_done`; para el resto,
-  `reserved_qty`. Esto es relevante si se quiere mostrar cantidades de movimientos
-  pendientes o en curso.
+- **Cantidad base (Odoo 18):** El campo unificado `quantity` reemplaza a los antiguos
+  `qty_done` y `reserved_qty`. En Odoo 18 se usa `quantity` directamente sin distinción
+  por estado. El campo `state` sigue siendo accesible como campo relacionado de `move_id.state`.
 
-- **Vista heredada:** `stock.stock_move_line_view_tree` es la vista lista estándar
-  del historial de movimientos. Si Odoo la renombra o restructura en versiones
-  futuras, el XPath puede fallar. Verificar con `ir.ui.view` en la BD.
+- **Vista heredada:** `stock.view_move_line_tree` es el ID externo de la vista lista
+  estándar del historial de movimientos en Odoo 18. En versiones anteriores (≤17) se
+  llamaba `stock.stock_move_line_view_tree`. Si Odoo la renombra en versiones futuras,
+  el `inherit_id` puede fallar. Verificar con `ir.ui.view` en la BD.
 
 - **`store=True`:** El campo se almacena en la columna `signed_qty` de la tabla
   `stock_move_line`. Esto permite filtrarlo, ordenarlo y agregarlo en informes SQL.
@@ -189,9 +200,10 @@ No hay dependencias de otros módulos `klo_*`. El módulo solo depende del core 
   requiera ordenar todas las líneas del mismo producto por fecha — o bien calcularse
   en un wizard/informe separado, ya que la computación en lote puede ser costosa.
 
-- **Limitación de `reserved_qty`:** En movimientos multi-step o con operaciones
-  de detalle, `reserved_qty` puede diferir de `product_qty`. Considerar qué campo
-  es más apropiado según el caso de uso si se extiende la lógica.
+- **Limitación de `quantity` en Odoo 18:** El campo unificado `quantity` puede
+  representar tanto cantidad reservada (movimientos pendientes) como cantidad
+  realizada (movimientos `done`). En Odoo ≤17 existían `qty_done` y `reserved_qty`
+  por separado. Considerar el contexto del movimiento si se extiende la lógica.
 
 ---
 
@@ -251,6 +263,7 @@ No hay dependencias de otros módulos `klo_*`. El módulo solo depende del core 
 | Versión    | Fecha      | Descripción del cambio                                 |
 |------------|------------|--------------------------------------------------------|
 | 18.0.1.0.0 | —          | Versión inicial: campo `signed_qty` + vista lista      |
+| 18.0.1.0.0 | 2026-06-25 | Corrección Odoo 18: `qty_done`/`reserved_qty` → `quantity`; vista heredada `stock.view_move_line_tree` |
 
 ---
 

@@ -22,22 +22,21 @@ class StockMoveLine(models.Model):
     # ------------------------------------------------------------------ #
     #  Cálculo de signed_qty                                               #
     # ------------------------------------------------------------------ #
-    @api.depends('qty_done', 'location_id', 'location_dest_id', 'state')
+    @api.depends('quantity', 'location_id', 'location_dest_id', 'state')
     def _compute_signed_qty(self):
         """
         Lógica de signo:
           - Si el destino es interno  y el origen NO lo es  →  entrada  (+)
           - Si el origen  es interno  y el destino NO lo es →  salida   (-)
           - Movimientos internos (ambos internos) o externos (ninguno)   →  0
-        La cantidad base es qty_done para movimientos 'done',
-        y product_qty para el resto (reservados/en curso).
+        En Odoo 18, qty_done y reserved_qty se unifican en el campo `quantity`.
         """
         internal = 'internal'
         for line in self:
             src_internal = (line.location_id.usage == internal)
             dst_internal = (line.location_dest_id.usage == internal)
 
-            qty = line.qty_done if line.state == 'done' else line.reserved_qty
+            qty = line.quantity
 
             if dst_internal and not src_internal:
                 line.signed_qty = qty          # entrada al almacén

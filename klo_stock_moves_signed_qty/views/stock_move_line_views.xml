@@ -10,7 +10,7 @@
     <record id="stock_move_line_signed_qty_tree" model="ir.ui.view">
         <field name="name">stock.move.line.signed.qty.tree</field>
         <field name="model">stock.move.line</field>
-        <field name="inherit_id" ref="stock.stock_move_line_view_tree"/>
+        <field name="inherit_id" ref="stock.view_move_line_tree"/>
         <field name="arch" type="xml">
 
             <!--
@@ -18,7 +18,7 @@
                 de la columna estándar "qty_done" (Cantidad).
                 El atributo sum="Saldo neto" genera el total al pie de la lista.
             -->
-            <xpath expr="//field[@name='qty_done']" position="after">
+            <xpath expr="//field[@name='quantity']" position="after">
                 <field
                     name="signed_qty"
                     string="Cantidad neta"
