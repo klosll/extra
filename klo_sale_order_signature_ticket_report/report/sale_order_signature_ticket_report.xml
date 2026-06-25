@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record
+        id="action_sale_order_signature_ticket"
+        model="ir.actions.report"
+    >
+        <field name="name">Ticket con firma</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">klo_sale_order_signature_ticket_report.sale_order_signature_ticket_report</field>
+        <field name="print_report_name">'Ticket con firma - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="sale.model_sale_order" />
+        <field name="binding_type">report</field>
+        <field
+            name="paperformat_id"
+            ref="batch_liquidation_report.paperformat_custom_ticket"
+        />
+    </record>
+
+    <!-- Hereda del documento ticket padre y añade únicamente la firma del cliente al pie -->
+    <template
+        id="sale_order_signature_ticket_report_document"
+        inherit_id="batch_liquidation_report.sale_order_ticket_report_document"
+    >
+        <xpath expr="//div[@name='so_total_summary']" position="after">
+            <t t-if="o.customer_signature">
+                <div style="margin-top: 20px;">
+                    <hr style="border-bottom: 1px solid black;" />
+                    <strong>Aceptación del cliente:</strong>
+                    <img
+                        t-att-src="image_data_uri(o.customer_signature)"
+                        style="max-height: 80px; max-width: 200px; display: block; margin-top: 4px;"
+                        alt="Firma del cliente"
+                    />
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="sale_order_signature_ticket_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t
+                    t-call="klo_sale_order_signature_ticket_report.sale_order_signature_ticket_report_document"
+                    t-lang="user.lang"
+                />
+            </t>
+        </t>
+    </template>
+</odoo>
