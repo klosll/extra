@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2026 KLO Ingeniería Informática S.L.L.
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_whatsapp_session_tree" model="ir.ui.view">
+        <field name="name">klo.whatsapp.session.tree</field>
+        <field name="model">klo.whatsapp.session</field>
+        <field name="arch" type="xml">
+            <list string="Sesiones WhatsApp" decoration-success="state == 'done'"
+                  decoration-warning="state == 'waiting_confirm'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="partner_id"/>
+                <field name="wa_phone_number"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'"
+                       decoration-warning="state == 'waiting_confirm'"
+                       decoration-info="state == 'open'"
+                       decoration-danger="state == 'cancelled'"/>
+                <field name="message_count"/>
+                <field name="total_tokens"/>
+                <field name="draft_order_id"/>
+                <field name="write_date" string="Última actividad"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_whatsapp_session_form" model="ir.ui.view">
+        <field name="name">klo.whatsapp.session.form</field>
+        <field name="model">klo.whatsapp.session</field>
+        <field name="arch" type="xml">
+            <form string="Sesión WhatsApp">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="open,waiting_confirm,done,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="partner_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="wa_phone_number" readonly="1"/>
+                            <field name="draft_order_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="message_count" readonly="1"/>
+                            <field name="total_tokens" readonly="1"/>
+                            <field name="write_date" readonly="1" string="Última actividad"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Mensajes" name="messages">
+                            <field name="whatsapp_message_ids" readonly="1">
+                                <list decoration-primary="direction == 'in'" decoration-success="direction == 'out'">
+                                    <field name="create_date" string="Fecha"/>
+                                    <field name="direction" widget="badge"
+                                           decoration-primary="direction == 'in'"
+                                           decoration-success="direction == 'out'"/>
+                                    <field name="body"/>
+                                    <field name="wa_message_id"/>
+                                    <field name="processing_error" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Uso de IA" name="ai_usage">
+                            <field name="ai_usage_ids" readonly="1">
+                                <list>
+                                    <field name="create_date" string="Fecha"/>
+                                    <field name="model_name"/>
+                                    <field name="prompt_tokens"/>
+                                    <field name="completion_tokens"/>
+                                    <field name="total_tokens"/>
+                                    <field name="estimated_cost_eur" string="Coste est. (€)"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Historial JSON" name="history" groups="base.group_system">
+                            <field name="history_json" readonly="1" widget="code" options="{'mode': 'json'}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_whatsapp_session_search" model="ir.ui.view">
+        <field name="name">klo.whatsapp.session.search</field>
+        <field name="model">klo.whatsapp.session</field>
+        <field name="arch" type="xml">
+            <search string="Sesiones WhatsApp">
+                <field name="partner_id"/>
+                <field name="wa_phone_number"/>
+                <filter string="Abiertas" name="open" domain="[('state','=','open')]"/>
+                <filter string="Esperando confirmación" name="waiting" domain="[('state','=','waiting_confirm')]"/>
+                <filter string="Completadas" name="done" domain="[('state','=','done')]"/>
+                <filter string="Canceladas" name="cancelled" domain="[('state','=','cancelled')]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Cliente" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_whatsapp_session" model="ir.actions.act_window">
+        <field name="name">Sesiones WhatsApp</field>
+        <field name="res_model">klo.whatsapp.session</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_whatsapp_session_search"/>
+        <field name="context">{'search_default_open': 1}</field>
+    </record>
+</odoo>

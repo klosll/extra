@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2026 KLO Ingeniería Informática S.L.L.
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <data noupdate="1">
+        <record id="param_verify_token" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.verify_token</field>
+            <field name="value"></field>
+        </record>
+        <record id="param_access_token" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.access_token</field>
+            <field name="value"></field>
+        </record>
+        <record id="param_phone_number_id" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.phone_number_id</field>
+            <field name="value"></field>
+        </record>
+        <record id="param_api_version" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.api_version</field>
+            <field name="value">v19.0</field>
+        </record>
+        <record id="param_openai_api_key" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.openai_api_key</field>
+            <field name="value"></field>
+        </record>
+        <record id="param_openai_model" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.openai_model</field>
+            <field name="value">gpt-4o</field>
+        </record>
+        <record id="param_auto_confirm" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.auto_confirm_order</field>
+            <field name="value">False</field>
+        </record>
+        <record id="param_session_timeout" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.session_timeout_hours</field>
+            <field name="value">24</field>
+        </record>
+        <record id="param_max_tokens_per_day" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.max_tokens_per_day</field>
+            <field name="value">0</field>
+        </record>
+        <record id="param_max_cost_per_month" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.max_cost_per_month</field>
+            <field name="value">0</field>
+        </record>
+    </data>
+</odoo>

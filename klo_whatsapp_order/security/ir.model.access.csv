@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wa_session_manager,wa.session.manager,model_klo_whatsapp_session,klo_whatsapp_order.group_whatsapp_order_manager,1,1,1,1
+access_wa_message_manager,wa.message.manager,model_klo_whatsapp_message,klo_whatsapp_order.group_whatsapp_order_manager,1,1,1,1
+access_wa_ai_usage_manager,wa.ai.usage.manager,model_klo_whatsapp_ai_usage,klo_whatsapp_order.group_whatsapp_order_manager,1,1,1,1

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2026 KLO Ingeniería Informática S.L.L.
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_whatsapp_message_tree" model="ir.ui.view">
+        <field name="name">klo.whatsapp.message.tree</field>
+        <field name="model">klo.whatsapp.message</field>
+        <field name="arch" type="xml">
+            <list string="Mensajes WhatsApp" decoration-primary="direction == 'in'"
+                  decoration-success="direction == 'out'">
+                <field name="create_date" string="Fecha"/>
+                <field name="session_id"/>
+                <field name="direction" widget="badge"
+                       decoration-primary="direction == 'in'"
+                       decoration-success="direction == 'out'"/>
+                <field name="body"/>
+                <field name="wa_message_id"/>
+                <field name="processing_error" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_whatsapp_message_search" model="ir.ui.view">
+        <field name="name">klo.whatsapp.message.search</field>
+        <field name="model">klo.whatsapp.message</field>
+        <field name="arch" type="xml">
+            <search string="Mensajes WhatsApp">
+                <field name="session_id"/>
+                <field name="body"/>
+                <filter string="Entrantes" name="incoming" domain="[('direction','=','in')]"/>
+                <filter string="Salientes" name="outgoing" domain="[('direction','=','out')]"/>
+                <filter string="Con errores" name="errors" domain="[('processing_error','!=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_whatsapp_message" model="ir.actions.act_window">
+        <field name="name">Mensajes WhatsApp</field>
+        <field name="res_model">klo.whatsapp.message</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_whatsapp_message_search"/>
+    </record>
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2026 KLO Ingeniería Informática S.L.L.
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <menuitem id="menu_whatsapp_root" name="WhatsApp IA" parent="sale.sale_menu_root"
+              sequence="99" groups="klo_whatsapp_order.group_whatsapp_order_manager"/>
+
+    <menuitem id="menu_whatsapp_sessions" name="Sesiones" parent="menu_whatsapp_root"
+              action="action_whatsapp_session" sequence="10"
+              groups="klo_whatsapp_order.group_whatsapp_order_manager"/>
+
+    <menuitem id="menu_whatsapp_messages" name="Mensajes" parent="menu_whatsapp_root"
+              action="action_whatsapp_message" sequence="20"
+              groups="klo_whatsapp_order.group_whatsapp_order_manager"/>
+
+    <menuitem id="menu_whatsapp_ai_usage" name="Uso de IA" parent="menu_whatsapp_root"
+              action="action_whatsapp_ai_usage" sequence="30"
+              groups="klo_whatsapp_order.group_whatsapp_order_manager"/>
+</odoo>

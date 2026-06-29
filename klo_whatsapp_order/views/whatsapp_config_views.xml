@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2026 KLO Ingeniería Informática S.L.L.
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="res_config_settings_view_whatsapp" model="ir.ui.view">
+        <field name="name">res.config.settings.view.whatsapp</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <block name="quotation_order_setting_container" position="after">
+                <block title="Pedidos por WhatsApp con IA" id="klo_whatsapp_order_settings">
+                    <setting id="klo_wa_meta_settings" string="Meta Cloud API" help="Credenciales de la WhatsApp Business Cloud API.">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="wa_verify_token" class="col-lg-4 o_light_label"/>
+                                <field name="wa_verify_token" class="col-lg-8"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="wa_access_token" class="col-lg-4 o_light_label"/>
+                                <field name="wa_access_token" password="True" class="col-lg-8"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="wa_phone_number_id" class="col-lg-4 o_light_label"/>
+                                <field name="wa_phone_number_id" class="col-lg-8"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="wa_api_version" class="col-lg-4 o_light_label"/>
+                                <field name="wa_api_version" class="col-lg-8"/>
+                            </div>
+                        </div>
+                    </setting>
+                    <setting id="klo_wa_openai_settings" string="OpenAI" help="Configuración del modelo de inteligencia artificial.">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="openai_api_key" class="col-lg-4 o_light_label"/>
+                                <field name="openai_api_key" password="True" class="col-lg-8"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="openai_model" class="col-lg-4 o_light_label"/>
+                                <field name="openai_model" class="col-lg-8"/>
+                            </div>
+                        </div>
+                    </setting>
+                    <setting id="klo_wa_ai_limits" string="Control de gasto de IA" help="Limita el consumo diario de tokens y el coste mensual. Usa 0 para sin límite.">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="wa_max_tokens_per_day" class="col-lg-6 o_light_label"/>
+                                <field name="wa_max_tokens_per_day" class="col-lg-6"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="wa_max_cost_per_month" class="col-lg-6 o_light_label"/>
+                                <field name="wa_max_cost_per_month" class="col-lg-6"/>
+                            </div>
+                        </div>
+                    </setting>
+                    <setting id="klo_wa_order_behavior" string="Comportamiento de pedidos" help="Define el flujo de confirmación y la sesión por defecto.">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="wa_auto_confirm_order" class="col-lg-6 o_light_label"/>
+                                <field name="wa_auto_confirm_order" class="col-lg-6"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="wa_order_team_id" class="col-lg-6 o_light_label"/>
+                                <field name="wa_order_team_id" class="col-lg-6"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="wa_session_timeout_hours" class="col-lg-6 o_light_label"/>
+                                <field name="wa_session_timeout_hours" class="col-lg-6"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+            </block>
+        </field>
+    </record>
+</odoo>
