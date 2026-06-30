@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="action_sort_stock_picking_lines_by_product_name" model="ir.actions.server">
-        <field name="name">Ordenar líneas por nombre de producto</field>
+    <record id="action_sort_stock_picking_lines_by_product_code" model="ir.actions.server">
+        <field name="name">Ordenar líneas por codigo de producto</field>
         <field name="model_id" ref="stock.model_stock_picking"/>
         <field name="binding_model_id" ref="stock.model_stock_picking"/>
         <field name="binding_view_types">form</field>
         <field name="state">code</field>
-        <field name="code">records.action_sort_lines_by_product_name()</field>
+        <field name="code">records.action_sort_lines_by_product_code()</field>
     </record>
 </odoo>
