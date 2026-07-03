@@ -19,7 +19,9 @@
         'sale_order_lot_selection',
         'sale_order_type_picking',
     ],
-    'data': [],
+    'data': [
+        'views/stock_picking_type_views.xml',
+    ],
     'installable': True,
     'application': False,
     'auto_install': False,

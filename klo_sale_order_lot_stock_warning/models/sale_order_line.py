@@ -28,6 +28,8 @@ class SaleOrderLine(models.Model):
             )
             if not pick_type or not pick_type.default_location_src_id:
                 continue
+            if not pick_type.show_stock_message:
+                continue
             location = pick_type.default_location_src_id
             stock_qty = line._get_lot_stock_qty(line.lot_id, location)
             if stock_qty < line.product_uom_qty:
