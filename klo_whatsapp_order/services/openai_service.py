@@ -31,21 +31,54 @@ INSTRUCCIONES:
 """
 
 
-def interpret_message(env, history, user_message, catalog, session_id=None):
+def _get_client_and_model(env):
     """
-    Llama a OpenAI con el historial de conversación y el catálogo restringido.
-    Devuelve dict con: intent, lines, message_to_customer.
-    También registra el uso de tokens en klo.whatsapp.ai.usage.
+    Determina el proveedor de IA a usar según la configuración.
+    Devuelve (client, model_name, provider_name).
     """
     from openai import OpenAI
 
     icp = env["ir.config_parameter"].sudo()
-    api_key = icp.get_param("klo_whatsapp_order.openai_api_key")
-    model = icp.get_param("klo_whatsapp_order.openai_model", "gpt-4o")
-    if not api_key:
-        raise ValueError("La API Key de OpenAI no está configurada.")
+    use_mimo = icp.get_param("klo_whatsapp_order.use_mimo", "True")
 
-    client = OpenAI(api_key=api_key)
+    if use_mimo == "True" or use_mimo is True:
+        api_key = icp.get_param("klo_whatsapp_order.mimo_api_key")
+        model = icp.get_param("klo_whatsapp_order.mimo_model", "mimo-v2.5")
+        base_url = icp.get_param(
+            "klo_whatsapp_order.mimo_base_url", "https://api.xiaomimimo.com/v1"
+        )
+        if not api_key:
+            raise ValueError(
+                "La API Key de Xiaomi MiMo no está configurada. "
+                "Configure 'API Key MiMo' en Ajustes > Ventas > Pedidos por WhatsApp."
+            )
+        client = OpenAI(api_key=api_key, base_url=base_url)
+        provider = "mimo"
+        _logger.info("Usando proveedor MiMo (modelo: %s)", model)
+    else:
+        api_key = icp.get_param("klo_whatsapp_order.openai_api_key")
+        model = icp.get_param("klo_whatsapp_order.openai_model", "gpt-4o")
+        if not api_key:
+            raise ValueError(
+                "La API Key de OpenAI no está configurada. "
+                "Configure 'API Key OpenAI' en Ajustes > Ventas > Pedidos por WhatsApp."
+            )
+        client = OpenAI(api_key=api_key)
+        provider = "openai"
+        _logger.info("Usando proveedor OpenAI (modelo: %s)", model)
+
+    return client, model, provider
+
+
+def interpret_message(env, history, user_message, catalog, session_id=None):
+    """
+    Llama al proveedor de IA configurado (MiMo u OpenAI) con el historial
+    de conversación y el catálogo restringido.
+    Devuelve dict con: intent, lines, message_to_customer.
+    También registra el uso de tokens en klo.whatsapp.ai.usage.
+    """
+    client, model, provider = _get_client_and_model(env)
+
     system_msg = SYSTEM_PROMPT.format(
         catalog_json=json.dumps(catalog, ensure_ascii=False)
     )
@@ -53,13 +86,15 @@ def interpret_message(env, history, user_message, catalog, session_id=None):
     messages.extend(history or [])
     messages.append({"role": "user", "content": user_message})
 
-    response = client.chat.completions.create(
-        model=model,
-        messages=messages,
-        response_format={"type": "json_object"},
-        temperature=0.1,
-        max_tokens=1024,
-    )
+    kwargs = {
+        "model": model,
+        "messages": messages,
+        "response_format": {"type": "json_object"},
+        "temperature": 0.1,
+        "max_tokens": 1024,
+    }
+
+    response = client.chat.completions.create(**kwargs)
     raw = response.choices[0].message.content or "{}"
     result = json.loads(raw)
 

@@ -7,14 +7,17 @@ PRICE_PER_M_TOKENS = {
     "gpt-4o": {"input": 2.50, "output": 10.00},
     "gpt-4o-mini": {"input": 0.15, "output": 0.60},
     "gpt-4-turbo": {"input": 10.00, "output": 30.00},
+    "mimo-v2.5": {"input": 0.14, "output": 0.28},
+    "mimo-v2.5-pro": {"input": 0.14, "output": 0.28},
+    "mimo-v2-flash": {"input": 0.05, "output": 0.10},
 }
-DEFAULT_INPUT_PRICE = 2.50
-DEFAULT_OUTPUT_PRICE = 10.00
+DEFAULT_INPUT_PRICE = 0.14
+DEFAULT_OUTPUT_PRICE = 0.28
 
 
 class WhatsappAiUsage(models.Model):
     _name = "klo.whatsapp.ai.usage"
-    _description = "Registro de uso y coste de IA (OpenAI)"
+    _description = "Registro de uso y coste de IA (MiMo / OpenAI)"
     _order = "create_date desc"
 
     session_id = fields.Many2one(

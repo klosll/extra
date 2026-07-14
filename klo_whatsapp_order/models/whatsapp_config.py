@@ -24,12 +24,33 @@ class ResConfigSettings(models.TransientModel):
         default="v19.0",
         config_parameter="klo_whatsapp_order.api_version",
     )
+    use_mimo = fields.Boolean(
+        string="Usar Xiaomi MiMo",
+        default=True,
+        config_parameter="klo_whatsapp_order.use_mimo",
+        help="Activa MiMo V2.5 como proveedor de IA. Si está desactivado, usa OpenAI.",
+    )
+    mimo_api_key = fields.Char(
+        string="API Key MiMo",
+        config_parameter="klo_whatsapp_order.mimo_api_key",
+    )
+    mimo_model = fields.Char(
+        string="Modelo MiMo",
+        default="mimo-v2.5",
+        config_parameter="klo_whatsapp_order.mimo_model",
+        help="Modelo de Xiaomi MiMo (mimo-v2.5, mimo-v2.5-pro, mimo-v2-flash).",
+    )
+    mimo_base_url = fields.Char(
+        string="URL base API MiMo",
+        default="https://api.xiaomimimo.com/v1",
+        config_parameter="klo_whatsapp_order.mimo_base_url",
+    )
     openai_api_key = fields.Char(
-        string="API Key OpenAI",
+        string="API Key OpenAI (fallback)",
         config_parameter="klo_whatsapp_order.openai_api_key",
     )
     openai_model = fields.Char(
-        string="Modelo OpenAI",
+        string="Modelo OpenAI (fallback)",
         default="gpt-4o",
         config_parameter="klo_whatsapp_order.openai_model",
     )

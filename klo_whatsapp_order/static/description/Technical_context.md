@@ -5,14 +5,38 @@
 | Campo | Valor |
 |---|---|
 | Name | `klo_whatsapp_order` |
-| Version | `18.0.1.0.0` |
+| Version | `18.0.2.0.0` |
 | Author | `KLO Ingenieria Informatica S.L.L.` |
 | License | `AGPL-3` |
 | Path | `/opt/odoo18_desarrollo/extra-addons/klo/extra/klo_whatsapp_order` |
 
 ## Descripción
 
-Este módulo habilita la recepción automatizada de pedidos de clientes por WhatsApp usando la Meta Cloud API como canal de entrada/salida y OpenAI como capa de interpretación del lenguaje natural. El objetivo es convertir mensajes libres del cliente en borradores de pedidos de venta en Odoo, manteniendo trazabilidad de la conversación, control de confirmación y seguimiento del consumo de IA.
+Este módulo habilita la recepción automatizada de pedidos de clientes por WhatsApp usando la Meta Cloud API como canal de entrada/salida y un proveedor de IA (Xiaomi MiMo V2.5 o OpenAI) como capa de interpretación del lenguaje natural. El objetivo es convertir mensajes libres del cliente en borradores de pedidos de venta en Odoo, manteniendo trazabilidad de la conversación, control de confirmación y seguimiento del consumo de IA.
+
+**Proveedores de IA soportados:**
+- **Xiaomi MiMo V2.5** (recomendado): API compatible con OpenAI, coste reducido. Modelos: `mimo-v2.5`, `mimo-v2.5-pro`, `mimo-v2-flash`.
+- **OpenAI** (fallback): Modelos GPT-4o, GPT-4o-mini, GPT-4-turbo.
+
+### `res.config.settings` (hereda `sale.res_config_settings_view_form`)
+
+| Campo | Tipo | Etiqueta | Descripción |
+|---|---|---|---|
+| `wa_verify_token` | `Char` | Token de verificación webhook | Token de verificación de Meta. |
+| `wa_access_token` | `Char` | Access Token Meta | Token permanente de la WhatsApp Business Cloud API. |
+| `wa_phone_number_id` | `Char` | Phone Number ID | ID del número de teléfono en Meta. |
+| `wa_api_version` | `Char` | Versión API Meta | Versión de la API (default: v19.0). |
+| `use_mimo` | `Boolean` | Usar Xiaomi MiMo | Activa MiMo como proveedor principal (default: True). |
+| `mimo_api_key` | `Char` | API Key MiMo | Clave de API de Xiaomi MiMo. |
+| `mimo_model` | `Char` | Modelo MiMo | Modelo a usar (default: mimo-v2.5). |
+| `mimo_base_url` | `Char` | URL base API MiMo | Endpoint de MiMo (default: https://api.xiaomimimo.com/v1). |
+| `openai_api_key` | `Char` | API Key OpenAI (fallback) | Clave de API de OpenAI (solo si MiMo está desactivado). |
+| `openai_model` | `Char` | Modelo OpenAI (fallback) | Modelo OpenAI (default: gpt-4o). |
+| `wa_max_tokens_per_day` | `Integer` | Límite diario de tokens | 0 = sin límite. |
+| `wa_max_cost_per_month` | `Float` | Límite mensual de coste IA (€) | 0 = sin límite. |
+| `wa_auto_confirm_order` | `Boolean` | Confirmar pedido automáticamente | Sin validación al cliente. |
+| `wa_order_team_id` | `Many2one(crm.team)` | Equipo de ventas predeterminado | Equipo para los pedidos generados. |
+| `wa_session_timeout_hours` | `Integer` | Tiempo expiración sesión (horas) | Default: 24. |
 
 ## Campos añadidos
 
@@ -70,7 +94,7 @@ Este módulo habilita la recepción automatizada de pedidos de clientes por What
 
 ### Paquetes Python externos
 
-- `openai`
+- `openai` (usado tanto para OpenAI como para MiMo, que es compatible)
 - `requests`
 
 ## Lógica
@@ -80,7 +104,8 @@ Este módulo habilita la recepción automatizada de pedidos de clientes por What
 - **Autenticación del cliente**: solo se aceptan números presentes en `res.partner.whatsapp_phone` y con `whatsapp_order_enabled` activo.
 - **Historial conversacional**: `append_message()` mantiene un contexto compacto para la IA.
 - **Control de gasto**: `_check_daily_limits()` consulta `klo.whatsapp.ai.usage` y bloquea cuando se superan límites diarios o mensuales.
-- **Interpretación con IA**: `services/openai_service.py` llama a OpenAI, obliga una respuesta JSON y registra consumo por sesión.
+- **Routing de proveedor**: `openai_service._get_client_and_model()` selecciona MiMo o OpenAI según `use_mimo`. Ambos usan la librería `openai` con diferente `base_url`.
+- **Interpretación con IA**: `services/openai_service.py` llama al proveedor configurado, obliga una respuesta JSON y registra consumo por sesión.
 - **Construcción del pedido**: `services/order_builder.py` genera o actualiza el borrador de `sale.order` aplicando la tarifa del cliente.
 - **Confirmación**: el flujo puede requerir validación del cliente o confirmar automáticamente según configuración.
 
@@ -136,17 +161,18 @@ cd /opt/odoo18_desarrollo/odoo
 /home/manolo/.local/bin/uv run /opt/odoo18_desarrollo/uv/.venv/bin/python3 \
     /opt/odoo18_desarrollo/odoo/odoo-bin \
     -c /opt/odoo18_desarrollo/config/odoo.conf \
-    -d ryp_dev -i klo_whatsapp_order --stop-after-init
+    -d garridomontero_dev -i klo_whatsapp_order --stop-after-init
 
 /home/manolo/.local/bin/uv run /opt/odoo18_desarrollo/uv/.venv/bin/python3 \
     /opt/odoo18_desarrollo/odoo/odoo-bin \
     -c /opt/odoo18_desarrollo/config/odoo.conf \
-    -d ryp_dev -u klo_whatsapp_order --stop-after-init
+    -d garridomontero_dev -u klo_whatsapp_order --stop-after-init
 ```
 
 ## Posibles adaptaciones futuras
 
-- **Multiempresa**: parametrizar credenciales Meta/OpenAI por compañía.
+- **Multiempresa**: parametrizar credenciales Meta/MiMo/OpenAI por compañía.
 - **Rate limiting**: añadir límites por partner, por número y por ventana temporal.
 - **Fallback humano**: derivar sesiones dudosas a un comercial o cola de soporte.
 - **RGPD**: anonimización, retención limitada del histórico y consentimiento explícito del canal.
+- **Thinking de MiMo**: habilitar `thinking` para `mimo-v2.5-pro` en tareas complejas de interpretación.

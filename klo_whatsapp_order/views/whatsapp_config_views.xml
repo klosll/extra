@@ -29,7 +29,27 @@
                             </div>
                         </div>
                     </setting>
-                    <setting id="klo_wa_openai_settings" string="OpenAI" help="Configuración del modelo de inteligencia artificial.">
+                    <setting id="klo_wa_mimo_settings" string="Xiaomi MiMo" help="Proveedor de IA principal (recomendado). API compatible con OpenAI.">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="use_mimo" class="col-lg-4 o_light_label"/>
+                                <field name="use_mimo" class="col-lg-8"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="mimo_api_key" class="col-lg-4 o_light_label"/>
+                                <field name="mimo_api_key" password="True" class="col-lg-8"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="mimo_model" class="col-lg-4 o_light_label"/>
+                                <field name="mimo_model" class="col-lg-8"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="mimo_base_url" class="col-lg-4 o_light_label"/>
+                                <field name="mimo_base_url" class="col-lg-8"/>
+                            </div>
+                        </div>
+                    </setting>
+                    <setting id="klo_wa_openai_settings" string="OpenAI (fallback)" help="Proveedor alternativo. Se usa solo si MiMo está desactivado.">
                         <div class="content-group">
                             <div class="row mt16">
                                 <label for="openai_api_key" class="col-lg-4 o_light_label"/>

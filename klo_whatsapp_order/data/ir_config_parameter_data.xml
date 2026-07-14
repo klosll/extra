@@ -27,6 +27,22 @@
             <field name="key">klo_whatsapp_order.openai_model</field>
             <field name="value">gpt-4o</field>
         </record>
+        <record id="param_use_mimo" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.use_mimo</field>
+            <field name="value">True</field>
+        </record>
+        <record id="param_mimo_api_key" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.mimo_api_key</field>
+            <field name="value"></field>
+        </record>
+        <record id="param_mimo_model" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.mimo_model</field>
+            <field name="value">mimo-v2.5</field>
+        </record>
+        <record id="param_mimo_base_url" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.mimo_base_url</field>
+            <field name="value">https://api.xiaomimimo.com/v1</field>
+        </record>
         <record id="param_auto_confirm" model="ir.config_parameter">
             <field name="key">klo_whatsapp_order.auto_confirm_order</field>
             <field name="value">False</field>
