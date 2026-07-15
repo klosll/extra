@@ -2,8 +2,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     "name": "KLO - Pedidos por WhatsApp con IA",
-    "version": "18.0.2.0.0",
-    "summary": "Recepción automatizada de pedidos de venta por WhatsApp usando IA (MiMo V2.5 / OpenAI)",
+    "version": "18.0.3.0.0",
+    "summary": "Recepción automatizada de pedidos de venta por WhatsApp usando IA (Meta / OpenWA + MiMo V2.5)",
     "license": "AGPL-3",
     "author": "KLO Ingenieria Informatica S.L.L.",
     "website": "https://www.klo.es",

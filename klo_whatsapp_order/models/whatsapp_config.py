@@ -7,6 +7,21 @@ from odoo import fields, models
 class ResConfigSettings(models.TransientModel):
     _inherit = "res.config.settings"
 
+    wa_channel = fields.Selection(
+        [
+            ("meta", "Meta Cloud API (WhatsApp Business)"),
+            ("openwa", "OpenWA (Self-Hosted, WhatsApp Web)"),
+        ],
+        string="Canal de WhatsApp",
+        default="meta",
+        config_parameter="klo_whatsapp_order.channel",
+        help=(
+            "Meta: Usa la API oficial de WhatsApp Business (requiere cuenta de negocio). "
+            "OpenWA: Gateway auto-hospedado que usa WhatsApp Web (gratuito, open source)."
+        ),
+    )
+
+    # --- Meta Cloud API ---
     wa_verify_token = fields.Char(
         string="Token de verificación webhook",
         config_parameter="klo_whatsapp_order.verify_token",
@@ -23,6 +38,29 @@ class ResConfigSettings(models.TransientModel):
         string="Versión API Meta",
         default="v19.0",
         config_parameter="klo_whatsapp_order.api_version",
+    )
+
+    # --- OpenWA (Self-Hosted) ---
+    openwa_base_url = fields.Char(
+        string="URL base OpenWA",
+        default="http://localhost:2785",
+        config_parameter="klo_whatsapp_order.openwa_base_url",
+        help="URL del servidor OpenWA (ej: http://localhost:2785 o https://openwa.tudominio.com).",
+    )
+    openwa_api_key = fields.Char(
+        string="API Key OpenWA",
+        config_parameter="klo_whatsapp_order.openwa_api_key",
+        help="Clave API que genera OpenWA en su dashboard.",
+    )
+    openwa_session_id = fields.Char(
+        string="Session ID de OpenWA",
+        config_parameter="klo_whatsapp_order.openwa_session_id",
+        help="ID de la sesión de WhatsApp creada en OpenWA.",
+    )
+    openwa_webhook_secret = fields.Char(
+        string="Secret HMAC (webhook OpenWA)",
+        config_parameter="klo_whatsapp_order.openwa_webhook_secret",
+        help="Secreto para verificar la firma HMAC de los webhooks entrantes.",
     )
     use_mimo = fields.Boolean(
         string="Usar Xiaomi MiMo",

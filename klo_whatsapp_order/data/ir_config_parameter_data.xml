@@ -3,6 +3,13 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
     <data noupdate="1">
+        <!-- Canal de WhatsApp -->
+        <record id="param_channel" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.channel</field>
+            <field name="value">meta</field>
+        </record>
+
+        <!-- Meta Cloud API -->
         <record id="param_verify_token" model="ir.config_parameter">
             <field name="key">klo_whatsapp_order.verify_token</field>
             <field name="value"></field>
@@ -19,14 +26,26 @@
             <field name="key">klo_whatsapp_order.api_version</field>
             <field name="value">v19.0</field>
         </record>
-        <record id="param_openai_api_key" model="ir.config_parameter">
-            <field name="key">klo_whatsapp_order.openai_api_key</field>
+
+        <!-- OpenWA (Self-Hosted) -->
+        <record id="param_openwa_base_url" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.openwa_base_url</field>
+            <field name="value">http://localhost:2785</field>
+        </record>
+        <record id="param_openwa_api_key" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.openwa_api_key</field>
             <field name="value"></field>
         </record>
-        <record id="param_openai_model" model="ir.config_parameter">
-            <field name="key">klo_whatsapp_order.openai_model</field>
-            <field name="value">gpt-4o</field>
+        <record id="param_openwa_session_id" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.openwa_session_id</field>
+            <field name="value"></field>
         </record>
+        <record id="param_openwa_webhook_secret" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.openwa_webhook_secret</field>
+            <field name="value"></field>
+        </record>
+
+        <!-- Proveedor de IA: MiMo -->
         <record id="param_use_mimo" model="ir.config_parameter">
             <field name="key">klo_whatsapp_order.use_mimo</field>
             <field name="value">True</field>
@@ -43,6 +62,18 @@
             <field name="key">klo_whatsapp_order.mimo_base_url</field>
             <field name="value">https://api.xiaomimimo.com/v1</field>
         </record>
+
+        <!-- Proveedor de IA: OpenAI (fallback) -->
+        <record id="param_openai_api_key" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.openai_api_key</field>
+            <field name="value"></field>
+        </record>
+        <record id="param_openai_model" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.openai_model</field>
+            <field name="value">gpt-4o</field>
+        </record>
+
+        <!-- Comportamiento -->
         <record id="param_auto_confirm" model="ir.config_parameter">
             <field name="key">klo_whatsapp_order.auto_confirm_order</field>
             <field name="value">False</field>

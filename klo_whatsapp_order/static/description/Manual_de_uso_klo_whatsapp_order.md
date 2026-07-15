@@ -4,531 +4,342 @@
 
 El módulo **klo_whatsapp_order** permite recibir pedidos de clientes por WhatsApp de forma automatizada usando inteligencia artificial. Los mensajes de los clientes se procesan con un proveedor de IA (Xiaomi MiMo V2.5 o OpenAI) y se convierten en borradores de pedidos de venta en Odoo.
 
+**Canales de WhatsApp soportados:**
+- **Meta Cloud API** (WhatsApp Business): API oficial, requiere cuenta de negocio
+- **OpenWA** (Self-Hosted): Gateway open source, usa WhatsApp Web, gratuito
+
 **Proveedores de IA soportados:**
-- **Xiaomi MiMo V2.5** (recomendado): API compatible con OpenAI, coste muy reducido
+- **Xiaomi MiMo V2.5** (recomendado): API compatible con OpenAI, coste reducido
 - **OpenAI** (fallback): Modelos GPT-4o, GPT-4o-mini
 
 ---
 
 ## 2. Configuración Paso a Paso
 
-### 2.1. OPCIÓN A: Configurar Xiaomi MiMo V2.5 (Recomendado)
+### 2.1. INSTALACIÓN DE OPENWA (Recomendado)
 
-#### Paso 1: Crear cuenta en Xiaomi MiMo
+OpenWA es un gateway de API WhatsApp auto-hospedado. **No necesitas cuenta de negocio de Facebook** ni verificación especial. Usa tu WhatsApp normal.
 
-1. Abrir el navegador y ir a: **https://platform.xiaomimimo.com**
-2. Hacer clic en **"Sign Up"** o **"Log In"**
-3. Si no tienes cuenta Xiaomi:
-   - Hacer clic en **"Create Account"**
-   - Introducir email o número de teléfono
-   - Crear contraseña
-   - Verificar la cuenta por email/SMS
-4. Si ya tienes cuenta Xiaomi:
-   - Iniciar sesión con tus credenciales
-5. Aceptar los términos y condiciones
+#### Paso 1: Instalar Docker (si no lo tienes)
 
-**Nota:** Al registrarte recibirás **$2 de crédito de prueba** automáticamente.
+```bash
+# Ubuntu/Debian
+sudo apt update
+sudo apt install -y docker.io docker-compose-plugin
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER
+# Cerrar sesión y volver a entrar
+```
 
-#### Paso 2: Obtener API Key de MiMo
+#### Paso 2: Clonar e instalar OpenWA
 
-1. Una vez dentro de la plataforma, ir a **"Console"** (consola)
-2. En el menú lateral, buscar **"API Keys"**
-3. Hacer clic en **"Create API Key"** o **"Generate New Key"**
-4. Introducir un nombre descriptivo (ej: "WhatsApp Odoo")
-5. Hacer clic en **"Create"** o **"Generate"**
-6. **IMPORTANTE:** Copiar inmediatamente la API Key (formato `sk-xxxxx`)
-   - La clave solo se muestra una vez
-   - Guardarla en un lugar seguro
-7. Hacer clic en **"Done"** o **"Close"**
+```bash
+# Clonar el repositorio
+git clone https://github.com/rmyndharis/OpenWA.git
+cd OpenWA
 
-#### Paso 3: Verificar créditos
+# Iniciar con Docker (desarrollo)
+docker compose -f docker-compose.dev.yml up -d
+```
 
-1. En la consola, ir a **"Balance"** o **"Billing"**
-2. Comprobar que aparece el crédito de $2
-3. Los créditos se gastan automáticamente al usar la API
+#### Paso 3: Acceder al dashboard
 
-#### Paso 4: Configurar en Odoo
+1. Abrir el navegador: **http://localhost:2785**
+2. Verás el dashboard de OpenWA
+3. La primera vez se genera una API Key automáticamente
+4. Copiar la API Key (aparece en los logs o en el dashboard)
 
-1. Abrir Odoo en el navegador
-2. Ir a **Ventas** > **Ajustes** (icono de engranaje)
-3. Buscar la sección **"Pedidos por WhatsApp con IA"**
-4. Dentro de esa sección, buscar **"Xiaomi MiMo"**
-5. Configurar cada campo:
+#### Paso 4: Crear sesión de WhatsApp
 
-**Campo: "Usar Xiaomi MiMo"**
-- Marcar la casilla ✅
-- Esto activa MiMo como proveedor principal
+1. En el dashboard, ir a **Sessions**
+2. Hacer clic en **Create Session**
+3. Introducir un nombre (ej: "mi-bot-odoo")
+4. Guardar el **Session ID** que se genera
 
-**Campo: "API Key MiMo"**
-- Pegar la API Key copiada en el Paso 2
-- Formato: `sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
-- Esta clave es secreta, no compartirla
+#### Paso 5: Autenticar WhatsApp
 
-**Campo: "Modelo MiMo"**
-- Dejar por defecto: `mimo-v2.5`
-- Opciones disponibles:
-  - `mimo-v2.5` → Multimodal (recomendado para la mayoría de casos)
-  - `mimo-v2.5-pro` → Razonamiento avanzado (más lento pero más preciso)
-  - `mimo-v2-flash` → Ultra-rápido (para mensajes simples)
+1. En la sesión creada, hacer clic en **Start**
+2. Aparecerá un código QR
+3. Abrir WhatsApp en tu teléfono
+4. Ir a **Dispositivos vinculados** > **Vincular dispositivo**
+5. Escanear el código QR
+6. Esperar a que diga "Conectado"
 
-**Campo: "URL base API MiMo"**
-- Dejar por defecto: `https://api.xiaomimimo.com/v1`
-- No cambiarlo a menos que se sepa lo que se hace
+#### Paso 6: Configurar webhook en OpenWA
 
-6. Hacer clic en **"Guardar"** (botón azul arriba)
+1. En el dashboard, ir a **Webhooks** de la sesión
+2. Hacer clic en **Add Webhook**
+3. Introducir:
+   - **URL**: `https://tu-dominio-odoo.com/webhook/openwa`
+   - **Events**: Seleccionar `message.received`
+   - **Secret**: Introducir un secreto (ej: `mi_secreto_hmac_123`)
+4. Guardar
 
-#### Paso 5: Probar la conexión
+#### Paso 7: Verificar conexión
 
-1. Enviar un mensaje de prueba por WhatsApp al número configurado
-2. Ejemplo: "Hola, quiero hacer un pedido"
-3. Verificar que se recibe respuesta automática
-4. Si hay error, revisar la API Key en los ajustes
+1. Enviar un mensaje de WhatsApp al número autenticado
+2. Verificar en los logs de OpenWA que llega el mensaje
+3. Verificar en Odoo que se procesa correctamente
 
 ---
 
-### 2.2. OPCIÓN B: Configurar OpenAI (Fallback)
+### 2.2. CONFIGURACIÓN DE OPENWA EN ODOO
 
-Usar esta opción solo si no puedes usar MiMo o necesitas un proveedor alternativo.
+1. Ir a **Ventas** > **Ajustes**
+2. Buscar **"Pedidos por WhatsApp con IA"**
+3. En **"Canal de WhatsApp"**, seleccionar: **OpenWA (Self-Hosted)**
+4. Configurar la sección **OpenWA**:
 
-#### Paso 1: Crear cuenta en OpenAI
+**Campo: "URL base OpenWA"**
+- Por defecto: `http://localhost:2785`
+- Si OpenWA está en otro servidor: `https://openwa.tudominio.com`
 
-1. Abrir el navegador y ir a: **https://platform.openai.com**
-2. Hacer clic en **"Sign Up"**
-3. Opciones de registro:
-   - Con Google
-   - Con Microsoft
-   - Con email
-4. Completar el registro y verificar la cuenta
-5. Introducir datos de facturación (requerido aunque haya créditos gratis)
+**Campo: "API Key OpenWA"**
+- Pegar la API Key generada por OpenWA
+- Formato: `owa_k1_xxxxxxxxxxxxxxxxxxxxxxxx`
 
-#### Paso 2: Obtener API Key de OpenAI
+**Campo: "Session ID de OpenWA"**
+- Pegar el ID de la sesión creada
+- Ejemplo: `8f3c2b1a-9d4e-4c7a-8b2f-1e6d5a4c3b2a`
 
-1. Una vez dentro, ir a **"API Keys"** en el menú lateral
-2. Hacer clic en **"Create new secret key"**
-3. Introducir un nombre (ej: "WhatsApp Odoo")
-4. Hacer clic en **"Create secret key"**
-5. **IMPORTANTE:** Copiar inmediatamente la clave (formato `sk-xxxxxxxxxxxx`)
-   - La clave solo se muestra una vez
-   - Guardarla en un lugar seguro
-6. Hacer clic en **"Done"**
+**Campo: "Secret HMAC (webhook OpenWA)"**
+- Introducir el mismo secreto configurado en el webhook de OpenWA
+- Este secreto verifica que los mensajes vienen de OpenWA
 
-#### Paso 3: Configurar créditos
-
-1. En el menú, ir a **"Settings"** > **"Billing"**
-2. Opciones:
-   - **Free tier**: Créditos limitados ($5 al inicio)
-   - **Pay-as-you-go**: Recargar saldo según necesidad
-3. Para empezar, el free tier es suficiente para pruebas
-
-#### Paso 4: Configurar en Odoo
-
-1. Abrir Odoo en el navegador
-2. Ir a **Ventas** > **Ajustes**
-3. Buscar **"Pedidos por WhatsApp con IA"**
-4. **IMPORTANTE:** Primero desactivar MiMo:
-   - Buscar **"Xiaomi MiMo"**
-   - Desmarcar **"Usar Xiaomi MiMo"** ❌
-5. Buscar **"OpenAI (fallback)"**
-6. Configurar cada campo:
-
-**Campo: "API Key OpenAI (fallback)"**
-- Pegar la API Key copiada en el Paso 2
-- Formato: `sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
-
-**Campo: "Modelo OpenAI (fallback)"**
-- Opciones:
-  - `gpt-4o` → Más capaz (recomendado)
-  - `gpt-4o-mini` → Más barato
-  - `gpt-4-turbo` → Más rápido
-
-7. Hacer clic en **"Guardar"**
+5. Hacer clic en **"Guardar"**
 
 ---
 
-### 2.3. Configurar WhatsApp Business API (Meta)
+### 2.3. CONFIGURACIÓN DE META CLOUD API (Alternativa)
 
-Esta configuración es necesaria independientemente del proveedor de IA.
+Usa esta opción si prefieres la API oficial de WhatsApp Business.
 
 #### Paso 1: Crear aplicación en Meta
 
 1. Ir a: **https://developers.facebook.com**
 2. Iniciar sesión con tu cuenta de Facebook
 3. Ir a **"My Apps"** > **"Create App"**
-4. Seleccionar **"Business"** como tipo de aplicación
-5. Introducir nombre de la aplicación (ej: "WhatsApp Odoo")
-6. Crear la aplicación
+4. Seleccionar **"Business"** como tipo
+5. Crear la aplicación
 
 #### Paso 2: Configurar WhatsApp Business
 
-1. En la nueva aplicación, ir a **"WhatsApp"** en el menú
+1. En la aplicación, ir a **"WhatsApp"**
 2. Hacer clic en **"Start Using the WhatsApp Business API"**
 3. Seleccionar o crear una cuenta de negocios
-4. Agregar un número de teléfono nuevo o existente
-5. Verificar el número por SMS o llamada
+4. Agregar un número de teléfono
+5. Verificar el número
 
 #### Paso 3: Obtener credenciales
 
 1. Ir a **"WhatsApp"** > **"API Setup"**
-2. Copiar los siguientes valores:
-
-**Phone Number ID:**
-- Se encuentra en "Phone numbers"
-- Copiar el ID numérico (ej: `1234567890`)
-
-**Permanent Access Token:**
-1. Ir a **"System Users"**
-2. Seleccionar o crear un usuario del sistema
-3. Hacer clic en **"Generate new token"**
-4. Seleccionar los permisos:
-   - `whatsapp_business_messaging`
-   - `whatsapp_business_management`
-5. Copiar el token (formato: `EAAxxxxx`)
+2. Copiar:
+   - **Phone Number ID**
+   - **Permanent Access Token** (en System Users)
 
 #### Paso 4: Configurar en Odoo
 
-1. Ir a **Ventas** > **Ajustes**
-2. Buscar **"Meta Cloud API"**
-3. Configurar:
+1. En **"Canal de WhatsApp"**, seleccionar: **Meta Cloud API**
+2. Configurar:
+   - **Token de verificación webhook**: Token personalizado
+   - **Access Token Meta**: Token permanente copiado
+   - **Phone Number ID**: ID del teléfono copiado
+   - **Versión API Meta**: `v19.0`
 
-**Campo: "Token de verificación webhook"**
-- Introducir un token personalizado (ej: `mi_token_secreto_123`)
-- Este token se usará para verificar el webhook
-- Recordar este valor para el siguiente paso
-
-**Campo: "Access Token Meta (permanente)"**
-- Pegar el Permanent Access Token copiado
-
-**Campo: "Phone Number ID (Meta)"**
-- Pegar el Phone Number ID copiado
-
-**Campo: "Versión API Meta"**
-- Dejar por defecto: `v19.0`
-
-4. Hacer clic en **"Guardar"**
-
-#### Paso 5: Configurar Webhook en Meta
+#### Paso 5: Configurar webhook en Meta
 
 1. En Meta Developers, ir a **"WhatsApp"** > **"Configuration"**
-2. Buscar **"Webhook"**
-3. Hacer clic en **"Edit"** o **"Configure"**
-4. Introducir:
-
-**Callback URL:**
-```
-https://tu-dominio-odoo.com/webhook/whatsapp
-```
-- Reemplazar `tu-dominio-odoo.com` con tu dominio real
-- Debe ser HTTPS (obligatorio para Meta)
-
-**Verify Token:**
-- Introducir el mismo token configurado en Odoo (Paso 4)
-- Ejemplo: `mi_token_secreto_123`
-
-5. Hacer clic en **"Verify and Save"**
-6. Suscribirse a los eventos:
-   - Marcar **"messages"**
-   - Guardar
-
-#### Paso 6: Probar el webhook
-
-1. En la configuración del webhook, hacer clic en **"Test"**
-2. Debería aparecer "Verified" si está correcto
-3. Si falla, verificar:
-   - La URL sea accesible desde internet
-   - El token coincida con el de Odoo
-   - El certificado SSL esté instalado
+2. Webhook > **"Edit"**
+3. Introducir:
+   - **Callback URL**: `https://tu-dominio-odoo.com/webhook/whatsapp`
+   - **Verify Token**: El mismo token configurado en Odoo
+4. Guardar y suscribirse a `messages`
 
 ---
 
-## 3. Configuración de Contactos
+### 2.4. CONFIGURACIÓN DEL PROVEEDOR DE IA (MiMo V2.5)
 
-### 3.1. Habilitar un contacto para WhatsApp
+#### Paso 1: Crear cuenta en Xiaomi MiMo
 
-1. Ir a **Contactos**
-2. Seleccionar o crear un contacto
-3. Ir a la pestaña **"Ventas y Compra"**
-4. Buscar los campos de WhatsApp:
+1. Ir a: **https://platform.xiaomimimo.com**
+2. Registrarse con cuenta Xiaomi
+3. Al registrarte recibes **$2 de crédito gratis**
 
-**Campo: "Teléfono WhatsApp"**
-- Introducir el número en formato internacional
-- Ejemplo: `+34612345678` (España)
-- Ejemplo: `+521234567890` (México)
-- IMPORTANTE: Incluir el código de país
+#### Paso 2: Obtener API Key
 
-**Campo: "Pedidos por WhatsApp activos"**
-- Marcar la casilla ✅ para habilitar
-- Solo los contactos habilitados pueden hacer pedidos
+1. Ir a **Console** > **API Keys**
+2. Crear nueva API Key (formato `sk-xxxxx`)
+3. Copiar y guardar de forma segura
 
-5. Guardar el contacto
+#### Paso 3: Configurar en Odoo
 
-### 3.2. Verificar configuración
+1. En **"Xiaomi MiMo"**:
+   - **Usar Xiaomi MiMo**: ✅ Activado
+   - **API Key MiMo**: Pegar la API Key
+   - **Modelo MiMo**: `mimo-v2.5`
+   - **URL base API MiMo**: `https://api.xiaomimimo.com/v1`
 
-1. Enviar un mensaje de WhatsApp al número configurado en Meta
-2. Debería llegar una respuesta automática
-3. Si no llega respuesta, revisar:
-   - Que el contacto esté habilitado
-   - Que el número coincida exactamente
-   - Los logs en **Ventas > WhatsApp IA > Mensajes**
+2. En **"OpenAI (fallback)"** (opcional):
+   - Solo si MiMo no está disponible
+   - Introducir API Key de OpenAI
 
 ---
 
-## 4. Flujo de Pedidos
+## 3. Comparativa de Proveedores
 
-### 4.1. Proceso completo
+### Canales de WhatsApp
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  1. CLIENTE ENVÍA MENSAJE POR WHATSAPP                      │
-│     "Hola, quiero 20 cajas de producto A"                   │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│  2. SISTEMA RECIBE Y AUTENTICA                              │
-│     - Verifica número en res.partner                         │
-│     - Comprueba que esté habilitado                          │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│  3. IA INTERPRETA EL MENSAJE                                │
-│     - Extrae productos y cantidades                          │
-│     - Identifica intención (pedido, consulta, cancelación)   │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│  4. SE CREA/ACTUALIZA PEDIDO BORRADOR                       │
-│     - Sale.order con líneas de producto                      │
-│     - Precios según tarifa del cliente                       │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│  5. CLIENTE RECIBE RESUMEN Y CONFIRMA                       │
-│     "He preparado: 20x Producto A = 100€. ¿Confirmas?"     │
-│     Cliente responde "SÍ" o "NO"                            │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│  6. PEDIDO SE CONFIRMA (automático o manual)                │
-│     - Se crea la venta en Odoo                               │
-│     - Se notifica al cliente                                 │
-└─────────────────────────────────────────────────────────────┘
-```
+| Característica | Meta Cloud API | OpenWA |
+|---|---|---|
+| Coste | Gratuito (con límites) | Gratuito |
+| Cuenta de negocio | Sí requerida | No necesaria |
+| Verificación Facebook | Sí | No |
+| Hospedaje | Cloud de Meta | Self-hosted (Docker) |
+| API | Oficial WhatsApp Business | Compatible WhatsApp Web |
+| Multi-sesión | No | Sí |
+| Webhooks | Sí | Sí |
+| Dashboard | No | Sí |
 
-### 4.2. Ejemplos de mensajes
+### Proveedores de IA
 
-**Realizar un pedido:**
-```
-Cliente: "Buenos días, necesito 30 cajas del producto XYZ y 15 del ABC"
-Sistema: "He preparado tu pedido:
-- 30 x Producto XYZ: 150€
-- 15 x Producto ABC: 75€
-Total: 225€
-¿Confirmas? Responde SÍ para confirmar o NO para cancelar."
-```
-
-**Consultar precio:**
-```
-Cliente: "¿Cuánto cuesta el producto XYZ?"
-Sistema: "El precio del Producto XYZ es 5€ por caja.
-¿Te gustaría hacer un pedido?"
-```
-
-**Cancelar pedido:**
-```
-Cliente: "Cancelo el pedido anterior"
-Sistema: "Pedido cancelado correctamente. ¡Hasta pronto!"
-```
-
----
-
-## 5. Monitoreo y Administración
-
-### 5.1. Sesiones de WhatsApp
-
-**Ubicación:** Ventas > WhatsApp IA > Sesiones
-
-Información disponible:
-- **Cliente**: Contacto asociado
-- **Número WhatsApp**: Origen de la conversación
-- **Estado**: Abierta / Esperando confirmación / Completada / Cancelada
-- **Nº mensajes**: Total de mensajes intercambiados
-- **Tokens totales**: Consumo de IA en la sesión
-- **Pedido borrador**: Venta generada
-
-### 5.2. Mensajes
-
-**Ubicación:** Ventas > WhatsApp IA > Mensajes
-
-Información disponible:
-- **Sesión**: Conversación asociada
-- **Dirección**: Entrante (cliente) / Saliente (sistema)
-- **Cuerpo**: Texto del mensaje
-- **ID mensaje Meta**: Identificador único
-- **Error de procesamiento**: Si hubo algún problema
-
-### 5.3. Uso de IA
-
-**Ubicación:** Ventas > WhatsApp IA > Uso IA
-
-Información disponible:
-- **Sesión**: Conversación asociada
-- **Modelo IA**: Modelo utilizado (mimo-v2.5, gpt-4o, etc.)
-- **Tokens de entrada**: Tokens consumidos por el prompt
-- **Tokens de salida**: Tokens consumidos por la respuesta
-- **Coste estimado (€)**: Coste calculado automáticamente
-
----
-
-## 6. Modelos de IA Disponibles
-
-### 6.1. Xiaomi MiMo V2.5
-
-| Modelo | Uso ideal | Ventajas | Coste (1M tokens) |
+| Modelo | Coste (1M tokens) | Velocidad | Calidad |
 |---|---|---|---|
-| `mimo-v2.5` | Uso general | Multimodal, buen balance | $0.14 input / $0.28 output |
-| `mimo-v2.5-pro` | Análisis complejo | Mayor precisión | $0.14 input / $0.28 output |
-| `mimo-v2-flash` | Mensajes simples | Ultra-rápido | $0.05 input / $0.10 output |
+| MiMo V2.5 | $0.14 / $0.28 | Rápida | Muy buena |
+| MiMo V2.5 Pro | $0.14 / $0.28 | Media | Excelente |
+| MiMo V2.5 Flash | $0.05 / $0.10 | Muy rápida | Buena |
+| GPT-4o | $2.50 / $10.00 | Rápida | Excelente |
+| GPT-4o Mini | $0.15 / $0.60 | Muy rápida | Buena |
 
-**Recomendación:** Usar `mimo-v2.5` para la mayoría de casos.
-
-### 6.2. OpenAI (Fallback)
-
-| Modelo | Uso ideal | Ventajas | Coste (1M tokens) |
-|---|---|---|---|
-| `gpt-4o` | Uso general | Muy capaz | $2.50 input / $10.00 output |
-| `gpt-4o-mini` | Uso ligero | Más barato | $0.15 input / $0.60 output |
-| `gpt-4-turbo` | Velocidad | Rápido | $10.00 input / $30.00 output |
-
-**Comparativa:** MiMo es ~18x más barato que GPT-4o.
+**Recomendación:** OpenWA + MiMo V2.5 = **100% gratuito + bajo coste de IA**
 
 ---
 
-## 7. Control de Gasto
+## 4. Configuración de Contactos
 
-### 7.1. Configurar límites
+### Habilitar un contacto
 
-1. Ir a **Ventas > Ajustes > Pedidos por WhatsApp con IA**
-2. Buscar **"Control de gasto de IA"**
-3. Configurar:
+1. Ir a **Contactos** > Seleccionar contacto
+2. Pestaña **"Ventas y Compra"**:
+   - **Teléfono WhatsApp**: Formato internacional sin `+` (ej: `34612345678`)
+   - **Pedidos por WhatsApp activos**: ✅ Marcar
 
-**Límite diario de tokens:**
-- Valor `0` = sin límite
-- Ejemplo: `100000` = máximo 100,000 tokens por día
-- Se reinicia automáticamente cada día
+### Formato de números
 
-**Límite mensual de coste IA (€):**
-- Valor `0` = sin límite
-- Ejemplo: `10` = máximo 10€ por mes
-- Se reinicia el primer día de cada mes
-
-4. Guardar los cambios
-
-### 7.2. Monitorear consumo
-
-1. Ir a **Ventas > WhatsApp IA > Uso IA**
-2. Usar filtros para ver consumo por:
-   - Fecha
-   - Sesión
-   - Modelo
-3. El coste se calcula automáticamente según el modelo usado
+- **Para OpenWA**: Solo dígitos, sin `+` ni espacios (ej: `34612345678`)
+- **Para Meta**: Formato E.164 con `+` (ej: `+34612345678`)
+- El módulo detecta automáticamente el canal y ajusta el formato
 
 ---
 
-## 8. Solución de Problemas
+## 5. Flujo de Pedidos
 
-### 8.1. Errores de configuración
+```
+1. CLIENTE ENVÍA MENSAJE
+   "Hola, quiero 20 cajas de producto A"
+        ↓
+2. SISTEMA RECIBE Y AUTENTICA
+   - Verifica número en res.partner
+   - Comprueba que esté habilitado
+        ↓
+3. IA INTERPRETA EL MENSAJE
+   - Extrae productos y cantidades
+   - Identifica intención
+        ↓
+4. SE CREA PEDIDO BORRADOR
+   - Sale.order con líneas
+   - Precios según tarifa
+        ↓
+5. CLIENTE CONFIRMA
+   "¿Confirmas? SÍ/NO"
+        ↓
+6. PEDIDO SE CONFIRMA
+   - Se crea la venta en Odoo
+```
 
-**Error: "La API Key de Xiaomi MiMo no está configurada"**
-- Causa: Falta la API Key de MiMo
-- Solución: Ir a Ajustes > Xiaomi MiMo > Introducir API Key
+---
 
-**Error: "La API Key de OpenAI no está configurada"**
-- Causa: MiMo desactivado y falta API Key de OpenAI
-- Solución: Activar MiMo o configurar OpenAI
+## 6. Solución de Problemas
 
-**Error: "Meta API no configurada (token o phone_id ausentes)"**
-- Causa: Faltan credenciales de Meta
-- Solución: Ir a Ajustes > Meta Cloud API > Completar campos
+### OpenWA
 
-### 8.2. Errores de mensajes
+**Error: "OpenWA no configurada"**
+- Verificar que la API Key esté introducida
+- Comprobar que la URL base sea correcta
 
-**Error: "Tu número no está autorizado"**
-- Causa: El contacto no está habilitado
-- Solución: Ir al contacto > Marcar "Pedidos por WhatsApp activos"
-
-**Error: "Ha ocurrido un error al procesar tu mensaje"**
-- Causa: Error en la IA o timeout
-- Solución: Revisar logs en WhatsApp IA > Mensajes
-
-**Error: "Límite diario de tokens alcanzado"**
-- Causa: Se superó el límite configurado
-- Solución: Aumentar límites o esperar al día siguiente
-
-### 8.3. Errores de webhook
-
-**Webhook no verifica con Meta**
-- Causas posibles:
-  - URL no accesible desde internet
-  - Token no coincide
-  - Certificado SSL no válido
-- Soluciones:
-  - Verificar que la URL sea HTTPS
-  - Comprobar el token en Ajustes
-  - Instalar certificado SSL válido
+**Error: "Firma HMAC inválida"**
+- El Secret HMAC no coincide
+- Verificar que sea el mismo en OpenWA y en Odoo
 
 **Mensajes no llegan a Odoo**
-- Causas posibles:
-  - Webhook no configurado
-  - Evento "messages" no suscrito
-  - Error en el endpoint
-- Soluciones:
-  - Verificar webhook en Meta Developers
-  - Revisar logs de Odoo
-  - Comprobar suscripción a eventos
+- Verificar que el webhook esté configurado en OpenWA
+- Comprobar que la URL del webhook sea accesible
+- Revisar logs de OpenWA
+
+**QR no aparece**
+- Verificar que Docker esté corriendo
+- Revisar logs: `docker logs openwa-api`
+
+### Meta Cloud API
+
+**Error: "Meta API no configurada"**
+- Verificar Access Token y Phone Number ID
+- Comprobar que el webhook esté verificado
+
+### IA
+
+**Error: "API Key de MiMo no configurada"**
+- Ir a Ajustes > Xiaomi MiMo > Introducir API Key
+
+**Error: "Límite de tokens alcanzado"**
+- Revisar límites en Ajustes > Control de gasto
+- Aumentar límites o desactivarlos (0 = sin límite)
 
 ---
 
-## 9. Consejos y Buenas Prácticas
+## 7. Comandos Útiles
 
-### 9.1. Uso de la IA
+### Gestionar OpenWA
 
-- **Sé específico**: "Quiero 20 cajas de Producto A" mejor que "quiero cosas"
-- **Usa nombres claros**: Si el cliente conoce los nombres de producto, mejor
-- **Confirma antes de cancelar**: Evitar cancelaciones accidentales
+```bash
+# Ver logs de OpenWA
+docker logs -f openwa-api
 
-### 9.2. Gestión de contactos
+# Reiniciar OpenWA
+docker compose -f docker-compose.dev.yml restart
 
-- **Mantener números actualizados**: Verificar formatos internacionales
-- **Un contacto por cliente**: Evitar duplicados
-- **Deshabilitar contactos inactivos**: Reducir uso innecesario de IA
+# Parar OpenWA
+docker compose -f docker-compose.dev.yml down
 
-### 9.3. Optimización de costes
+# Actualizar OpenWA
+cd OpenWA
+git pull
+docker compose -f docker-compose.dev.yml up -d --build
+```
 
-- **Usar mimo-v2-flash** para mensajes simples
-- **Configurar límites** según el uso esperado
-- **Monitorear consumo** periódicamente
-- **Ajustar límites** según necesidades reales
+### Actualizar módulo Odoo
+
+```bash
+cd /opt/odoo18_desarrollo/odoo
+/home/manolo/.local/bin/uv run /opt/odoo18_desarrollo/uv/.venv/bin/python3 \
+    /opt/odoo18_desarrollo/odoo/odoo-bin \
+    -c /opt/odoo18_desarrollo/config/odoo.conf \
+    -d garridomontero_dev -u klo_whatsapp_order --stop-after-init
+```
 
 ---
 
-## 10. Soporte y Contacto
-
-Para problemas o consultas:
+## 8. Soporte
 
 **KLO Ingeniería Informática S.L.L.**
 - Web: [https://www.klo.es](https://www.klo.es)
-- Email: soporte@klo.es
 
-**Soporte técnico de Xiaomi MiMo:**
-- Documentación: [https://mimo.mi.com/docs](https://mimo.mi.com/docs)
+**Documentación OpenWA:**
+- GitHub: [https://github.com/rmyndharis/OpenWA](https://github.com/rmyndharis/OpenWA)
+
+**Xiaomi MiMo:**
 - Plataforma: [https://platform.xiaomimimo.com](https://platform.xiaomimimo.com)
 
 ---
 
 *Documento actualizado: Julio 2026*
-*Versión del módulo: 18.0.2.0.0*
-*Última revisión: 10 de julio de 2026*
+*Versión del módulo: 18.0.3.0.0*

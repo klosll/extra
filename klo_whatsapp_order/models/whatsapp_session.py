@@ -115,7 +115,19 @@ class WhatsappSession(models.Model):
                 )
 
     @api.model
-    def _process_incoming_payload(self, payload):
+    def _get_wa_sender(self, channel="meta"):
+        """
+        Devuelve el servicio de envío de mensajes según el canal configurado.
+        Returns: (send_function, channel_name)
+        """
+        from ..services import meta_api, openwa_api
+
+        if channel == "openwa":
+            return openwa_api.send_text_message, "openwa"
+        return meta_api.send_text_message, "meta"
+
+    @api.model
+    def _process_incoming_payload(self, payload, channel="meta"):
         """Punto de entrada del queue_job: procesa el payload de Meta."""
         try:
             entry = (payload or {}).get("entry", [{}])[0]
@@ -132,14 +144,19 @@ class WhatsappSession(models.Model):
                 msg.get("id"),
                 msg.get("text", {}).get("body", ""),
                 raw_payload=msg,
+                channel=channel,
             )
         except Exception:
             _logger.exception("Error procesando payload WhatsApp")
 
     @api.model
-    def _handle_incoming_text(self, from_number, wa_msg_id, text, raw_payload=None):
+    def _handle_incoming_text(
+        self, from_number, wa_msg_id, text, raw_payload=None, channel="meta"
+    ):
         """Procesa un mensaje entrante: autenticación, IA y respuesta al cliente."""
-        from ..services import meta_api, openai_service, order_builder
+        from ..services import openai_service, order_builder
+
+        send_message, _ = self._get_wa_sender(channel)
 
         if not from_number:
             _logger.warning("Mensaje WhatsApp recibido sin número de origen")
@@ -153,7 +170,7 @@ class WhatsappSession(models.Model):
             limit=1,
         )
         if not partner:
-            meta_api.send_text_message(
+            send_message(
                 self.env,
                 from_number,
                 "Lo siento, tu número no está autorizado para realizar pedidos. "
@@ -196,7 +213,7 @@ class WhatsappSession(models.Model):
             session._check_daily_limits()
         except Exception as exc:
             incoming_message.processing_error = str(exc)
-            meta_api.send_text_message(self.env, from_number, str(exc))
+            send_message(self.env, from_number, str(exc))
             return
 
         catalog = order_builder.get_restricted_catalog(self.env, partner)
@@ -211,8 +228,8 @@ class WhatsappSession(models.Model):
             )
         except Exception as exc:
             incoming_message.processing_error = str(exc)
-            _logger.exception("Error en OpenAI")
-            meta_api.send_text_message(
+            _logger.exception("Error en IA")
+            send_message(
                 self.env,
                 from_number,
                 "Ha ocurrido un error al procesar tu mensaje. Por favor, inténtalo de nuevo.",
@@ -278,7 +295,7 @@ class WhatsappSession(models.Model):
                 "y en qué cantidad."
             )
 
-        meta_api.send_text_message(self.env, from_number, reply)
+        send_message(self.env, from_number, reply)
         self.env["klo.whatsapp.message"].sudo().create(
             {
                 "session_id": session.id,

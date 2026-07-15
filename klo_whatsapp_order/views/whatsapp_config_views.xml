@@ -9,7 +9,19 @@
         <field name="arch" type="xml">
             <block name="quotation_order_setting_container" position="after">
                 <block title="Pedidos por WhatsApp con IA" id="klo_whatsapp_order_settings">
-                    <setting id="klo_wa_meta_settings" string="Meta Cloud API" help="Credenciales de la WhatsApp Business Cloud API.">
+
+                    <!-- Selector de canal -->
+                    <setting id="klo_wa_channel_selection" string="Canal de WhatsApp" help="Selecciona el proveedor de WhatsApp que usarás.">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="wa_channel" class="col-lg-4 o_light_label"/>
+                                <field name="wa_channel" class="col-lg-8"/>
+                            </div>
+                        </div>
+                    </setting>
+
+                    <!-- Meta Cloud API (oculto por defecto, visible si wa_channel=meta) -->
+                    <setting id="klo_wa_meta_settings" string="Meta Cloud API" help="Credenciales de la WhatsApp Business Cloud API." invisible="wa_channel != 'meta'">
                         <div class="content-group">
                             <div class="row mt16">
                                 <label for="wa_verify_token" class="col-lg-4 o_light_label"/>
@@ -29,6 +41,30 @@
                             </div>
                         </div>
                     </setting>
+
+                    <!-- OpenWA (oculto por defecto, visible si wa_channel=openwa) -->
+                    <setting id="klo_wa_openwa_settings" string="OpenWA (Self-Hosted)" help="Gateway open source auto-hospedado. Usa WhatsApp Web (sin cuenta de negocio)." invisible="wa_channel != 'openwa'">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="openwa_base_url" class="col-lg-4 o_light_label"/>
+                                <field name="openwa_base_url" class="col-lg-8"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="openwa_api_key" class="col-lg-4 o_light_label"/>
+                                <field name="openwa_api_key" password="True" class="col-lg-8"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="openwa_session_id" class="col-lg-4 o_light_label"/>
+                                <field name="openwa_session_id" class="col-lg-8"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="openwa_webhook_secret" class="col-lg-4 o_light_label"/>
+                                <field name="openwa_webhook_secret" password="True" class="col-lg-8"/>
+                            </div>
+                        </div>
+                    </setting>
+
+                    <!-- Proveedor de IA -->
                     <setting id="klo_wa_mimo_settings" string="Xiaomi MiMo" help="Proveedor de IA principal (recomendado). API compatible con OpenAI.">
                         <div class="content-group">
                             <div class="row mt16">
@@ -61,6 +97,8 @@
                             </div>
                         </div>
                     </setting>
+
+                    <!-- Control de gasto -->
                     <setting id="klo_wa_ai_limits" string="Control de gasto de IA" help="Limita el consumo diario de tokens y el coste mensual. Usa 0 para sin límite.">
                         <div class="content-group">
                             <div class="row mt16">
@@ -73,6 +111,8 @@
                             </div>
                         </div>
                     </setting>
+
+                    <!-- Comportamiento de pedidos -->
                     <setting id="klo_wa_order_behavior" string="Comportamiento de pedidos" help="Define el flujo de confirmación y la sesión por defecto.">
                         <div class="content-group">
                             <div class="row mt16">
