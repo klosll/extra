@@ -48,7 +48,7 @@
         <!-- Proveedor de IA: MiMo -->
         <record id="param_use_mimo" model="ir.config_parameter">
             <field name="key">klo_whatsapp_order.use_mimo</field>
-            <field name="value">True</field>
+            <field name="value">mimo</field>
         </record>
         <record id="param_mimo_api_key" model="ir.config_parameter">
             <field name="key">klo_whatsapp_order.mimo_api_key</field>
@@ -72,6 +72,19 @@
             <field name="key">klo_whatsapp_order.openai_model</field>
             <field name="value">gpt-4o</field>
         </record>
+
+        <!-- Proveedor de IA: Groq (gratis para pruebas) -->
+        <record id="param_groq_api_key" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.groq_api_key</field>
+            <field name="value"></field>
+        </record>
+        <record id="param_groq_model" model="ir.config_parameter">
+            <field name="key">klo_whatsapp_order.groq_model</field>
+            <field name="value">llama-3.3-70b-versatile</field>
+        </record>
+
+        <record id="param_opencode_api_key" model="ir.config_parameter"><field name="key">klo_whatsapp_order.opencode_api_key</field><field name="value"></field></record>
+        <record id="param_opencode_model" model="ir.config_parameter"><field name="key">klo_whatsapp_order.opencode_model</field><field name="value">mimo-v2.5-free</field></record>
 
         <!-- Comportamiento -->
         <record id="param_auto_confirm" model="ir.config_parameter">

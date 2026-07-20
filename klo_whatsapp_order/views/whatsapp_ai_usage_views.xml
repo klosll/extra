@@ -28,7 +28,7 @@
                 <filter string="Hoy" name="today"
                         domain="[('create_date','&gt;=', context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
                 <filter string="Este mes" name="this_month"
-                        domain="[('create_date','&gt;=', context_today().replace(day=1).strftime('%Y-%m-%d 00:00:00'))]"/>
+                        domain="[('create_date','&gt;=', context_today().strftime('%Y-%m-01 00:00:00'))]"/>
                 <group expand="0" string="Agrupar por">
                     <filter string="Modelo IA" name="group_model" context="{'group_by': 'model_name'}"/>
                     <filter string="Sesión" name="group_session" context="{'group_by': 'session_id'}"/>

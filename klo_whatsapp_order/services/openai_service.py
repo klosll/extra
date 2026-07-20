@@ -39,9 +39,9 @@ def _get_client_and_model(env):
     from openai import OpenAI
 
     icp = env["ir.config_parameter"].sudo()
-    use_mimo = icp.get_param("klo_whatsapp_order.use_mimo", "True")
+    provider = icp.get_param("klo_whatsapp_order.use_mimo", "mimo")
 
-    if use_mimo == "True" or use_mimo is True:
+    if provider == "mimo":
         api_key = icp.get_param("klo_whatsapp_order.mimo_api_key")
         model = icp.get_param("klo_whatsapp_order.mimo_model", "mimo-v2.5")
         base_url = icp.get_param(
@@ -53,8 +53,29 @@ def _get_client_and_model(env):
                 "Configure 'API Key MiMo' en Ajustes > Ventas > Pedidos por WhatsApp."
             )
         client = OpenAI(api_key=api_key, base_url=base_url)
-        provider = "mimo"
         _logger.info("Usando proveedor MiMo (modelo: %s)", model)
+    elif provider == "groq":
+        api_key = icp.get_param("klo_whatsapp_order.groq_api_key")
+        model = icp.get_param(
+            "klo_whatsapp_order.groq_model", "llama-3.3-70b-versatile"
+        )
+        base_url = "https://api.groq.com/openai/v1"
+        if not api_key:
+            raise ValueError(
+                "La API Key de Groq no está configurada. "
+                "Obtenga una gratis en console.groq.com y configure 'API Key Groq' "
+                "en Ajustes > Ventas > Pedidos por WhatsApp."
+            )
+        client = OpenAI(api_key=api_key, base_url=base_url)
+        _logger.info("Usando proveedor Groq (modelo: %s)", model)
+    elif provider == "opencode":
+        api_key = icp.get_param("klo_whatsapp_order.opencode_api_key")
+        model = icp.get_param("klo_whatsapp_order.opencode_model", "mimo-v2.5-free")
+        base_url = "https://opencode.ai/zen/v1"
+        if not api_key:
+            raise ValueError("La API Key de OpenCode Zen no esta configurada. Obtenga una gratis en opencode.ai.")
+        client = OpenAI(api_key=api_key, base_url=base_url)
+        _logger.info("Usando proveedor OpenCode Zen (modelo: %s)", model)
     else:
         api_key = icp.get_param("klo_whatsapp_order.openai_api_key")
         model = icp.get_param("klo_whatsapp_order.openai_model", "gpt-4o")
@@ -64,7 +85,6 @@ def _get_client_and_model(env):
                 "Configure 'API Key OpenAI' en Ajustes > Ventas > Pedidos por WhatsApp."
             )
         client = OpenAI(api_key=api_key)
-        provider = "openai"
         _logger.info("Usando proveedor OpenAI (modelo: %s)", model)
 
     return client, model, provider

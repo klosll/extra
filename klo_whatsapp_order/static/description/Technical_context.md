@@ -5,33 +5,45 @@
 | Campo | Valor |
 |---|---|
 | Name | `klo_whatsapp_order` |
-| Version | `18.0.2.0.0` |
+| Version | `18.0.4.0.0` |
 | Author | `KLO Ingenieria Informatica S.L.L.` |
 | License | `AGPL-3` |
 | Path | `/opt/odoo18_desarrollo/extra-addons/klo/extra/klo_whatsapp_order` |
 
 ## Descripción
 
-Este módulo habilita la recepción automatizada de pedidos de clientes por WhatsApp usando la Meta Cloud API como canal de entrada/salida y un proveedor de IA (Xiaomi MiMo V2.5 o OpenAI) como capa de interpretación del lenguaje natural. El objetivo es convertir mensajes libres del cliente en borradores de pedidos de venta en Odoo, manteniendo trazabilidad de la conversación, control de confirmación y seguimiento del consumo de IA.
+Este módulo habilita la recepción automatizada de pedidos de clientes por WhatsApp usando un canal de WhatsApp (Meta Cloud API o OpenWA) y un proveedor de IA (Xiaomi MiMo V2.5, OpenAI o Groq) como capa de interpretación del lenguaje natural. El objetivo es convertir mensajes libres del cliente en borradores de pedidos de venta en Odoo, manteniendo trazabilidad de la conversación, control de confirmación y seguimiento del consumo de IA.
+
+**Canales de WhatsApp soportados:**
+- **Meta Cloud API** (WhatsApp Business): API oficial, requiere cuenta de negocio de Facebook.
+- **OpenWA** (Self-Hosted): Gateway open source auto-hospedado con Docker, usa WhatsApp Web, gratuito.
 
 **Proveedores de IA soportados:**
-- **Xiaomi MiMo V2.5** (recomendado): API compatible con OpenAI, coste reducido. Modelos: `mimo-v2.5`, `mimo-v2.5-pro`, `mimo-v2-flash`.
-- **OpenAI** (fallback): Modelos GPT-4o, GPT-4o-mini, GPT-4-turbo.
+- **Xiaomi MiMo V2.5** (recomendado): API compatible con OpenAI, coste reducido. Modelos: `mimo-v2.5`, `mimo-v2.5-pro`.
+- **OpenAI** (pago): Modelos GPT-4o, GPT-4o-mini, GPT-4-turbo.
+- **Groq** (gratis para pruebas): API gratuita con modelos Llama. Modelos: `llama-3.3-70b-versatile`, `llama-3.1-8b-instant`, `mixtral-8x7b-32768`.
 
 ### `res.config.settings` (hereda `sale.res_config_settings_view_form`)
 
 | Campo | Tipo | Etiqueta | Descripción |
 |---|---|---|---|
+| `wa_channel` | `Selection` | Canal de WhatsApp | Selecciona proveedor: `meta` (Cloud API) o `openwa` (Self-Hosted). |
 | `wa_verify_token` | `Char` | Token de verificación webhook | Token de verificación de Meta. |
 | `wa_access_token` | `Char` | Access Token Meta | Token permanente de la WhatsApp Business Cloud API. |
 | `wa_phone_number_id` | `Char` | Phone Number ID | ID del número de teléfono en Meta. |
 | `wa_api_version` | `Char` | Versión API Meta | Versión de la API (default: v19.0). |
-| `use_mimo` | `Boolean` | Usar Xiaomi MiMo | Activa MiMo como proveedor principal (default: True). |
+| `openwa_base_url` | `Char` | URL base OpenWA | Endpoint del servidor OpenWA (default: http://localhost:2785). |
+| `openwa_api_key` | `Char` | API Key OpenWA | Clave de API generada por OpenWA. |
+| `openwa_session_id` | `Char` | Session ID de OpenWA | ID de la sesión de WhatsApp en OpenWA. |
+| `openwa_webhook_secret` | `Char` | Secret HMAC (webhook OpenWA) | Secreto para verificar firma HMAC de webhooks entrantes. |
+| `use_mimo` | `Selection` | Proveedor de IA | Selecciona proveedor: `mimo` (MiMo), `openai` (OpenAI) o `groq` (Groq gratis). |
 | `mimo_api_key` | `Char` | API Key MiMo | Clave de API de Xiaomi MiMo. |
 | `mimo_model` | `Char` | Modelo MiMo | Modelo a usar (default: mimo-v2.5). |
 | `mimo_base_url` | `Char` | URL base API MiMo | Endpoint de MiMo (default: https://api.xiaomimimo.com/v1). |
-| `openai_api_key` | `Char` | API Key OpenAI (fallback) | Clave de API de OpenAI (solo si MiMo está desactivado). |
-| `openai_model` | `Char` | Modelo OpenAI (fallback) | Modelo OpenAI (default: gpt-4o). |
+| `openai_api_key` | `Char` | API Key OpenAI | Clave de API de OpenAI. |
+| `openai_model` | `Char` | Modelo OpenAI | Modelo OpenAI (default: gpt-4o). |
+| `groq_api_key` | `Char` | API Key Groq | Clave de API de Groq (gratis en console.groq.com). |
+| `groq_model` | `Char` | Modelo Groq | Modelo Groq (default: llama-3.3-70b-versatile). |
 | `wa_max_tokens_per_day` | `Integer` | Límite diario de tokens | 0 = sin límite. |
 | `wa_max_cost_per_month` | `Float` | Límite mensual de coste IA (€) | 0 = sin límite. |
 | `wa_auto_confirm_order` | `Boolean` | Confirmar pedido automáticamente | Sin validación al cliente. |
@@ -99,20 +111,24 @@ Este módulo habilita la recepción automatizada de pedidos de clientes por What
 
 ## Lógica
 
-- **Webhook de WhatsApp**: `controllers/whatsapp_webhook.py` verifica el endpoint con Meta y encola el tratamiento de cada POST.
-- **Sesión**: `_process_incoming_payload` y `_handle_incoming_text` localizan o crean la sesión activa del cliente.
+- **Webhook de WhatsApp**: `controllers/whatsapp_webhook.py` expone dos endpoints:
+  - `/webhook/whatsapp` (GET/POST): Verificación y recepción de Meta Cloud API.
+  - `/webhook/openwa` (POST): Recepción de OpenWA con verificación HMAC (`X-Hub-Signature-256`).
+- **Routing de canal**: `_get_wa_sender(channel)` selecciona el servicio de envío (`meta_api` o `openwa_api`) según el canal configurado.
+- **Sesión**: `_process_incoming_payload` (Meta) y `_handle_incoming_text` (ambos canales) localizan o crean la sesión activa del cliente.
 - **Autenticación del cliente**: solo se aceptan números presentes en `res.partner.whatsapp_phone` y con `whatsapp_order_enabled` activo.
 - **Historial conversacional**: `append_message()` mantiene un contexto compacto para la IA.
 - **Control de gasto**: `_check_daily_limits()` consulta `klo.whatsapp.ai.usage` y bloquea cuando se superan límites diarios o mensuales.
-- **Routing de proveedor**: `openai_service._get_client_and_model()` selecciona MiMo o OpenAI según `use_mimo`. Ambos usan la librería `openai` con diferente `base_url`.
+- **Routing de proveedor IA**: `openai_service._get_client_and_model()` selecciona MiMo, OpenAI o Groq según `use_mimo`. Todos usan la librería `openai` con diferente `base_url`.
 - **Interpretación con IA**: `services/openai_service.py` llama al proveedor configurado, obliga una respuesta JSON y registra consumo por sesión.
 - **Construcción del pedido**: `services/order_builder.py` genera o actualiza el borrador de `sale.order` aplicando la tarifa del cliente.
 - **Confirmación**: el flujo puede requerir validación del cliente o confirmar automáticamente según configuración.
+- **Servicios WhatsApp**: `services/meta_api.py` (Cloud API) y `services/openwa_api.py` (OpenWA) encapsulan el envío de mensajes, verificación de webhooks y consulta de estado de sesión/QR.
 
 ## Vistas modificadas
 
 - **Formulario de contactos** (`base.view_partner_form`): añade `whatsapp_phone` y `whatsapp_order_enabled` a continuación del campo `category_id` (etiquetas), usando el XPath `//field[@name='category_id']` con `position="after"`.
-- **Ajustes de ventas** (`sale.res_config_settings_view_form`): añade bloque de configuración de Meta, OpenAI, límites y comportamiento.
+- **Ajustes de ventas** (`sale.res_config_settings_view_form`): añade bloque de configuración con selector de canal (Meta/OpenWA), selector de proveedor IA (MiMo/OpenAI/Groq), secciones condicionales para cada proveedor, límites de gasto y comportamiento de pedidos.
 - **Menús bajo Ventas**: nuevo nodo **WhatsApp IA** con accesos a sesiones, mensajes y uso de IA.
 
 ## Estructura de archivos
@@ -135,6 +151,7 @@ klo_whatsapp_order/
 │   ├── __init__.py
 │   ├── meta_api.py
 │   ├── openai_service.py
+│   ├── openwa_api.py
 │   └── order_builder.py
 ├── security/
 │   ├── ir.model.access.csv
@@ -151,6 +168,8 @@ klo_whatsapp_order/
 └── static/
     └── description/
         ├── icon.png
+        ├── Manual_de_uso_klo_whatsapp_order.md
+        ├── Manual_de_uso_klo_whatsapp_order.pdf
         └── Technical_context.md
 ```
 

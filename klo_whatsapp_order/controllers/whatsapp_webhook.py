@@ -112,9 +112,16 @@ class WhatsappWebhookController(http.Controller):
                 if data.get("fromMe", False):
                     return request.make_json_response({"status": "ok"})
 
-                # Extraer número del chatId (formato: phone@c.us)
+                # Extraer número del chatId (formato: phone@c.us o LID)
                 chat_id = data.get("chatId", data.get("from", ""))
                 from_number = chat_id.replace("@c.us", "").replace("@s.whatsapp.net", "")
+
+                # Si el chatId es un LID (Linked Internal Device), resolver a número real
+                if "@lid" in chat_id:
+                    from ..services import openwa_api
+                    from_number = openwa_api.resolve_lid_to_phone(
+                        request.env, chat_id.replace("@lid", "")
+                    )
 
                 text = data.get("body", "")
                 wa_msg_id = data.get("id", data.get("waMessageId", ""))

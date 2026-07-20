@@ -2,7 +2,7 @@
 
 ## 1. Descripción General
 
-El módulo **klo_whatsapp_order** permite recibir pedidos de clientes por WhatsApp de forma automatizada usando inteligencia artificial. Los mensajes de los clientes se procesan con un proveedor de IA (Xiaomi MiMo V2.5 o OpenAI) y se convierten en borradores de pedidos de venta en Odoo.
+El módulo **klo_whatsapp_order** permite recibir pedidos de clientes por WhatsApp de forma automatizada usando inteligencia artificial. Los mensajes de los clientes se procesan con un proveedor de IA (Xiaomi MiMo V2.5, OpenAI o Groq) y se convierten en borradores de pedidos de venta en Odoo.
 
 **Canales de WhatsApp soportados:**
 - **Meta Cloud API** (WhatsApp Business): API oficial, requiere cuenta de negocio
@@ -10,7 +10,8 @@ El módulo **klo_whatsapp_order** permite recibir pedidos de clientes por WhatsA
 
 **Proveedores de IA soportados:**
 - **Xiaomi MiMo V2.5** (recomendado): API compatible con OpenAI, coste reducido
-- **OpenAI** (fallback): Modelos GPT-4o, GPT-4o-mini
+- **OpenAI** (pago): Modelos GPT-4o, GPT-4o-mini
+- **Groq** (gratis para pruebas): API gratuita con modelos Llama
 
 ---
 
@@ -157,31 +158,40 @@ Usa esta opción si prefieres la API oficial de WhatsApp Business.
 
 ---
 
-### 2.4. CONFIGURACIÓN DEL PROVEEDOR DE IA (MiMo V2.5)
+### 2.4. CONFIGURACIÓN DEL PROVEEDOR DE IA
 
-#### Paso 1: Crear cuenta en Xiaomi MiMo
+En **"Proveedor de IA"**, seleccionar una de las opciones:
+
+#### Opción A: Xiaomi MiMo V2.5 (Recomendado)
 
 1. Ir a: **https://platform.xiaomimimo.com**
-2. Registrarse con cuenta Xiaomi
-3. Al registrarte recibes **$2 de crédito gratis**
-
-#### Paso 2: Obtener API Key
-
-1. Ir a **Console** > **API Keys**
-2. Crear nueva API Key (formato `sk-xxxxx`)
-3. Copiar y guardar de forma segura
-
-#### Paso 3: Configurar en Odoo
-
-1. En **"Xiaomi MiMo"**:
-   - **Usar Xiaomi MiMo**: ✅ Activado
+2. Registrarse con cuenta Xiaomi (recibes **$2 de crédito gratis**)
+3. Ir a **Console** > **API Keys** y crear una API Key
+4. En Odoo, configurar:
+   - **Proveedor de IA**: Xiaomi MiMo V2.5 (recomendado)
    - **API Key MiMo**: Pegar la API Key
    - **Modelo MiMo**: `mimo-v2.5`
    - **URL base API MiMo**: `https://api.xiaomimimo.com/v1`
 
-2. En **"OpenAI (fallback)"** (opcional):
-   - Solo si MiMo no está disponible
-   - Introducir API Key de OpenAI
+#### Opción B: Groq (Gratis para pruebas)
+
+1. Ir a: **https://console.groq.com**
+2. Crear cuenta gratuita (sin tarjeta)
+3. Ir a **API Keys** y crear una API Key
+4. En Odoo, configurar:
+   - **Proveedor de IA**: Groq (gratis para pruebas)
+   - **API Key Groq**: Pegar la API Key
+   - **Modelo Groq**: `llama-3.3-70b-versatile`
+
+#### Opción C: OpenAI (Pago)
+
+1. Ir a: **https://platform.openai.com**
+2. Crear cuenta y añadir método de pago
+3. Ir a **API Keys** y crear una API Key
+4. En Odoo, configurar:
+   - **Proveedor de IA**: OpenAI (GPT-4o)
+   - **API Key OpenAI**: Pegar la API Key
+   - **Modelo OpenAI**: `gpt-4o`
 
 ---
 
@@ -206,11 +216,13 @@ Usa esta opción si prefieres la API oficial de WhatsApp Business.
 |---|---|---|---|
 | MiMo V2.5 | $0.14 / $0.28 | Rápida | Muy buena |
 | MiMo V2.5 Pro | $0.14 / $0.28 | Media | Excelente |
-| MiMo V2.5 Flash | $0.05 / $0.10 | Muy rápida | Buena |
 | GPT-4o | $2.50 / $10.00 | Rápida | Excelente |
 | GPT-4o Mini | $0.15 / $0.60 | Muy rápida | Buena |
+| Groq Llama 3.3 70B | Gratis | Muy rápida | Buena |
+| Groq Mixtral 8x7B | Gratis | Rápida | Buena |
 
-**Recomendación:** OpenWA + MiMo V2.5 = **100% gratuito + bajo coste de IA**
+**Recomendación:** OpenWA + MiMo V2.5 = **bajo coste + buena calidad**
+**Para pruebas:** OpenWA + Groq = **100% gratuito**
 
 ---
 
@@ -288,7 +300,14 @@ Usa esta opción si prefieres la API oficial de WhatsApp Business.
 ### IA
 
 **Error: "API Key de MiMo no configurada"**
-- Ir a Ajustes > Xiaomi MiMo > Introducir API Key
+- Ir a Ajustes > Proveedor de IA > Seleccionar MiMo > Introducir API Key
+
+**Error: "API Key de Groq no configurada"**
+- Ir a Ajustes > Proveedor de IA > Seleccionar Groq > Introducir API Key
+- Obtener key gratis en console.groq.com
+
+**Error: "API Key de OpenAI no configurada"**
+- Ir a Ajustes > Proveedor de IA > Seleccionar OpenAI > Introducir API Key
 
 **Error: "Límite de tokens alcanzado"**
 - Revisar límites en Ajustes > Control de gasto
@@ -342,4 +361,4 @@ cd /opt/odoo18_desarrollo/odoo
 ---
 
 *Documento actualizado: Julio 2026*
-*Versión del módulo: 18.0.3.0.0*
+*Versión del módulo: 18.0.4.0.0*

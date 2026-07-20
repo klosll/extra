@@ -10,6 +10,11 @@ PRICE_PER_M_TOKENS = {
     "mimo-v2.5": {"input": 0.14, "output": 0.28},
     "mimo-v2.5-pro": {"input": 0.14, "output": 0.28},
     "mimo-v2-flash": {"input": 0.05, "output": 0.10},
+    "llama-3.3-70b-versatile": {"input": 0.0, "output": 0.0},
+    "llama-3.1-8b-instant": {"input": 0.0, "output": 0.0},
+    "mixtral-8x7b-32768": {"input": 0.0, "output": 0.0},
+    "gemma2-9b-it": {"input": 0.0, "output": 0.0},
+    "mimo-v2.5-free": {"input": 0.0, "output": 0.0},
 }
 DEFAULT_INPUT_PRICE = 0.14
 DEFAULT_OUTPUT_PRICE = 0.28

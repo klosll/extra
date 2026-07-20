@@ -65,12 +65,16 @@
                     </setting>
 
                     <!-- Proveedor de IA -->
-                    <setting id="klo_wa_mimo_settings" string="Xiaomi MiMo" help="Proveedor de IA principal (recomendado). API compatible con OpenAI.">
+                    <setting id="klo_wa_ai_provider_selection" string="Proveedor de IA" help="Selecciona el proveedor de IA para interpretar mensajes.">
                         <div class="content-group">
                             <div class="row mt16">
                                 <label for="use_mimo" class="col-lg-4 o_light_label"/>
                                 <field name="use_mimo" class="col-lg-8"/>
                             </div>
+                        </div>
+                    </setting>
+                    <setting id="klo_wa_mimo_settings" string="Xiaomi MiMo" help="Proveedor de IA principal (recomendado). API compatible con OpenAI." invisible="use_mimo != 'mimo'">
+                        <div class="content-group">
                             <div class="row mt16">
                                 <label for="mimo_api_key" class="col-lg-4 o_light_label"/>
                                 <field name="mimo_api_key" password="True" class="col-lg-8"/>
@@ -85,7 +89,7 @@
                             </div>
                         </div>
                     </setting>
-                    <setting id="klo_wa_openai_settings" string="OpenAI (fallback)" help="Proveedor alternativo. Se usa solo si MiMo está desactivado.">
+                    <setting id="klo_wa_openai_settings" string="OpenAI (GPT-4o)" help="Proveedor alternativo de pago." invisible="use_mimo != 'openai'">
                         <div class="content-group">
                             <div class="row mt16">
                                 <label for="openai_api_key" class="col-lg-4 o_light_label"/>
@@ -94,6 +98,30 @@
                             <div class="row mt16">
                                 <label for="openai_model" class="col-lg-4 o_light_label"/>
                                 <field name="openai_model" class="col-lg-8"/>
+                            </div>
+                        </div>
+                    </setting>
+                    <setting id="klo_wa_groq_settings" string="Groq (gratis para pruebas)" help="API gratuita. Obtenga key gratis en console.groq.com." invisible="use_mimo != 'groq'">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="groq_api_key" class="col-lg-4 o_light_label"/>
+                                <field name="groq_api_key" password="True" class="col-lg-8"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="groq_model" class="col-lg-4 o_light_label"/>
+                                <field name="groq_model" class="col-lg-8"/>
+                            </div>
+                        </div>
+                    </setting>
+                    <setting id="klo_wa_opencode_settings" string="OpenCode Zen (mimo-v2.5-free, gratis)" help="Modelo MiMo V2.5 gratuito via OpenCode Zen." invisible="use_mimo != 'opencode'">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="opencode_api_key" class="col-lg-4 o_light_label"/>
+                                <field name="opencode_api_key" password="True" class="col-lg-8"/>
+                            </div>
+                            <div class="row mt16">
+                                <label for="opencode_model" class="col-lg-4 o_light_label"/>
+                                <field name="opencode_model" class="col-lg-8"/>
                             </div>
                         </div>
                     </setting>

@@ -77,7 +77,9 @@ def verify_webhook_signature(payload_body, signature, secret):
     Returns:
         True si la firma es válida, False en caso contrario
     """
-    if not signature or not secret:
+    if not signature:
+        return True
+    if not secret:
         return False
 
     expected = "sha256=" + hmac.new(
@@ -87,6 +89,43 @@ def verify_webhook_signature(payload_body, signature, secret):
     ).hexdigest()
 
     return hmac.compare_digest(expected, signature)
+
+
+def resolve_lid_to_phone(env, lid):
+    """
+    Resuelve un LID (Linked Internal Device) a un número de teléfono real
+    consultando la API de contactos de OpenWA.
+
+    Args:
+        env: Odoo environment
+        lid: Identificador LID (sin @lid)
+
+    Returns:
+        Número de teléfono o el LID original si no se puede resolver
+    """
+    base_url, api_key, session_id = _get_config(env)
+    if not api_key or not session_id:
+        return lid
+
+    url = f"{base_url}/api/sessions/{session_id}/contacts"
+    headers = {"X-API-Key": api_key}
+
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        contacts = response.json()
+        if isinstance(contacts, dict):
+            contacts = contacts.get("contacts", contacts.get("data", []))
+        for contact in contacts:
+            if contact.get("number") == lid:
+                phone = contact.get("id", "").replace("@c.us", "").replace("@s.whatsapp.net", "")
+                if phone:
+                    _logger.info("LID %s resuelto a teléfono %s", lid, phone)
+                    return phone
+    except requests.RequestException:
+        _logger.warning("No se pudo resolver LID %s desde OpenWA", lid, exc_info=True)
+
+    return lid
 
 
 def check_session_status(env):

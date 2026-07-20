@@ -62,11 +62,17 @@ class ResConfigSettings(models.TransientModel):
         config_parameter="klo_whatsapp_order.openwa_webhook_secret",
         help="Secreto para verificar la firma HMAC de los webhooks entrantes.",
     )
-    use_mimo = fields.Boolean(
-        string="Usar Xiaomi MiMo",
-        default=True,
+    use_mimo = fields.Selection(
+        [
+            ("mimo", "Xiaomi MiMo V2.5 (recomendado)"),
+            ("openai", "OpenAI (GPT-4o)"),
+            ("groq", "Groq (gratis, pruebas)"),
+            ("opencode", "OpenCode Zen (mimo-v2.5-free, gratis)"),
+        ],
+        string="Proveedor de IA",
+        default="mimo",
         config_parameter="klo_whatsapp_order.use_mimo",
-        help="Activa MiMo V2.5 como proveedor de IA. Si está desactivado, usa OpenAI.",
+        help="Selecciona el proveedor de IA para interpretar mensajes.",
     )
     mimo_api_key = fields.Char(
         string="API Key MiMo",
@@ -92,6 +98,20 @@ class ResConfigSettings(models.TransientModel):
         default="gpt-4o",
         config_parameter="klo_whatsapp_order.openai_model",
     )
+    # --- Groq (gratis para pruebas) ---
+    groq_api_key = fields.Char(
+        string="API Key Groq",
+        config_parameter="klo_whatsapp_order.groq_api_key",
+        help="Clave de API de Groq (gratis en console.groq.com).",
+    )
+    groq_model = fields.Char(
+        string="Modelo Groq",
+        default="llama-3.3-70b-versatile",
+        config_parameter="klo_whatsapp_order.groq_model",
+        help="Modelo de Groq (llama-3.3-70b-versatile, mixtral-8x7b-32768, etc.).",
+    )
+    opencode_api_key = fields.Char(string="API Key OpenCode Zen", config_parameter="klo_whatsapp_order.opencode_api_key", help="Clave de API de OpenCode Zen (gratis en opencode.ai).")
+    opencode_model = fields.Char(string="Modelo OpenCode Zen", default="mimo-v2.5-free", config_parameter="klo_whatsapp_order.opencode_model", help="Modelo de OpenCode Zen (mimo-v2.5-free, mimo-v2.5-pro, etc.).")
     wa_max_tokens_per_day = fields.Integer(
         string="Límite diario de tokens (0 = sin límite)",
         default=0,
