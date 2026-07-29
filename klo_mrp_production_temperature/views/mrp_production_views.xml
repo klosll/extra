@@ -7,8 +7,8 @@
             <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
             <field name="arch" type="xml">
                 <field name="lot_id" position="after">
-                <field name="temperature" optional="hide"/>
-            </field>
+                    <field name="temperature" optional="hide"/>
+                </field>
             </field>
         </record>
     </data>

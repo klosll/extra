@@ -10,9 +10,11 @@
     "website": "",
     "depends": [
         "mrp",
+        "custom_mrp_line_cost",
     ],
     "data": [
         "views/mrp_production_views.xml",
+        "views/stock_move_line_view.xml",
     ],
     "installable": True,
     "auto_install": False,

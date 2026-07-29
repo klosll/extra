@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="klo_production_move_line_ids_tree_view">
+        <field name="name">stock.move.line.tree.view</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="custom_mrp_line_cost.production_move_line_ids_tree_view"/>
+        <field name="arch" type="xml">
+          <field name="lot_id" position="after">
+              <field name="temperature" optional="hide"/>
+          </field>
+        </field>
+    </record>
+</odoo>
