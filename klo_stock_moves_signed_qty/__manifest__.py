@@ -12,7 +12,8 @@
         - **Saldo acumulado**: stock acumulado línea a línea
           (solo visible al filtrar por un único producto, ordenando por fecha).
     ''',
-    'author': 'Personalizado',
+    'author': 'KLO Ingenieria Informatica S.L.L.',
+    "website": "https://www.klo.es",
     'category': 'Inventory',
     'depends': ['stock'],
     'data': [
