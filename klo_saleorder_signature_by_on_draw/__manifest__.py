@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'KLO Sale Order - Firma: signed_by y signed_on encima del widget de firma',
+    'name': 'KLO Sale Order - Firma del Cliente con customer_signature',
     'version': '14.0.1.0.0',
-    'summary': 'Muestra signed_by y signed_on encima del campo customer_signature en el pedido de venta',
+    'summary': 'Sustituye signature por customer_signature en la página Customer Signature del pedido de venta',
     'description': """
-        Añade los campos signed_by y signed_on encima del campo customer_signature
-        en el formulario de Pedido de venta (página Customer Signature),
-        alineados a la izquierda.
-        No se eliminan de su posición original.
+        En la página "Customer Signature" del formulario de Pedido de venta,
+        reemplaza el campo signature por customer_signature (widget de firma dibujable).
+        Permite al cliente dibujar su firma directamente en el formulario.
     """,
     'author': 'KLO',
     'category': 'Sales',
