@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Historial de movimientos con cantidad con signo',
-    'version': '18.0.1.0.0',
+    'version': '18.0.2.0.0',
     'summary': 'Añade cantidad con signo y saldo acumulado al historial de movimientos de stock',
     'description': '''
         Añade dos columnas al historial de movimientos de productos
