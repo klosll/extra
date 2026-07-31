@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="saca_line_quality_tree_view_inherit" model="ir.ui.view">
+        <field name="name">saca.line.quality.tree.klo.descarga</field>
+        <field name="model">saca.line</field>
+        <field name="inherit_id" ref="custom_descarga.saca_line_quality_tree_view" />
+        <field name="arch" type="xml">
+            <field name="dock_temperature" position="after">
+                <field name="feed_family_id" string="Familia de Pienso" optional="show" />
+                <field name="estirpe_percentage" string="Estirpe (%)" optional="show" />
+            </field>
+        </field>
+    </record>
+</odoo>
