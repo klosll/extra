@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="report_invoice_document" inherit_id="account.report_invoice_document">
+        <xpath expr="//t[contains(@t-set, 'o')]" position="after">
+            <t t-set="lines_grouped" t-value="o.lines_grouped_by_sale_order()" />
+        </xpath>
+        <xpath expr="//t[contains(@t-foreach, 'lines')]/t[3]" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+        <xpath expr="//tbody[hasclass('invoice_tbody')]" position="inside">
+            <t t-set="subtotal" t-value="0.0" />
+        </xpath>
+        <xpath expr="//t[contains(@t-foreach, 'lines')]" position="attributes">
+            <attribute name="t-foreach">lines_grouped</attribute>
+            <attribute name="t-as">lines_group</attribute>
+        </xpath>
+        <xpath
+            expr="//t[@t-value='current_subtotal + line.price_subtotal']"
+            position="before"
+        >
+            <t t-set="l" t-value="lines_group['line']" />
+            <t t-set="line" t-value="lines_group['line']" />
+            <t t-set="sale_order" t-value="lines_group['sale_order']" />
+            <t
+                t-set="next_sale_order"
+                t-value="[lines_grouped[i + 1]['sale_order'] for i, x in enumerate(lines_grouped) if x == lines_group and i &lt; len(lines_grouped) - 1] or [False]"
+            />
+            <t t-set="line_last" t-value="False" />
+            <t t-set="line_index" t-value="0" />
+
+            <t t-if="sale_order != last_sale_order">
+                <t t-set="last_sale_order" t-value="sale_order" />
+                <tr t-if="sale_order">
+                    <td colspan="10">
+                        <strong>
+                            <span t-field="sale_order.name" />
+                            <t t-if="sale_order.client_order_ref">
+                                <span t-translation="off"> (</span>
+                                <span t-field="sale_order.client_order_ref" />
+                                <span t-translation="off">)</span>
+                            </t>
+                            <span t-translation="off"> - </span>
+                            <span t-field="sale_order.date_order" t-options="{'widget': 'date'}" />
+                        </strong>
+                    </td>
+                </tr>
+                <tr t-else="">
+                    <td colspan="10">
+                        <strong>
+                            <span>Sin referencia</span>
+                        </strong>
+                    </td>
+                </tr>
+            </t>
+        </xpath>
+        <xpath expr="//td/span[@t-field='line.quantity']" position="attributes">
+            <attribute name="t-esc">lines_group['quantity']</attribute>
+            <attribute name="t-field" />
+            <attribute
+                name="t-options"
+            >{'widget': 'float', 'decimal_precision': 'Product Unit of Measure'}</attribute>
+        </xpath>
+        <xpath expr="//td/span[@t-field='line.price_subtotal']" position="before">
+            <t t-set="line_subtotal" t-value="l.price_subtotal" />
+            <t t-if="lines_group['quantity'] != l.quantity" id="sale_order_subtotal">
+                <t
+                    t-set="line_sale_order_subtotal"
+                    t-value="l.quantity and lines_group['quantity'] * (line_subtotal / l.quantity) or 0.0"
+                />
+                <t
+                    t-set="subtotal"
+                    t-value="(subtotal or 0.0) + line_sale_order_subtotal"
+                />
+                <span
+                    t-esc="line_sale_order_subtotal"
+                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                />
+            </t>
+            <t t-else="">
+                <t t-set="subtotal" t-value="(subtotal or 0.0) + line_subtotal" />
+            </t>
+        </xpath>
+        <xpath expr="//td/span[@t-field='line.price_subtotal']" position="attributes">
+            <attribute name="t-if">lines_group['quantity'] == l.quantity</attribute>
+        </xpath>
+        <xpath
+            expr="//t[@t-foreach='lines_grouped']//td[hasclass('o_price_total')]"
+            position="after"
+        >
+            <tr t-if="sale_order != next_sale_order[0]">
+                <td colspan="10" class="text-end">
+                    <strong>Subtotal: </strong>
+                    <strong
+                        t-esc="subtotal"
+                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                    />
+                </td>
+                <t t-set="subtotal" t-value="0.0" />
+            </tr>
+        </xpath>
+    </template>
+</odoo>
