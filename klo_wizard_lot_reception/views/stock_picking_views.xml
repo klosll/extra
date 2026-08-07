@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Herencia de la vista form de stock.picking para agregar botón -->
+    <record id="view_picking_form_klo_lot_reception" model="ir.ui.view">
+        <field name="name">stock.picking.form.klo.lot.reception</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='do_print_picking']" position="before">
+                <button name="action_open_lot_reception_wizard"
+                        string="Capturar lotes"
+                        type="object"
+                        groups="stock.group_stock_user,purchase.group_purchase_user"
+                        attrs="{'invisible': ['|', ('picking_type_code', '!=', 'incoming'), ('state', 'not in', ('assigned', 'partially_available'))]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

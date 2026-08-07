@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Acción para abrir el wizard -->
+    <record id="action_lot_reception_wizard" model="ir.actions.act_window">
+        <field name="name">Capturar Lotes</field>
+        <field name="res_model">klo.lot.reception.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_picking_id': active_id}</field>
+    </record>
+
+    <!-- Vista form del wizard -->
+    <record id="lot_reception_wizard_view_form" model="ir.ui.view">
+        <field name="name">klo.lot.reception.wizard.view.form</field>
+        <field name="model">klo.lot.reception.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Capturar Lotes">
+                <header>
+                    <button name="action_validate"
+                            string="Validar"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancelar"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </header>
+                <group>
+                    <field name="picking_id" readonly="1"/>
+                </group>
+                <notebook>
+                    <page string="Líneas" name="lines">
+                        <field name="line_ids" nolabel="1">
+                            <tree editable="top">
+                                <field name="reader_ps"/>
+                                <field name="product_id"/>
+                                <field name="lot_id"/>
+                                <field name="container"/>
+                                <field name="qty_done"/>
+                                <field name="surplus"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+</odoo>
