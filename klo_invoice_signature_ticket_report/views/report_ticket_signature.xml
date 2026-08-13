@@ -18,6 +18,10 @@
             <t t-set="sale_orders" t-value="o.invoice_line_ids.mapped('sale_line_ids.order_id').filtered(lambda s: s.customer_signature)"/>
             <div t-if="sale_orders" class="row mt-3" id="customer_signature_section">
                 <div class="col-12 text-center">
+                    <div t-if="sale_orders[0].signed_by or sale_orders[0].signed_on" class="text-left mb-1">
+                        <div t-if="sale_orders[0].signed_by">Firmado por: <span t-field="sale_orders[0].signed_by"/></div>
+                        <div t-if="sale_orders[0].signed_on">Fecha de firma: <span t-field="sale_orders[0].signed_on"/></div>
+                    </div>
                     <strong>Firma del cliente:</strong><br/>
                     <img t-att-src="image_data_uri(sale_orders[0].customer_signature)" style="max-height: 120px;"/>
                 </div>
