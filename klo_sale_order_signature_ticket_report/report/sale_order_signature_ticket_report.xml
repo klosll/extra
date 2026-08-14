@@ -26,6 +26,10 @@
             <t t-if="o.customer_signature">
                 <div style="margin-top: 20px;">
                     <hr style="border-bottom: 1px solid black;" />
+                    <div t-if="o.signed_by or o.signed_on" class="text-left mb-1">
+                        <div t-if="o.signed_by">Firmado por: <span t-field="o.signed_by"/></div>
+                        <div t-if="o.signed_on">Fecha de firma: <span t-field="o.signed_on"/></div>
+                    </div>
                     <strong>Aceptación del cliente:</strong>
                     <img
                         t-att-src="image_data_uri(o.customer_signature)"
