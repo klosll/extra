@@ -1,4 +1,4 @@
-# Copyright 2026 KLO
+# Copyright 2026 KLO Ingeniería Informática S.L.L.
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl).
 {
     "name": "KLO - PO Supplierinfo Triple Discount Update",
@@ -16,7 +16,6 @@
         "purchase_triple_discount",
     ],
     "installable": True,
-    "application": False,
     "auto_install": False,
 }
 
