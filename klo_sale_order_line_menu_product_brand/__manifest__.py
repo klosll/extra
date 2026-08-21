@@ -5,7 +5,7 @@
 {
     "name": "KLO Sale Order Line Menu with Product Brand",
     "version": "18.0.1.0.0",
-    "author": "Open Source Integrators, Odoo Community Association (OCA)",
+    "author": "Open Source Integrators, Odoo Community Association (OCA), KLO Ingeniería Informática S.L.L.",
     "summary": "Adds a Sale Order Lines Menu and allows grouping by Product Brand",
     'description': 'Se amplia el módulo de OCA, sale_order_line_menu para que se pueda agrupar por Marca de Producto.',
     "website": "https://github.com/OCA/sale-workflow",
@@ -16,6 +16,7 @@
         "views/sale_order_line_views.xml",
     ],
     "installable": True,
+    "auto_install": False,
     "maintainer": ["KLO Ingeniería Informática S.L."],
     "development_status": "Beta",
 }
