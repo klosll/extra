@@ -13,4 +13,5 @@
     "category": "Purchases",
     "data": ["views/purchase_view.xml"],
     "installable": True,
+    "auto_install": False,
 }
