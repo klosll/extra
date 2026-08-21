@@ -22,7 +22,6 @@
         'views/sale_order_views.xml',
     ],
     'installable': True,
-    'application': False,
     'auto_install': False,
 }
 
