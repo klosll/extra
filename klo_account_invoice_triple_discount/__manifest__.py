@@ -13,4 +13,5 @@
     "depends": ["account_invoice_triple_discount"],
     "data": ["report/invoice.xml",],
     "installable": True,
+    "auto_install": False,
 }
