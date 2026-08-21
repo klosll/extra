@@ -1,3 +1,5 @@
+# Copyright 2026 KLO Ingeniería Informática S.L.L.
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 {
     'name': 'KLO - Estado Facturae en Facturas',
     'version': '18.0.1.0.0',
@@ -15,7 +17,6 @@
         'views/account_move_view.xml',
     ],
     'installable': True,
-    'application': False,
     'auto_install': False,
     'license': 'LGPL-3',
 }
