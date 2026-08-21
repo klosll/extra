@@ -1,3 +1,4 @@
+# Copyright 2026 KLO Ingeniería Informática S.L.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
@@ -6,7 +7,7 @@
     "author": "KLO Ingeniería Informática S.L.L.",
     "maintainers": ["Manuel Calomarde Gómez"],
     "category": "Accounting",
-    "website": "https://hithub.com/klosll/extra",
+    "website": "https://github.com/klosll/extra",
     "license": "AGPL-3",
     "depends": ["account",
                 'sale',
