@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Copyright 2026 KLO Ingeniería Informática S.L.L.
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 {
     'name': 'Historial de movimientos con cantidad con signo',
     'version': '18.0.2.0.0',
@@ -20,6 +22,6 @@
         'views/stock_move_line_views.xml',
     ],
     'installable': True,
-    'application': False,
+    'auto_install': False,
     'license': 'LGPL-3',
 }
