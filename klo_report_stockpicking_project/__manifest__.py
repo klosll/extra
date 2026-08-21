@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# Copyright 2026 KLO Ingeniería Informática S.L.L.
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 {
     'name': 'KLO - Proyecto en albarán de entrega',
     'summary': 'Muestra el campo Proyecto (project_id) en la cabecera del documento QWeb de entrega a cliente',
@@ -14,7 +16,6 @@
         'report/report_deliveryslip_project.xml',
     ],
     'installable': True,
-    'application': False,
     'auto_install': False,
 }
 
