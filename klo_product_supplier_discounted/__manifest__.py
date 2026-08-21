@@ -15,5 +15,6 @@
         "views/product_supplierinfo_view.xml",
     ],
     "installable": True,
+    "auto_install": False,
 }
 
