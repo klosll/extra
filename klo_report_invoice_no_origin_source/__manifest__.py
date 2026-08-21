@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-# KLO
+# Copyright 2026 KLO Ingeniería Informática S.L.L.
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': 'KLO - Invoice report no origin source on header',
-    'version': '18.0.0.1',
+    'version': '18.0.0.1.0',
     'summary': 'Invoice report without origin source on header by default',
     'description': 'No se imprime en la cabecera de la factura la lista del origen de los pedidos que se han facturado.',
     'category': 'Accounting/Accounting',
@@ -14,6 +15,6 @@
         "reports/report_invoice.xml",
     ],
     "installable": True,
-    "application" : False,
+    "auto_install" : False,
 }
 
