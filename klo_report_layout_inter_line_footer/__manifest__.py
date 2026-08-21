@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-# KLO
+# Copyright 2026 KLO Ingeniería Informática S.L.L.
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': 'KLO - Report layout footer inter line size',
-    'version': '18.0.0.1',
+    'version': '18.0.0.1.0',
     'summary': 'Report layout footer inter line size for more compact printing',
     'description': '''Se auto-crea el Parámetro de sistema: klo.report_layout_inter_line_footer con valor 1.0 por defecto
                     1.0 = sin espacio adicional entre líneas
@@ -18,6 +19,6 @@
         "views/report_assets.xml",
     ],
     "installable": True,
-    "application" : False,
+    "auto_install" : False,
 }
 
