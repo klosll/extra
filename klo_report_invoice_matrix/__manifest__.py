@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+# Copyright 2026 KLO Ingeniería Informática S.L.L.
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 # KLO
 {
     'name': 'KLO - Invoice dot matrix report',
-    'version': '18.0.0.1',
+    'version': '18.0.0.1.0',
     'summary': 'Invoice dot matrix report',
     'category': 'Accounting/Accounting',
     "license": "AGPL-3",
@@ -15,6 +17,6 @@
         "reports/report_invoice.xml",
     ],
     "installable": True,
-    "application" : False,
+    "auto_install" : False,
 }
 
