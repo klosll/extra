@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import date
+from datetime import datetime
 
 from odoo import api, fields, models
 
@@ -7,16 +7,14 @@ from odoo import api, fields, models
 def _get_last_purchase_price_by_product(env, products):
     if not products:
         return {}
-    lines = env['account.move.line'].sudo().search([
+    lines = env['purchase.order.line'].sudo().search([
         ('product_id', 'in', products.ids),
-        ('move_id.move_type', '=', 'in_invoice'),
-        ('move_id.state', '=', 'posted'),
-        ('exclude_from_invoice_tab', '=', False),
+        ('state', 'in', ['purchase', 'done']),
     ])
     # El ORM no permite ordenar por un campo de un modelo relacionado
-    # (move_id.invoice_date); se ordena en Python: última factura primero.
+    # (order_id.date_order); se ordena en Python: último pedido primero.
     lines = lines.sorted(
-        key=lambda line: (line.move_id.invoice_date or date.min, line.id),
+        key=lambda line: (line.order_id.date_order or datetime.min, line.order_id.id),
         reverse=True,
     )
     result = {}
