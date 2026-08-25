@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 KLO Ingeniería Informática S.L.L.
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="klo_purchase_history_tree_price_unit" model="ir.ui.view">
+        <field name="name">klo.purchase.history.list.price_unit</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_history_tree"/>
+        <field name="arch" type="xml">
+            <field name="price_unit" position="attributes">
+                <attribute name="options">{'field_digits': True}</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>
