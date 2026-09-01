@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="saca_line_form_view_inherit_temperature" model="ir.ui.view">
+        <field name="name">saca.line.form.view.inherit.temperature</field>
+        <field name="model">saca.line</field>
+        <field name="inherit_id" ref="custom_descarga.saca_line_form_view" />
+        <field name="arch" type="xml">
+            <field name="torista_id" position="after">
+                <field name="temperature"
+                    attrs="{'invisible': [('is_saca', '=', False)]}"
+                />
+            </field>
+        </field>
+    </record>
+</odoo>
