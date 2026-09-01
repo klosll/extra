@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="portal_saca_line_inherit_temperature" inherit_id="website_custom_saca.portal_saca_line">
+        <xpath expr="//div[t[@t-if='saca_line.vehicle_id']]" position="after">
+            <div><b>Temperature:</b>
+                <span class="info_span"><t
+                    t-if="saca_line.temperature"
+                    t-esc="saca_line.temperature"
+                    t-options='{"widget": "float", "precision": 2}'
+                /></span>
+                <input
+                    type="number"
+                    step="0.01"
+                    class="form-control saca_input"
+                    name="temperature"
+                    t-att-value="saca_line.temperature"
+                    style="display:none;"
+                />
+            </div>
+        </xpath>
+    </template>
+</odoo>
