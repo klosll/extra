@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- KLO. v18: El campo sale_partner_id fue eliminado de account.analytic.line.
+         El "Cliente de venta" de account.move.line se propaga ahora al campo partner_id
+         estandar de account.analytic.line al validar la factura de compra.
+         No se anaden vistas adicionales en este fichero. -->
+</odoo>

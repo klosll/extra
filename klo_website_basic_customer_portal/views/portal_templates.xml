@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- KLO. Desactivar entradas del portal "Mi Cuenta" que no son necesarias -->
+    <!-- Solo se muestran: Presupuestos, Pedidos de Venta y Facturas           -->
+
+    <!-- Ocultar: Solicitudes de presupuesto y Pedidos de compra (purchase) -->
+    <record id="purchase.portal_my_home_purchase" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <!-- Ocultar: Proyectos y Tareas (project) -->
+    <record id="project.portal_my_home" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <!-- Ocultar: Partes de horas (hr_timesheet) -->
+    <record id="hr_timesheet.portal_my_home_timesheet" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <!-- Ocultar: Contratos (contract OCA) -->
+    <record id="contract.portal_my_home_contract" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+</odoo>

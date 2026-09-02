@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- KLO. Wizard transitorio para corregir resource_calendar_std -->
+    <record id="view_klo_resource_calendar_fix_form" model="ir.ui.view">
+        <field name="name">klo.resource.calendar.fix.form</field>
+        <field name="model">klo.resource.calendar.fix</field>
+        <field name="arch" type="xml">
+            <form string="Corregir resource_calendar_std">
+                <group invisible="state != 'draft'">
+                    <div>
+                        <p>Esta herramienta vincula el calendario
+                           <b>"Standard 40 hours/week"</b> al XML ID
+                           <code>resource.resource_calendar_std</code> cuando
+                           falta el registro en <i>ir.model.data</i>.</p>
+                    </div>
+                </group>
+                <group invisible="state != 'done'">
+                    <field name="log_info" nolabel="1" widget="text"/>
+                </group>
+                <footer>
+                    <button
+                        name="action_fix"
+                        type="object"
+                        string="Ejecutar corrección"
+                        class="btn-primary"
+                        invisible="state != 'draft'"/>
+                    <button
+                        string="Cerrar"
+                        class="btn-secondary"
+                        special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_klo_resource_calendar_fix" model="ir.actions.act_window">
+        <field name="name">Corregir resource_calendar_std</field>
+        <field name="res_model">klo.resource.calendar.fix</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_klo_resource_calendar_fix"
+        name="Fix resource_calendar_std"
+        parent="base.menu_administration"
+        action="klo_fix_resource_calendar_std.action_klo_resource_calendar_fix"
+        sequence="900"/>
+</odoo>
