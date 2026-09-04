@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <template id="klo_invoice_report_document_no_taxes_column" inherit_id="account.report_invoice_document">
+      <xpath expr="//th[@name='th_taxes']" position="attributes">
+          <attribute name="t-if">False</attribute>
+      </xpath>
+      <xpath expr="//td[@name='td_taxes']" position="attributes">
+          <attribute name="t-if">False</attribute>
+      </xpath>
+  </template>
+
+</odoo>
