@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <template id="klo_invoice_report_document_no_origin" inherit_id="account.report_invoice_document">
+  <template id="klo_invoice_report_document_no_customer_code" inherit_id="account.report_invoice_document">
       <xpath expr="//div[@name='customer_code']" position="attributes">
           <attribute name="t-if">False</attribute>
       </xpath>
