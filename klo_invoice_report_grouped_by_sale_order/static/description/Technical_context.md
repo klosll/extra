@@ -6,7 +6,7 @@
 |------------------|--------------------------------------------|
 | Nombre técnico   | `klo_invoice_report_grouped_by_sale_order` |
 | Nombre legible   | KLO - Invoice Report Grouped by Sale Order |
-| Versión          | `18.0.1.0.0`                               |
+| Versión          | `18.0.1.0.1`                               |
 | Autor            | KLO Ingeniería Informática S.L.L.          |
 | Licencia         | AGPL-3                                     |
 | Categoría        | Accounting & Finance                       |
@@ -53,7 +53,10 @@ klo_invoice_report_grouped_by_sale_order/
 ```python
 def _sort_grouped_lines(self, lines_dic):
     """
-    Ordena las líneas agrupadas por nombre de pedido de venta.
+    Ordena las líneas agrupadas por fecha de entrega (commitment_date)
+    del pedido de venta, de más reciente a más antigua. Los pedidos sin
+    fecha de entrega se ordenan alfabéticamente por nombre al final,
+    seguidos de las notas/secciones finales.
     """
 
 def _process_section_note_lines_grouped(
@@ -127,6 +130,7 @@ def lines_grouped_by_sale_order(self):
 | Versión    | Fecha      | Descripción del cambio |
 |------------|------------|------------------------|
 | 18.0.1.0.0 | 2026-08-07 | Versión inicial |
+| 18.0.1.0.1 | 2026-09-11 | Ordena las agrupaciones por fecha de entrega (commitment_date) de más reciente a más antigua |
 
 ---
 

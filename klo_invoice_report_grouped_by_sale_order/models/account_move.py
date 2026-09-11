@@ -8,13 +8,15 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     def _sort_grouped_lines(self, lines_dic):
-        return sorted(
-            lines_dic,
-            key=lambda x: (
-                x["sale_order"].name or "",
-                x.get("is_last_section_notes", False),
-            ),
-        )
+        def _sort_key(item):
+            commitment_date = item["sale_order"].commitment_date
+            is_note = item.get("is_last_section_notes", False)
+            # Fecha de entrega de más reciente a más antigua. Sin fecha o
+            # notas/secciones finales: al final de la lista.
+            date_key = -commitment_date.toordinal() if commitment_date else 1
+            return (date_key, is_note, item["sale_order"].name or "")
+
+        return sorted(lines_dic, key=_sort_key)
 
     def _process_section_note_lines_grouped(
         self, previous_section, previous_note, lines_dic, sale_order=None
