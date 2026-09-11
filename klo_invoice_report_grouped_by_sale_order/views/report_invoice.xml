@@ -40,7 +40,7 @@
                                 <span t-translation="off">)</span>
                             </t>
                             <span t-translation="off"> - </span>
-                            <span t-field="sale_order.date_order" t-options="{'widget': 'date'}" />
+                            <span t-field="sale_order.commitment_date" t-options="{'widget': 'date'}" />
                         </strong>
                     </td>
                 </tr>
