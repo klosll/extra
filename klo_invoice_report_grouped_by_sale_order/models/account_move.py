@@ -11,10 +11,14 @@ class AccountMove(models.Model):
         def _sort_key(item):
             commitment_date = item["sale_order"].commitment_date
             is_note = item.get("is_last_section_notes", False)
-            # Fecha de entrega de más reciente a más antigua. Sin fecha o
+            # Fecha de entrega de más antigua a más reciente. Sin fecha o
             # notas/secciones finales: al final de la lista.
-            date_key = -commitment_date.toordinal() if commitment_date else 1
-            return (date_key, is_note, item["sale_order"].name or "")
+            return (
+                not commitment_date,
+                commitment_date.toordinal() if commitment_date else 0,
+                is_note,
+                item["sale_order"].name or "",
+            )
 
         return sorted(lines_dic, key=_sort_key)
 
