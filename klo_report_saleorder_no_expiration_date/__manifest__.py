@@ -6,7 +6,7 @@
     'version': '18.0.0.1.0',
     'summary': 'Sale order report without expiration date on header by default',
     'description': 'No se imprime en la cabecera del pedido de venta la fecha de vencimiento por defecto.',
-    'category': 'Accounting/Accounting',
+    'category': 'Sales/Sales',
     "license": "AGPL-3",
     'author': 'KLO Ingenieria Informatica S.L.L.',
     'website': 'https://www.klo.es',
