@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!--
+    Reemplaza únicamente el t-field date_order por commitment_date.
+    Se mantiene intacto el div padre name="informations_date" con sus <strong>
+    y condiciones para no afectar a las traducciones.
+  -->
+  <template id="klo_report_saleorder_document_date_order_by_commitment_date" inherit_id="sale.report_saleorder_document">
+      <xpath expr="//div[@name='informations_date']/div[@t-field='doc.date_order']" position="attributes">
+          <attribute name="t-field">doc.commitment_date</attribute>
+      </xpath>
+  </template>
+</odoo>
