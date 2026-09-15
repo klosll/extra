@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!--
+    Oculta el bloque "Salesperson" de la cabecera del informe de pedido de venta.
+    La vista padre (sale.report_saleorder_document) define en
+    addons/sale/report/ir_actions_report_templates.xml:
+
+        <div t-if="doc.user_id.name" class="col">
+            <strong>Salesperson</strong>
+            <div t-field="doc.user_id">Mitchell Admin</div>
+        </div>
+
+    Se desactiva la condición t-if del div para que el bloque no se renderice.
+    NOTA: el xpath apunta al elemento div (no a t), que es donde vive el t-if.
+  -->
+  <template id="klo_report_saleorder_document_no_salesperson" inherit_id="sale.report_saleorder_document">
+      <xpath expr='//div[@t-if="doc.user_id.name"]' position="attributes">
+          <attribute name="t-if">False</attribute>
+      </xpath>
+  </template>
+
+</odoo>
