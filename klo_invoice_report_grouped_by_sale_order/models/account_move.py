@@ -9,13 +9,13 @@ class AccountMove(models.Model):
 
     def _sort_grouped_lines(self, lines_dic):
         def _sort_key(item):
-            commitment_date = item["sale_order"].commitment_date
+            date_order = item["sale_order"].date_order
             is_note = item.get("is_last_section_notes", False)
-            # Fecha de entrega de más antigua a más reciente. Sin fecha o
+            # Fecha del pedido de más antigua a más reciente. Sin fecha o
             # notas/secciones finales: al final de la lista.
             return (
-                not commitment_date,
-                commitment_date.toordinal() if commitment_date else 0,
+                not date_order,
+                date_order.toordinal() if date_order else 0,
                 is_note,
                 item["sale_order"].name or "",
             )
