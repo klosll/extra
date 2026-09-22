@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="klo_sale_invoice_report_hide_product_code_saleorder" inherit_id="sale.report_saleorder_document">
+    <xpath expr="//td[@name='td_name']" position="replace">
+      <td name="td_name"><span t-out="line._get_report_line_name()" t-options="{'widget': 'text'}">Bacon Burger</span></td>
+    </xpath>
+  </template>
+</odoo>
