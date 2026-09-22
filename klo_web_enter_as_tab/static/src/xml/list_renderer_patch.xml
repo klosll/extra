@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- 1) Habilita navegación Enter→Tab también cuando el foco está en un widget.
+         El <td> tipo widget no traía t-on-keydown en el core; sin él Enter nunca llega a onCellKeydown. -->
+    <t t-inherit="web.ListRenderer.RecordRow" t-inherit-mode="extension">
+        <xpath expr="//t[@t-if=&quot;column.type === 'widget'&quot;]/td" position="attributes">
+            <attribute name="t-on-keydown">(ev) =&gt; this.onCellKeydown(ev, group, record)</attribute>
+            <attribute name="tabindex">-1</attribute>
+        </xpath>
+    </t>
+
+    <!-- 2) Requisito cliente: que Tab/Enter NO se detenga en el icono de Historial de precios,
+         sino que salte directo a la siguiente columna editable.
+         El widget original trae tabindex="0" (focalizable). Lo pasamos a -1 para que
+         getTabableElements() y el Tab nativo lo ignoren. Sigue siendo clicable con ratón. -->
+    <t t-inherit="sale_order_line_price_history.price_history_widget" t-inherit-mode="extension">
+        <xpath expr="//a[contains(@class,'fa-history')]" position="attributes">
+            <attribute name="tabindex">-1</attribute>
+        </xpath>
+    </t>
+</templates>

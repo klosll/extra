@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     "name": "KLO - Enter como Tab en listas editables",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.2",
     "summary": "Hace que la tecla Enter se comporte como Tab en las listas editables x2many",
     "license": "AGPL-3",
     "author": "KLO Ingenieria Informatica S.L.L.",
@@ -12,6 +12,7 @@
     "assets": {
         "web.assets_backend": [
             "klo_web_enter_as_tab/static/src/js/list_enter_as_tab.js",
+            "klo_web_enter_as_tab/static/src/xml/list_renderer_patch.xml",
         ],
     },
     "installable": True,

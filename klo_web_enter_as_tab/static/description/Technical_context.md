@@ -5,7 +5,7 @@
 |---|---|
 | **Nombre técnico** | `klo_web_enter_as_tab` |
 | **Nombre legible** | KLO - Enter como Tab en listas editables |
-| **Versión** | 18.0.1.0.0 |
+| **Versión** | 18.0.1.0.2 |
 | **Autor** | KLO Ingeniería Informática S.L.L. |
 | **Licencia** | AGPL-3 |
 | **Website** | https://www.klo.es |
@@ -114,16 +114,38 @@ patch(ListRenderer.prototype, {
 
 ---
 
-## Vistas modificadas
+## Vistas / Templates QWeb modificados
 
-Ninguna vista XML/QWeb se hereda. El cambio es 100% JS (assets). Afecta visualmente a **todas** las vistas lista donde `ListRenderer` esté en modo editable:
+### 1) `web.ListRenderer.RecordRow` — habilita navegación en columnas `widget`
 
-* Pedidos de venta: `sale.order` → `order_line` (`editable="bottom"`)
-* Pedidos de compra: `purchase.order` → `order_line`
-* Facturas: `account.move` → `invoice_line_ids`
-* Albaranes, presupuestos, partes, y cualquier `One2many` con `editable` en su definición de vista.
+**Archivo:** `static/src/xml/list_renderer_patch.xml`  
+**Template heredado:** `web.ListRenderer.RecordRow` (`addons/web/static/src/views/list/list_renderer.xml` :279)  
+**Motivo:** El `<td>` de tipo `widget` **no tenía** `t-on-keydown` en el core. Sin él Enter remapeado no llegaba a `onCellKeydown`.
 
-No hay `column_invisible` ni `attrs` involucrados (Odoo 18 ya usa atributos individuales `invisible`, `readonly`, etc.).
+```xml
+<t t-inherit="web.ListRenderer.RecordRow" t-inherit-mode="extension">
+    <xpath expr="//t[@t-if=&quot;column.type === 'widget'&quot;]/td" position="attributes">
+        <attribute name="t-on-keydown">(ev) =&gt; this.onCellKeydown(ev, group, record)</attribute>
+        <attribute name="tabindex">-1</attribute>
+    </xpath>
+</t>
+```
+
+### 2) `sale_order_line_price_history.price_history_widget` — salto del icono Historial
+
+**Archivo:** mismo `list_renderer_patch.xml` (segundo `t-inherit`)  
+**Template heredado:** `sale_order_line_price_history.price_history_widget` (`extra-addons/oca/sale-workflow/.../sale_line_price_history_widget.xml`)  
+**Motivo / Requisito cliente:** Que **Tab/Enter no se detenga en el icono** `fa-history` (reloj con flecha), sino que salte directo a la siguiente columna editable. El widget original trae `tabindex="0"` (focalizable); se pasa a `-1` para que `getTabableElements()` (`core/utils/ui.js:121 TABABLE_SELECTOR :not([tabindex="-1"])`) y el Tab nativo lo ignoren. Sigue siendo clicable con ratón. `findNextFocusableOnRow`/`findPreviousFocusableOnRow` ya descartan celdas sin elemento tabbeable (`getElementToFocus(c) === c`), por lo que el salto es automático en ambas direcciones.
+
+```xml
+<t t-inherit="sale_order_line_price_history.price_history_widget" t-inherit-mode="extension">
+    <xpath expr="//a[contains(@class,'fa-history')]" position="attributes">
+        <attribute name="tabindex">-1</attribute>
+    </xpath>
+</t>
+```
+
+Afecta a `sale.order` → `order_line` y a cualquier widget futuro que se quiera hacer “skippeable”. No hay `column_invisible` ni `attrs` involucrados.
 
 ---
 
@@ -138,8 +160,10 @@ klo_web_enter_as_tab/
 │   │   ├── icon.png
 │   │   └── Technical_context.md   ← Este fichero
 │   └── src/
-│       └── js/
-│           └── list_enter_as_tab.js  ← Patch ListRenderer.onCellKeydown
+│       ├── js/
+│       │   └── list_enter_as_tab.js  ← Patch ListRenderer.onCellKeydown (Enter→Tab)
+│       └── xml/
+│           └── list_renderer_patch.xml ← Herencia QWeb para td widget (history icon)
 ```
 
 Manifest `assets`:
@@ -147,6 +171,7 @@ Manifest `assets`:
 "assets": {
     "web.assets_backend": [
         "klo_web_enter_as_tab/static/src/js/list_enter_as_tab.js",
+        "klo_web_enter_as_tab/static/src/xml/list_renderer_patch.xml",
     ],
 },
 ```
@@ -182,9 +207,10 @@ Logs: `tail -f /opt/odoo18_desarrollo/log/odoo.log`
 | Situación | Antes del módulo | Después del módulo |
 |---|---|---|
 | Edición x2many, foco en columna intermedia, pulsa **Enter** | Valida línea y crea/salta a siguiente línea | **Avanza a siguiente columna editable** (como Tab) |
+| Historial precios (`fa-history`) al tabular con **Tab/Enter** | Se detenía en el icono y requería otro Tab; Enter abría wizard | **Se salta** — Tab/Enter van directo a siguiente columna editable. Historial solo por click. |
 | Última columna editable, pulsa **Enter** (fila intermedia) | Salta a primera columna de siguiente línea | Igual que Tab: salta a siguiente línea (comportamiento Tab nativo) |
 | Última columna de última fila, pulsa **Enter** con línea sucia | Crea nueva línea | Crea nueva línea (Tab también lo hace vía `applyCellKeydownEditModeGroup`) |
-| **Shift+Enter** en edición | Valida/salta atrás (o crea) | **Retrocede a columna anterior** (como Shift+Tab) |
+| **Shift+Enter** / **Shift+Tab** en edición | Valida/salta atrás | **Retrocede saltando el historial** igual que Shift+Tab |
 | `TEXTAREA` con Enter | Salto de línea | **Salto de línea** (sin cambios) |
 | Lista en solo-lectura, Enter sobre fila | Abre formulario del registro | **Abre formulario** (sin cambios) |
 
@@ -202,7 +228,8 @@ Logs: `tail -f /opt/odoo18_desarrollo/log/odoo.log`
 
 ## Notas para IA / desarrollador
 
-* **Fichero clave:** `static/src/js/list_enter_as_tab.js` — único punto de lógica. No hay Python ni vistas.
+* **Fichero clave JS:** `static/src/js/list_enter_as_tab.js` — patch `onCellKeydown`. **Fichero clave XML:** `static/src/xml/list_renderer_patch.xml` — 2 inherits: habilita `t-on-keydown` en `td widget` y pone `tabindex="-1"` al `fa-history`.
+* **Skip historial:** `sale_order_line_price_history/static/src/xml/sale_line_price_history_widget.xml` traía `tabindex="0"`; se parchea a `-1` para que `getTabableElements` (`TABABLE_SELECTOR :not([tabindex="-1"])`) y `findNextFocusableOnRow` lo salten. Antes de 18.0.1.0.1 sí se detenía; desde 18.0.1.0.2 se salta.
 * **Método clave:** `ListRenderer.onCellKeydown` en `/opt/odoo18_desarrollo/odoo/addons/web/static/src/views/list/list_renderer.js:1150`
 * **Servicio hotkey:** `/opt/odoo18_desarrollo/odoo/addons/web/static/src/core/hotkeys/hotkey_service.js:58` — `getActiveHotkey(ev)` lowercased, por eso se compara con `"enter"`/`"shift+enter"`.
 * **Asset bundle:** `web.assets_backend` — todo JS de backend se carga ahí; no usar `web.assets_frontend`.
@@ -217,6 +244,8 @@ Logs: `tail -f /opt/odoo18_desarrollo/log/odoo.log`
 | Versión | Fecha | Descripción del cambio |
 |---|---|---|
 | 18.0.1.0.0 | 2026-09-22 | Versión inicial: Enter como Tab en listas editables |
+| 18.0.1.0.1 | 2026-09-22 | Fix widget Historial (`fa-history`): añade `t-on-keydown` a `td` tipo widget para que Enter→Tab avance igual que Tab |
+| 18.0.1.0.2 | 2026-09-22 | Historial no focalizable: `tabindex="-1"` al `fa-history` para que Tab/Enter lo salten y vayan directo a siguiente columna |
 
 ---
 
