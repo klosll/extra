@@ -12,4 +12,23 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Form View: Analytic page - add analytic_account_id, hide account_id (native) -->
+    <record id="klo_xf_view_project_form_analytic" model="ir.ui.view">
+        <field name="name">klo.xf.project.form.analytic</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project" />
+        <field name="arch" type="xml">
+            <!-- KLO. En la página Analytic, añadimos analytic_account_id junto a account_id -->
+            <xpath expr="//page[@name='analytic']//field[@name='account_id']" position="after">
+                <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+            </xpath>
+            <!-- KLO. account_id (campo nativo) se deja invisible/deprecado: NO se borra físicamente
+                 porque rompería core (project_ids One2many en analytic.account, _check_account_id,
+                 company sync, rename propagate, analytic_account_balance related). -->
+            <xpath expr="//page[@name='analytic']//field[@name='account_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>
