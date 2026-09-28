@@ -21,17 +21,6 @@ class Project(models.Model):
         groups='analytic.group_analytic_accounting',
     )
 
-    # KLO. Campo temporal "Legacy" sin función, re-creado únicamente para evitar el
-    # error "x_plan4_id field is undefined" provocado por referencias residuales
-    # en la caché del navegador. NO se añade a ninguna vista. Se eliminará manualmente
-    # una vez verificado que el cliente ya no lo referencia.
-    x_plan4_id = fields.Many2one(
-        comodel_name='account.analytic.account',
-        string='Legacy',
-        copy=False,
-        ondelete='set null',
-    )
-
     # KLO. Redefinimos el campo invoice_ids del padre para que incluya las facturas que son de varios pedidos,
     # ya que la definición del padre (módulo xf_sale_project) solo acumula uno de los pedidos y el resto salen
     # sin factura asociada.

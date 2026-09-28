@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'KLO Sale Projects line price and discount inherit from xf_sale_project',
-    'version': '18.0.1.1.3',
+    'version': '18.0.1.1.4',
     'summary': """
     Project related sale quotations, sale orders and invoices,
     Project Sale Orders,
