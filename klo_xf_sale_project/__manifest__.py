@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'KLO Sale Projects line price and discount inherit from xf_sale_project',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.2.0',
     'summary': """
     Project related sale quotations, sale orders and invoices,
     Project Sale Orders,
@@ -30,7 +30,8 @@
         'security/ir.model.access.csv',
         'views/project.xml',
     ],
-    'depends': ['xf_sale_project'],
+    'images': ['static/description/icon.png'],
+    'depends': ['account', 'project', 'xf_sale_project'],
     'qweb': [],
     'installable': True,
     'auto_install': False,

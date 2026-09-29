@@ -1,4 +1,15 @@
 <odoo>
+    <record id="klo_xf_project_analytic_account_required" model="ir.ui.view">
+        <field name="name">klo.xf.project.analytic.account.required</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <field name="account_id" position="attributes">
+                <attribute name="required">1</attribute>
+            </field>
+        </field>
+    </record>
+
     <!-- List View-->
     <record id="klo_xf_view_project" model="ir.ui.view">
         <field name="name">klo.xf.project.status.tree</field>

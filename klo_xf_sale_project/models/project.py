@@ -1,9 +1,36 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import _, models, fields, api
+from odoo.exceptions import UserError, ValidationError
 
 class Project(models.Model):
     _inherit = 'project.project'
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        default_account_id = self.default_get(['account_id']).get('account_id')
+        if any(not vals.get('account_id', default_account_id) for vals in vals_list):
+            raise ValidationError(_(
+                "Debes seleccionar una cuenta analítica existente antes de crear el proyecto."
+            ))
+        return super().create(vals_list)
+
+    def write(self, vals):
+        if 'account_id' in vals and not vals['account_id']:
+            raise ValidationError(_(
+                "No puedes quitar la cuenta analítica de un proyecto."
+            ))
+        return super().write(vals)
+
+    def _create_analytic_account(self):
+        raise UserError(_(
+            "La cuenta analítica debe crearse manualmente y seleccionarse en el proyecto."
+        ))
+
+    @api.model
+    def _init_data_analytic_account(self):
+        # No crear cuentas analíticas automáticamente al inicializar partes de horas.
+        return True
 
     # KLO. Redefinimos el campo invoice_ids del padre para que incluya las facturas que son de varios pedidos,
     # ya que la definición del padre (módulo xf_sale_project) solo acumula uno de los pedidos y el resto salen
