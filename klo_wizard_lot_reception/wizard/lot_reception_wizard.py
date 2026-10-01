@@ -50,7 +50,8 @@ class LotReceptionWizard(models.TransientModel):
             )
             if move:
                 move = move[0]
-                self._create_stock_move_line(move, line, picking)
+                lot = line._resolve_lot()
+                self._create_stock_move_line(move, line, picking, lot)
             else:
                 self._create_purchase_order(
                     line, partner, picking
@@ -58,11 +59,11 @@ class LotReceptionWizard(models.TransientModel):
 
         return {'type': 'ir.actions.act_window_close'}
 
-    def _create_stock_move_line(self, move, line, picking):
+    def _create_stock_move_line(self, move, line, picking, lot=False):
         move_line_vals = {
             'move_id': move.id,
             'product_id': line.product_id.id,
-            'lot_id': line.lot_id.id if line.lot_id else False,
+            'lot_id': lot.id if lot else (line.lot_id.id if line.lot_id else False),
             'container': line.container,
             'qty_done': line.qty_done,
             'picking_id': picking.id,

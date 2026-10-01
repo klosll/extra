@@ -14,6 +14,7 @@ Permite crear líneas temporales con lotes y excedentes.
         'stock',
         'purchase',
         'sale_order_line_containers',
+        'purchase_sale_reader',
     ],
     'data': [
         'security/ir.model.access.csv',
