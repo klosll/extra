@@ -8,7 +8,7 @@
                 <group>
                     <field name="reader_ps"/>
                     <field name="product_id"/>
-                    <field name="lot_id"/>
+                    <field name="lot_name"/>
                     <field name="container"/>
                     <field name="qty_done"/>
                     <field name="surplus"/>

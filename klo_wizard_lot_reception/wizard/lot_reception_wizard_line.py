@@ -21,12 +21,7 @@ class LotReceptionWizardLine(models.TransientModel):
         string='Producto',
         required=True,
     )
-    lot_id = fields.Many2one(
-        'stock.production.lot',
-        string='Lote/Serie',
-        domain="[('product_id', '=', product_id)]",
-    )
-    lot_name = fields.Char(string='Lote pendiente', copy=False)
+    lot_name = fields.Char(string='Lote/Serie')
     container = fields.Integer(
         string='Container',
     )
@@ -95,24 +90,7 @@ class LotReceptionWizardLine(models.TransientModel):
                         lot_line, self.reader_ps
                     )
                     lot_name = (lot_name or "").strip() if isinstance(lot_name, str) else lot_name
-                    if lot_name:
-                        lot = self.env["stock.production.lot"].search(
-                            [
-                                ("product_id", "=", product.id),
-                                ("name", "=", lot_name),
-                                ("company_id", "=", company_id),
-                            ],
-                            limit=1,
-                        )
-                        if lot:
-                            temp_fields["lot_id"] = lot.id
-                            temp_fields["lot_name"] = False
-                        else:
-                            temp_fields["lot_id"] = False
-                            temp_fields["lot_name"] = lot_name
-                    else:
-                        temp_fields["lot_id"] = False
-                        temp_fields["lot_name"] = False
+                    temp_fields["lot_name"] = lot_name or False
             except Exception:
                 success = False
             for line in barcode_format.line_ids:
@@ -145,33 +123,3 @@ class LotReceptionWizardLine(models.TransientModel):
             else:
                 for f in temp_fields.keys():
                     self[f] = False
-
-    def _resolve_lot(self):
-        self.ensure_one()
-        if self.lot_id:
-            return self.lot_id
-        lot_name = (self.lot_name or "").strip()
-        if not lot_name:
-            return False
-        picking = self.wizard_id.picking_id
-        if picking and picking.company_id:
-            company_id = picking.company_id.id
-        else:
-            company_id = self.env.company.id
-        lot = self.env["stock.production.lot"].search(
-            [
-                ("product_id", "=", self.product_id.id),
-                ("name", "=", lot_name),
-                ("company_id", "=", company_id),
-            ],
-            limit=1,
-        )
-        if not lot:
-            lot = self.env["stock.production.lot"].create(
-                {
-                    "name": lot_name,
-                    "product_id": self.product_id.id,
-                    "company_id": company_id,
-                }
-            )
-        return lot

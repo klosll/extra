@@ -50,8 +50,7 @@ class LotReceptionWizard(models.TransientModel):
             )
             if move:
                 move = move[0]
-                lot = line._resolve_lot()
-                self._create_stock_move_line(move, line, picking, lot)
+                self._create_stock_move_line(move, line, picking)
             else:
                 self._create_purchase_order(
                     line, partner, picking
@@ -59,19 +58,20 @@ class LotReceptionWizard(models.TransientModel):
 
         return {'type': 'ir.actions.act_window_close'}
 
-    def _create_stock_move_line(self, move, line, picking, lot=False):
+    def _create_stock_move_line(self, move, line, picking):
         move_line_vals = {
             'move_id': move.id,
             'product_id': line.product_id.id,
-            'lot_id': lot.id if lot else (line.lot_id.id if line.lot_id else False),
+            'lot_name': line.lot_name or False,
             'container': line.container,
             'qty_done': line.qty_done,
+            'reader_ps': line.reader_ps or False,
             'picking_id': picking.id,
             'location_id': move.location_id.id,
             'location_dest_id': move.location_dest_id.id,
             'product_uom_id': move.product_uom.id,
         }
-        self.env['stock.move.line'].create(move_line_vals)
+        return self.env['stock.move.line'].create(move_line_vals)
 
     def _create_purchase_order(self, lines, partner, picking):
         if isinstance(lines, models.Model):
@@ -119,8 +119,19 @@ class LotReceptionWizard(models.TransientModel):
                 'product_uom': product.uom_po_id.id,
                 'price_unit': price_unit,
                 'date_planned': fields.Datetime.now(),
+                'surplus': line.surplus,
             }
             self.env['purchase.order.line'].create(po_line_vals)
 
         po.button_confirm()
+        new_pickings = po.picking_ids.filtered(lambda p: p.state not in ('done', 'cancel'))
+        if new_pickings:
+            new_picking = new_pickings[0]
+            created_lines = self.env['stock.move.line']
+            for line in lines:
+                move = new_picking.move_lines.filtered(lambda m: m.product_id == line.product_id)
+                if move:
+                    created_lines |= self._create_stock_move_line(move[0], line, new_picking)
+            if created_lines:
+                (new_picking.move_line_ids - created_lines).unlink()
         return po
