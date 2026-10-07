@@ -18,6 +18,7 @@ Permite crear líneas temporales con lotes y excedentes.
     ],
     'data': [
         'security/ir.model.access.csv',
+        'views/assets.xml',
         'wizard/lot_reception_wizard_line_views.xml',
         'wizard/lot_reception_wizard_views.xml',
         'views/stock_picking_views.xml',

@@ -44,6 +44,7 @@ class LotReceptionWizard(models.TransientModel):
         if surplus_lines:
             self._create_purchase_order(surplus_lines, partner, picking)
 
+        new_po_lines = self.env['klo.lot.reception.wizard.line']
         for line in normal_lines:
             move = picking.move_lines.filtered(
                 lambda m: m.product_id == line.product_id
@@ -52,9 +53,10 @@ class LotReceptionWizard(models.TransientModel):
                 move = move[0]
                 self._create_stock_move_line(move, line, picking)
             else:
-                self._create_purchase_order(
-                    line, partner, picking
-                )
+                new_po_lines |= line
+
+        if new_po_lines:
+            self._create_purchase_order(new_po_lines, partner, picking)
 
         return {'type': 'ir.actions.act_window_close'}
 

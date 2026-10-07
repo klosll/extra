@@ -15,23 +15,14 @@
         <field name="model">klo.lot.reception.wizard</field>
         <field name="arch" type="xml">
             <form string="Capturar Lotes">
-                <header>
-                    <button name="action_validate"
-                            string="Validar"
-                            type="object"
-                            class="btn-primary"/>
-                    <button string="Cancelar"
-                            class="btn-secondary"
-                            special="cancel"/>
-                </header>
                 <group>
                     <field name="picking_id" readonly="1"/>
                 </group>
                 <notebook>
                     <page string="Líneas" name="lines">
                         <field name="line_ids" nolabel="1">
-                            <tree editable="top">
-                                <field name="reader_ps"/>
+                            <tree editable="bottom">
+                                <field name="reader_ps" widget="reader_ps_autonext"/>
                                 <field name="product_id"/>
                                 <field name="lot_name"/>
                                 <field name="container"/>
@@ -41,6 +32,15 @@
                         </field>
                     </page>
                 </notebook>
+                <footer>
+                    <button name="action_validate"
+                            string="Validar"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancelar"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
             </form>
         </field>
     </record>
