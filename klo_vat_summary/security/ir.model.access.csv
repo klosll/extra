@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_klo_vat_summary_user,klo.vat.summary user,model_klo_vat_summary,account.group_account_user,1,1,1,1
+access_klo_vat_summary_line_user,klo.vat.summary.line user,model_klo_vat_summary_line,account.group_account_user,1,1,1,1
