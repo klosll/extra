@@ -91,10 +91,19 @@ class KloVatSummaryXlsx(models.AbstractModel):
         fmt_title, fmt_header, _fmt_text, _fmt_num, fmt_num_total, fmt_total_label = (
             formats
         )
+        fmt_bold = workbook.add_format({"bold": True})
+        fmt_date = workbook.add_format({"num_format": "dd/mm/yyyy"})
         sheet.set_column("A:A", 45)
         sheet.set_column("B:D", 16)
 
-        row = 0
+        # Cabecera: Compañía, Desde y Hasta (2 filas + 1 fila en blanco)
+        sheet.write(0, 0, "Compañía", fmt_bold)
+        sheet.write(0, 1, summary.company_id.name, fmt_bold)
+        sheet.write(1, 0, "Desde", fmt_bold)
+        sheet.write_datetime(1, 1, summary.date_from, fmt_date)
+        sheet.write(1, 2, "Hasta", fmt_bold)
+        sheet.write_datetime(1, 3, summary.date_to, fmt_date)
+        row = 3
         total_rows = {}
         for section, title, total_label in BLOCKS:
             lines = summary.line_ids.filtered(
