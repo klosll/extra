@@ -75,7 +75,7 @@
     <menuitem
         id="menu_klo_vat_summary"
         name="Resumen IVA devengado y deducido"
-        parent="account.menu_finance_reports"
+        parent="l10n_es_aeat.menu_root_aeat"
         action="action_klo_vat_summary"
         sequence="25"
     />

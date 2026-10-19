@@ -6,7 +6,7 @@
     "category": "Accounting/Accounting",
     "author": "KLO",
     "license": "AGPL-3",
-    "depends": ["account", "l10n_es", "report_xlsx"],
+    "depends": ["account", "l10n_es", "l10n_es_aeat", "report_xlsx"],
     "data": [
         "security/ir.model.access.csv",
         "views/vat_summary_views.xml",
