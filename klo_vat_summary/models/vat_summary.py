@@ -5,6 +5,7 @@ import re
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
+from odoo.tools.misc import format_date
 
 SECTION_SELECTION = [
     ("emitidas", "Emitidas (IVA devengado)"),
@@ -103,6 +104,18 @@ class KloVatSummary(models.TransientModel):
     @api.model
     def _default_date_to(self):
         return self._default_date_from() + relativedelta(months=3, days=-1)
+
+    @api.depends("date_from", "date_to")
+    def _compute_display_name(self):
+        for wizard in self:
+            if wizard.date_from and wizard.date_to:
+                wizard.display_name = "%s (%s - %s)" % (
+                    self.env._("Resumen de IVA"),
+                    format_date(self.env, wizard.date_from),
+                    format_date(self.env, wizard.date_to),
+                )
+            else:
+                wizard.display_name = self.env._("Resumen de IVA")
 
     @api.depends("line_ids.base", "line_ids.cuota")
     def _compute_totals(self):
