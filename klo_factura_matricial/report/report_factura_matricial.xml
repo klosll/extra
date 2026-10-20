@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    KLO. Plantilla QWeb "Factura Matricial" para impresora matricial en papel
+    continuo (279 mm alto x 210 mm ancho, portrait, margenes 0, Courier New 11px).
+
+    HEREDA de account.report_invoice_document (primary="True"):
+      - No modifica el original: account.report_invoice_document queda intacto.
+      - Reutiliza el contexto de datos y la lógica condicional de la factura
+        (o = account.move, lang, docs).
+      - Se sustituye por completo el t-call a web.external_layout por un layout
+        propio de posiciones fijas (mm) pensado para formulario preimpreso.
+
+    Paginación: máximo 15 líneas de detalle por hoja (cuerpo desde 105 mm con
+    interlineado de 6 mm). La cabecera se repite en TODAS las hojas; los
+    totales del pie solo se imprimen en la ÚLTIMA hoja.
+-->
+<odoo>
+    <data>
+
+        <!-- KLO. Formato de papel continuo 210x279 mm, márgenes 0 y sin
+             cabecera de compañía (header_line False): las posiciones absolutas
+             del formulario preimpreso deben respetarse sin desplazamientos. -->
+        <record id="paperformat_factura_matricial" model="report.paperformat">
+            <field name="name">Papel continuo 279x210 mm - Factura Matricial</field>
+            <field name="format">custom</field>
+            <field name="page_height">279</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">80</field>
+        </record>
+
+        <!-- KLO. Template heredado (primary) de account.report_invoice_document.
+             primary="True" establece mode='primary' en ir.ui.view: al renderizar
+             este template Odoo combina el documento base + este diff, sin
+             afectar al reporte estándar de facturas. -->
+        <template id="report_factura_matricial_document"
+                  inherit_id="account.report_invoice_document"
+                  primary="True">
+
+            <!-- KLO. Se sustituye TODO el layout del base (t-call a
+                 web.external_layout) por el layout de posiciones fijas. Dentro
+                 del reemplazo se re-añaden los t-set que estaban dentro del
+                 t-call sustituido (o con lang y forced_vat). -->
+            <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+
+                <!-- KLO. Contexto del layout sustituido (web.external_layout):
+                     o en el idioma del cliente y forced_vat del pie. -->
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <t t-set="forced_vat" t-value="o.fiscal_position_id.foreign_vat"/>
+
+                <!-- KLO. Líneas con la MISMA ordenación que la plantilla base. -->
+                <t t-set="lines"
+                   t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"/>
+                <!-- KLO. Paginación: trocea las líneas en hojas de 15 líneas
+                     (or [[]] garantiza al menos una hoja con cabecera y pie). -->
+                <t t-set="max_lines" t-value="15"/>
+                <t t-set="line_pages"
+                   t-value="[lines[i:i+max_lines] for i in range(0, len(lines), max_lines)] or [[]]"/>
+
+                <t t-foreach="line_pages" t-as="page_lines">
+                    <!-- KLO. Hoja física: 210x279 mm con posiciones relativas y
+                         Courier New 11px. page-break-after:auto en la última
+                         hoja para evitar una hoja en blanco final. -->
+                    <div class="page"
+                         t-att-style="'width:210mm;height:279mm;position:relative;overflow:hidden;font-family:\'Courier New\',monospace;font-size:11px;page-break-after:%s;' % ('auto' if page_lines_last else 'always')">
+
+                        <!-- KLO. Cabecera (se repite en TODAS las hojas):
+                             posiciones fijas top/left en mm. -->
+                        <div style="position:absolute;top:63mm;left:20mm;width:52mm;">
+                            <t t-esc="o.name"/>
+                        </div>
+                        <div style="position:absolute;top:63mm;left:75mm;width:35mm;">
+                            <t t-esc="o.partner_id.ref"/>
+                        </div>
+                        <div style="position:absolute;top:50mm;left:115mm;width:90mm;">
+                            <address class="mb-0" t-field="o.partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                        </div>
+                        <div style="position:absolute;top:80mm;left:20mm;width:52mm;"
+                             t-field="o.invoice_date"/>
+                        <div style="position:absolute;top:80mm;left:75mm;width:35mm;">
+                            <t t-esc="o.partner_id.vat"/>
+                        </div>
+
+                        <!-- KLO. Cuerpo: desde 105 mm con interlineado de 6 mm
+                             (top = 105 + line_index * 6), máximo 15 líneas por
+                             hoja. Las columnas numéricas solo se imprimen en
+                             líneas de producto; secciones/notas solo name. -->
+                        <t t-foreach="page_lines" t-as="line">
+                            <t t-set="line_y" t-value="105 + line_index * 6"/>
+                            <div t-att-style="'position:absolute;top:%smm;left:20mm;width:100mm;white-space:nowrap;overflow:hidden;' % line_y"
+                                 t-field="line.name" t-options='{"widget": "text"}'/>
+                            <t t-if="line.display_type == 'product'">
+                                <div t-att-style="'position:absolute;top:%smm;left:123mm;width:16mm;text-align:right;' % line_y"
+                                     t-field="line.quantity"/>
+                                <div t-att-style="'position:absolute;top:%smm;left:140mm;width:16mm;text-align:right;' % line_y"
+                                     t-field="line.price_unit"/>
+                                <div t-att-style="'position:absolute;top:%smm;left:158mm;width:16mm;white-space:nowrap;overflow:hidden;' % line_y">
+                                    <t t-esc="', '.join([(tax.invoice_label or tax.name) for tax in line.tax_ids])"/>
+                                </div>
+                                <div t-att-style="'position:absolute;top:%smm;left:175mm;width:30mm;text-align:right;' % line_y"
+                                     t-field="line.price_subtotal"/>
+                            </t>
+                        </t>
+
+                        <!-- KLO. Pie/totales: solo en la ÚLTIMA hoja. La
+                             etiqueta de impuestos se toma de o.tax_totals
+                             (v18: subtotal['tax_groups'][]['group_name']). -->
+                        <t t-if="page_lines_last">
+                            <div style="position:absolute;top:242mm;left:25mm;width:66mm;"
+                                 t-field="o.amount_untaxed"/>
+                            <div style="position:absolute;top:242mm;left:93mm;width:16mm;">
+                                <t t-esc="', '.join([tax_group['group_name'] for subtotal in o.tax_totals['subtotals'] for tax_group in subtotal['tax_groups']])"/>
+                            </div>
+                            <div style="position:absolute;top:242mm;left:110mm;width:58mm;"
+                                 t-field="o.amount_tax"/>
+                            <div style="position:absolute;top:242mm;left:170mm;width:35mm;"
+                                 t-field="o.amount_total"/>
+                            <div style="position:absolute;top:265mm;left:20mm;width:90mm;"
+                                 t-field="o.invoice_payment_term_id"/>
+                        </t>
+                    </div>
+                </t>
+            </xpath>
+        </template>
+
+        <!-- KLO. Raíz del reporte (espejo del report_invoice estándar): itera
+             los documentos y llama al template heredado en el idioma del
+             cliente (t-lang). -->
+        <template id="report_factura_matricial">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                    <t t-call="klo_factura_matricial.report_factura_matricial_document" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
