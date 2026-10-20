@@ -5,7 +5,7 @@
     "category": "Inventory",
     "author": "KLO",
     "license": "AGPL-3",
-    "depends": ["stock"],
+    "depends": ["stock", "custom_mrp_descarga"],
     "data": [
         "data/ir_actions_server.xml",
     ],
