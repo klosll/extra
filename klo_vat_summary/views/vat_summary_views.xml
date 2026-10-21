@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_klo_vat_summary_form" model="ir.ui.view">
+        <field name="name">klo.vat.summary.form</field>
+        <field name="model">klo.vat.summary</field>
+        <field name="arch" type="xml">
+            <form string="Resumen IVA devengado y deducido">
+                <header>
+                    <button
+                        name="action_calculate"
+                        string="Calcular"
+                        type="object"
+                        class="btn-primary"
+                        icon="fa-calculator"
+                    />
+                    <button
+                        name="action_export_xlsx"
+                        string="Exportar XLSX"
+                        type="object"
+                        class="btn-secondary"
+                        icon="fa-file-excel-o"
+                    />
+                </header>
+                <group>
+                    <group>
+                        <field
+                            name="company_id"
+                            groups="base.group_multi_company"
+                        />
+                        <field name="date_from" />
+                        <field name="date_to" />
+                        <field name="currency_id" invisible="1" />
+                    </group>
+                    <group string="Totales">
+                        <group string="IVA devengado (casilla 27)">
+                            <field name="emitida_base" />
+                            <field name="emitida_cuota" />
+                        </group>
+                        <group string="IVA deducido (casilla 45)">
+                            <field name="recibida_base" />
+                            <field name="recibida_cuota" />
+                        </group>
+                        <group string="No computa en el IVA">
+                            <field name="irpf_cuota" />
+                            <field name="nod_cuota" />
+                        </group>
+                        <group>
+                            <field name="resultado" />
+                        </group>
+                    </group>
+                </group>
+                <field name="line_ids" nolabel="1">
+                    <list create="false" delete="false" edit="false">
+                        <field name="sequence" invisible="1" />
+                        <field name="section" />
+                        <field name="name" />
+                        <field name="tax_id" optional="hide" />
+                        <field name="base" />
+                        <field name="cuota" />
+                        <field name="total" />
+                        <field name="currency_id" invisible="1" />
+                    </list>
+                </field>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_klo_vat_summary" model="ir.actions.act_window">
+        <field name="name">Resumen IVA devengado y deducido</field>
+        <field name="res_model">klo.vat.summary</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem
+        id="menu_klo_vat_summary"
+        name="Resumen IVA devengado y deducido"
+        parent="account.menu_finance_reports"
+        action="action_klo_vat_summary"
+        sequence="25"
+    />
+</odoo>
