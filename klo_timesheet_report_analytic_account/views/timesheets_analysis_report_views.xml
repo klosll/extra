@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- KLO: desglose por cuenta analítica en el informe de partes de horas.
+         1) Pivot "Por empleado": la cuenta analítica queda como segundo nivel de fila,
+            de forma que cada empleado se puede desplegar por cuenta analítica (como en v15).
+         2) Vista de búsqueda: campo de filtro y agrupación "Cuenta analítica".
+         3) Lista: columna de cuenta analítica para el detalle. -->
+
+    <record id="timesheets_analysis_report_pivot_employee_analytic_account" model="ir.ui.view">
+        <field name="name">timesheets.analysis.report.pivot.employee.analytic.account</field>
+        <field name="model">timesheets.analysis.report</field>
+        <field name="inherit_id" ref="hr_timesheet.timesheets_analysis_report_pivot_employee"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <field name="account_id" type="row"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="timesheets_analysis_report_search_analytic_account" model="ir.ui.view">
+        <field name="name">timesheets.analysis.report.search.analytic.account</field>
+        <field name="model">timesheets.analysis.report</field>
+        <field name="inherit_id" ref="hr_timesheet.hr_timesheet_report_search"/>
+        <field name="arch" type="xml">
+            <field name="project_id" position="after">
+                <field name="account_id"/>
+            </field>
+            <xpath expr="//group[@name='groupby']" position="inside">
+                <filter string="Cuenta analítica" name="groupby_account" domain="[]" context="{'group_by': 'account_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="timesheets_analysis_report_list_analytic_account" model="ir.ui.view">
+        <field name="name">timesheets.analysis.report.list.analytic.account</field>
+        <field name="model">timesheets.analysis.report</field>
+        <field name="inherit_id" ref="hr_timesheet.timesheets_analysis_report_list"/>
+        <field name="arch" type="xml">
+            <field name="project_id" position="after">
+                <field name="account_id" optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>
