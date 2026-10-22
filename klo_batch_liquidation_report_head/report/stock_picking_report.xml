@@ -60,6 +60,8 @@
                     <strong>Mantener la mercancía entre 0-4 grados.</strong>
                     <br/>
                     <strong>**Producto Certificado Welfair**</strong>
+                    <br/>
+                    <strong>Código WIN: 8447405010418</strong>
                 </div>
                 <div class="col-auto">
                     <span t-field="o.name"/>- Página:
