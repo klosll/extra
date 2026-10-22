@@ -5,7 +5,7 @@
 | Campo | Valor |
 |---|---|
 | **Nombre técnico** | `klo_report_stockpicking_small_font_body` |
-| **Versión** | 18.0.0.1.0 |
+| **Versión** | 18.0.0.1.1 |
 | **Autor** | KLO Ingeniería Informática S.L.L. |
 | **Licencia** | AGPL-3 |
 | **Categoría** | Accounting/Accounting |
@@ -35,6 +35,7 @@ No añade campos ni métodos Python. Toda la lógica es declarativa:
    - Fuente monoespaciada `'Courier New', monospace` y `line-height: 1.2`
    - `.document-title` con tamaño 1.5×
    - Reemplaza el `<h2>` del título por un `<div class="document-title">` con `t-field="o.name"`.
+4. **Contexto de render (18.0.0.1.1, 2026-10-20):** el parámetro se lee con `env['ir.config_parameter']` (antes dependía del objeto `request` HTTP): mismo valor renderizado, y render posible fuera de peticiones (shell/tests).
 
 ---
 

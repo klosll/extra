@@ -3,7 +3,8 @@
   <template id="klo_report_delivery_document_small_font_body" inherit_id="stock.report_delivery_document">
 
     <xpath expr="//t[@t-set='o'][@t-value='o.with_context(lang=o._get_report_lang())']" position="before">
-        <t t-set="font_size" t-value="request.env['ir.config_parameter'].sudo().get_param('klo.stockpicking_report_small_font_body', '10')"/>
+      <!-- env en lugar de request: mismo valor (ir.config_parameter con sudo) pero sin depender del contexto HTTP; permite renderizar fuera de peticiones (shell/tests). -->
+      <t t-set="font_size" t-value="env['ir.config_parameter'].sudo().get_param('klo.stockpicking_report_small_font_body', '10')"/>
         <style>
             /* Forzar tamaño dinámico en todo el documento */
             body, body * {
