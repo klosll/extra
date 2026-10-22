@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Herencia del QWeb de factura (account.report_invoice_document).
+        Sustituye la columna "Unit Price" para mostrar el precio unitario
+        sin impuestos, calculado mediante el campo computado
+        price_unit_untaxed de account.move.line.
+
+        El reemplazo se limita al span interior del td_price_unit para
+        minimizar colisiones con otras herencias del mismo template: el
+        td y su t-attf-class original (d-none d-md-table-cell cuando
+        report_type == 'html', necesario porque este mismo template se
+        reutiliza como vista previa HTML en el portal de facturas del
+        cliente) quedan intactos del template core.
+    -->
+    <template id="report_invoice_document_untaxed_price"
+              inherit_id="account.report_invoice_document">
+
+        <!-- Reemplazamos solo el span del precio unitario en el cuerpo de la tabla.
+             El span usa t-field en lugar de t-out + widget monetary: t-field
+             toma el formato del campo (min_display_digits='Product Price'),
+             mostrando los mismos decimales que price_unit en el formulario
+             y sin símbolo de moneda. -->
+        <xpath expr="//td[@name='td_price_unit']/span" position="replace">
+            <span class="text-nowrap" t-field="line.price_unit_untaxed"/>
+        </xpath>
+
+    </template>
+</odoo>
