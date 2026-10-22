@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2026 KLO Ingeniería Informática S.L.L.
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<!--
+    Personalización de columnas del informe de factura para RYP,
+    sobre account.report_invoice_document (core: addons/account/views/report_invoice.xml).
+
+    Cambio de columnas (equivalente al realizado en el pedido):
+    * La cabecera de la columna de precio unitario pasa a "Precio U".
+    * Se añade una columna "Neto" (precio unitario sin impuestos con el descuento
+      aplicado) antes de "Importe".
+    * La columna "Importe" muestra el subtotal de Odoo (price_subtotal), siempre
+      sin impuestos y cuadrando con base/IVA/total; el span original del subtotal
+      se oculta en lugar de eliminarse para no romper herencias de terceros
+      (p. ej. account_invoice_report_grouped_by_picking).
+-->
+<odoo>
+    <template id="klo_custom_invoice_columns_ryp" inherit_id="account.report_invoice_document">
+
+        <xpath expr="//th[@name='th_priceunit']/span" position="replace">
+            <!-- En la factura el texto de la cabecera está dentro de un span (a diferencia
+                 del pedido, donde va directo en el th); se sustituye solo ese span para
+                 conservar el th y su name, que es el ancla de las herencias. -->
+            <span>Precio U</span>
+        </xpath>
+
+        <xpath expr="//th[@name='th_subtotal']" position="before">
+            <!-- Etiqueta literal "Neto" solicitada por el cliente; para una futura i18n se
+                 debería externalizar el texto en lugar de dejarlo como texto duro. -->
+            <th name="th_net" class="text-end text-nowrap">Neto</th>
+        </xpath>
+
+        <xpath expr="//td[@name='td_subtotal']" position="before">
+            <!-- Neto = precio unitario sin impuestos con el descuento aplicado. -->
+            <td name="td_net" class="text-end text-nowrap">
+                <!-- Renderizado con t-field sobre el campo computado price_unit_net
+                      (mimético del price_unit del core): el QWeb le aplica los mismos
+                      decimales que el campo "Precio unitario" del formulario (precisión
+                      decimal "Product Price"). -->
+                <span t-field="line.price_unit_net"/>
+            </td>
+        </xpath>
+
+        <xpath expr="//td[@name='td_subtotal']/span[@t-field='line.price_subtotal']" position="attributes">
+            <!-- El span original del subtotal NO se elimina porque es ancla de herencias de
+                 terceros (account_invoice_report_grouped_by_picking y similares), que aplican
+                 sus xpaths sobre él. Se oculta con style en lugar de con t-if porque ese
+                 módulo fija el mismo atributo t-if en este span: si aquí también se usara
+                 t-if, el último en aplicarse pisaría al otro y uno de los dos dejaría de
+                 funcionar. -->
+            <attribute name="style">display:none</attribute>
+        </xpath>
+
+        <xpath expr="//td[@name='td_subtotal']" position="inside">
+            <!-- Importe: se muestra el subtotal de la línea (price_subtotal), siempre sin
+                 impuestos y cuadrando con base/IVA/total; en filas con cantidad parcial
+                 por albarán se muestra la parte proporcional que calcula
+                 account_invoice_report_grouped_by_picking. Se añade junto al span
+                 original, que queda oculto con style.
+                 La condición del t-if es la negación de la de account_invoice_report_grouped_by_picking:
+                 las filas con cantidad parcial por albarán muestran la suya (la parte
+                 proporcional) y el resto muestran la nuestra, para no duplicar importes.
+                 lines_group y l son variables que solo existen con el módulo de agrupación
+                 instalado; la expresión tolera que no existan porque QWeb resuelve los
+                 nombres indefinidos como None: la condición cae en la rama sin agrupación y
+                 se muestra el subtotal completo de la línea. -->
+            <span class="text-nowrap" t-if="not (lines_group and lines_group['quantity'] != l.quantity)" t-out="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+        </xpath>
+
+        <!-- Separación de 1 mm entre columnas numéricas del cuerpo (factura):
+             los datos de las columnas numéricas se mezclaban visualmente,
+             agravado por el padding 1px de los módulos de fuente pequeña.
+             Se aplica a th y td para mantener cabeceras y valores alineados.
+             El scope a table.o_main_table evita tocar la tabla de totales
+             (o_total_table). -->
+        <xpath expr="//table[hasclass('o_main_table')]" position="before">
+            <style>
+                /* Separación de 1 mm entre columnas numéricas del cuerpo. */
+                table.o_main_table th.text-end,
+                table.o_main_table td.text-end {
+                    padding-left: 1mm;
+                }
+            </style>
+        </xpath>
+
+    </template>
+</odoo>

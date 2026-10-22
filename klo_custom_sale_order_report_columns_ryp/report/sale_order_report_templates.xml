@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2026 KLO Ingeniería Informática S.L.L.
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<!--
+    Personalización de columnas del informe de pedido de venta para RYP,
+    sobre sale.report_saleorder_document (core: addons/sale/report/ir_actions_report_templates.xml).
+
+    Cambio de columnas:
+    * Se añade una columna "Neto" (precio unitario sin impuestos con el descuento
+      aplicado) antes de "Importe".
+    * La columna "Importe" muestra el subtotal de Odoo (price_subtotal), siempre
+      sin impuestos: cuadra exactamente con la base/IVA/total del documento.
+
+    Lección de superficie mínima: NUNCA se reemplaza el th/td completo; solo se añaden
+    nodos hermanos o se sustituyen los span internos, para no romper herencias de terceros
+    que anclan en esos mismos nodos (p. ej. sale_layout_category_hide_detail).
+-->
+<odoo>
+    <template id="klo_custom_saleorder_columns_ryp" inherit_id="sale.report_saleorder_document">
+
+        <xpath expr="//th[@name='th_priceunit']" position="replace">
+            <!-- Cabecera "Precio U": en el pedido el texto va directo en el th (sin span),
+                 por eso se reemplaza el th completo conservando su name y class (ancla de
+                 herencias de terceros). Literal "Precio U" no externalizado (i18n futura). -->
+            <th name="th_priceunit" class="text-end text-nowrap">Precio U</th>
+        </xpath>
+
+        <xpath expr="//th[@name='th_subtotal']" position="before">
+            <!-- Etiqueta literal "Neto" solicitada por el cliente; para una futura i18n se
+                 debería externalizar el texto en lugar de dejarlo como texto duro. -->
+            <th name="th_net" class="text-end text-nowrap">Neto</th>
+        </xpath>
+
+        <xpath expr="//td[@name='td_subtotal']" position="before">
+            <!-- Se replica el t-if del td_subtotal del core (not line.is_downpayment) para
+                 que las filas de anticipo no queden descuadradas respecto a las columnas. -->
+            <td name="td_net" t-if="not line.is_downpayment" class="text-end text-nowrap">
+                <!-- Neto renderizado con t-field sobre el campo computado price_unit_net
+                      (mimético del price_unit del core): el QWeb le aplica los mismos
+                      decimales que el campo "Precio unitario" del formulario (precisión
+                      decimal "Product Price"). -->
+                <span t-field="line.price_unit_net"/>
+            </td>
+        </xpath>
+
+        <xpath expr="//td[@name='td_subtotal']/span[@t-field='line.price_total']" position="replace">
+            <!-- Importe = subtotal de Odoo (price_subtotal), siempre sin impuestos:
+                 cuadra exactamente con base/IVA/total del documento. La multiplicación
+                 manual Cantidad × Neto puede diferir ±0,01 € en líneas con impuestos
+                 precio incluido (redondeo del impuesto por línea de Odoo), por eso se
+                 muestra el subtotal. Se mantiene el widget monetary (formato de
+                 moneda, 2 decimales) y se sustituye únicamente el span del core que lo
+                 renderizaba, sin tocar el td contenedor. -->
+            <span class="text-nowrap" t-out="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+        </xpath>
+
+        <xpath expr="//td[@name='td_subtotal']/span[@t-field='line.price_subtotal']" position="replace">
+            <!-- Se elimina este span: era la rama alternativa cuando company_price_include no
+                 era tax_included, y el nuevo Importe ya no depende de esa política (siempre
+                 se calcula sin impuestos), por lo que no debe renderizarse nada aquí. -->
+            <t/>
+        </xpath>
+
+        <!-- Separación de 1 mm entre columnas numéricas del cuerpo (pedido):
+             los datos de las columnas numéricas se mezclaban visualmente,
+             agravado por el padding 1px de los módulos de fuente pequeña.
+             Se aplica a th y td para mantener cabeceras y valores alineados.
+             El scope a table.o_main_table evita tocar la tabla de totales
+             (o_total_table). -->
+        <xpath expr="//table[hasclass('o_main_table')]" position="before">
+            <style>
+                /* Separación de 1 mm entre columnas numéricas del cuerpo. */
+                table.o_main_table th.text-end,
+                table.o_main_table td.text-end {
+                    padding-left: 1mm;
+                }
+            </style>
+        </xpath>
+
+    </template>
+</odoo>
