@@ -5,7 +5,7 @@
 | Campo | Valor |
 |---|---|
 | **Nombre técnico** | `klo_report_invoice_small_font_body` |
-| **Versión** | 18.0.0.1.0 |
+| **Versión** | 18.0.0.1.1 |
 | **Autor** | KLO Ingeniería Informática S.L.L. |
 | **Licencia** | AGPL-3 |
 | **Categoría** | Accounting/Accounting |
@@ -25,6 +25,7 @@ No añade campos ni modelos Python (`models/__init__.py` está vacío). Toda la 
 - **Parámetro de sistema** `ir.config_parameter` con clave `klo.invoice_report_small_font_body` y valor `10` (registro `noupdate="1"`, `forcecreate="False"`).
 - **Formato de papel** `report.paperformat` externo id `paperformat_continuous_paper`, nombre "Continuous paper", `default=True`, formato `custom` 280×219 mm, márgenes (top 45, bottom 27, left/right 7), `header_spacing=43`, `dpi=90`, `disable_shrinking=True`.
 - **Plantilla QWeb** que inyecta un `<style>` con `font-size` dinámico leído del parámetro.
+- **Contexto de render (18.0.0.1.1, 2026-10-20):** la plantilla lee el parámetro con `env['ir.config_parameter']` (antes dependía del objeto `request` HTTP): mismo valor renderizado, y render posible fuera de peticiones (shell/tests).
 
 ## Dependencias
 

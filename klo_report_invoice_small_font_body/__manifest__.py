@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': 'KLO - Invoice report small font body',
-    'version': '18.0.0.1.0',
+    'version': '18.0.0.1.1',
     'summary': 'Invoice report body with smaller font size for more compact printing',
     'description': 'Se auto-crea el Parámetro de sistema: klo.invoice_report_body_small_font con valor 8 por defecto',
     'category': 'Accounting/Accounting',
