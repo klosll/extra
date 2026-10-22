@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': 'KLO - Report layout small font header',
-    'version': '18.0.0.1.0',
+    'version': '18.0.0.1.1',
     'summary': 'Report layout header with smaller font size for more compact printing',
     'description': 'Se auto-crea el Parámetro de sistema: klo.report_layout_small_font_header con valor 10 por defecto',
     'category': 'Accounting/Accounting',

@@ -5,7 +5,7 @@
 | Campo | Valor |
 |---|---|
 | **Nombre técnico** | `klo_report_layout_small_font_header` |
-| **Versión** | 18.0.0.1.0 |
+| **Versión** | 18.0.0.1.1 |
 | **Autor** | KLO Ingeniería Informática S.L.L. |
 | **Licencia** | AGPL-3 |
 | **Categoría** | Accounting/Accounting |
@@ -31,7 +31,7 @@ El módulo **no añade campos ni métodos Python**. Toda la lógica reside en:
 
 ```xml
 <t t-set="header_font_size"
-   t-value="request.env['ir.config_parameter'].sudo().get_param('klo.report_layout_small_font_header', '12')"/>
+   t-value="env['ir.config_parameter'].sudo().get_param('klo.report_layout_small_font_header', '12')"/>
 <style>
     .header {
         font-size: <t t-out="header_font_size"/>px !important;
@@ -40,6 +40,8 @@ El módulo **no añade campos ni métodos Python**. Toda la lógica reside en:
 ```
 
 El valor por defecto `'12'` se usa si el parámetro no existe.
+
+**Historial (18.0.0.1.1, 2026-10-20):** la lectura del parámetro usa `env['ir.config_parameter']` (antes dependía del objeto `request` HTTP): mismo valor renderizado, y render posible fuera de peticiones (shell/tests).
 
 ---
 
