@@ -8,13 +8,14 @@
     <template id="report_saleorder_document_untaxed_price"
               inherit_id="sale.report_saleorder_document">
 
-        <!-- Reemplazamos la celda del precio unitario en el cuerpo de la tabla -->
+        <!-- Reemplazamos la celda del precio unitario en el cuerpo de la tabla.
+             El span usa t-field en lugar de t-out + widget monetary: t-field
+             toma el formato del campo (min_display_digits='Product Price'),
+             mostrando los mismos decimales que price_unit en el formulario
+             y sin símbolo de moneda. -->
         <xpath expr="//td[@name='td_priceunit']" position="replace">
             <td name="td_priceunit" class="text-end text-nowrap">
-                <span
-                    t-out="line.price_unit_untaxed"
-                    t-options='{"widget": "monetary", "display_currency": doc.currency_id}'
-                >3</span>
+                <span t-field="line.price_unit_untaxed"/>
             </td>
         </xpath>
 

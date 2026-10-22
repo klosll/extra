@@ -1,9 +1,9 @@
 # KLO — Sale Order Price Unit Untaxed
 
 **Nombre técnico:** `klo_sale_order_price_unit_untaxed`  
-**Versión:** 18.0.1.0.0  
+**Versión:** 18.0.2.0.1  
 **Autor:** KLO Ingeniería Informática S.L.L.  
-**Licencia:** LGPL-3  
+**Licencia:** AGPL-3  
 **Categoría:** Sales / Sales  
 **Dependencias:** `sale`, `portal`  
 **Ubicación:** `extra-addons/klo/extra/klo_sale_order_price_unit_untaxed`
@@ -37,7 +37,7 @@ klo_sale_order_price_unit_untaxed/
 └── static/
     └── description/
         ├── icon.png
-        └── Tecnical_document.md
+        └── Technical_context.md
 ```
 
 ---
@@ -50,36 +50,48 @@ Se hereda el modelo `sale.order.line` y se añade el campo computado `price_unit
 
 ### Campo añadido
 
-| Atributo      | Valor                          |
-|---------------|-------------------------------|
-| Nombre        | `price_unit_untaxed`          |
-| Tipo          | `Float`                       |
-| String        | `Precio unitario (sin IVA)`   |
-| Digits        | `Product Price`               |
-| Computed      | Sí                            |
-| Store         | `False`                       |
+| Atributo          | Valor                         |
+|------------------|-------------------------------|
+| Nombre           | `price_unit_untaxed`          |
+| Tipo             | `Float`                       |
+| String           | `Precio unitario (sin IVA)`   |
+| min_display_digits | `Product Price`             |
+| Computed         | Sí                            |
+| Store            | `False`                       |
 
 ### Dependencias del compute
 
 ```
-price_unit, tax_id, product_id, currency_id, order_id.partner_id
+price_unit, tax_id, product_id, currency_id, order_id.partner_id, display_type
 ```
+
+`display_type` se incluye en el `@api.depends` porque el compute ramifica según ese
+campo (líneas de producto frente a secciones/notas).
 
 ### Lógica de cálculo
 
 ```python
-@api.depends('price_unit', 'tax_id', 'product_id', 'currency_id', 'order_id.partner_id')
+ESCALA = 10000.0
+
+
+@api.depends('price_unit', 'tax_id', 'product_id', 'currency_id', 'order_id.partner_id', 'display_type')
 def _compute_price_unit_untaxed(self):
     for line in self:
+        # Simetría con el módulo de factura: secciones y notas reciben 0.0
+        # sin pasar por compute_all. En sale.order.line las líneas de
+        # producto tienen display_type vacío (False), no 'product'.
+        if line.display_type:
+            line.price_unit_untaxed = 0.0
+            continue
         if line.tax_id:
             taxes_result = line.tax_id.compute_all(
                 line.price_unit,
                 currency=line.currency_id,
-                quantity=1.0,
+                quantity=ESCALA,
                 product=line.product_id,
                 partner=line.order_id.partner_id,
             )
-            line.price_unit_untaxed = taxes_result['total_excluded']
+            line.price_unit_untaxed = taxes_result['total_excluded'] / ESCALA
         else:
             line.price_unit_untaxed = line.price_unit
 ```
@@ -87,6 +99,23 @@ def _compute_price_unit_untaxed(self):
 El método `compute_all` de `account.tax` devuelve un diccionario con la clave
 `total_excluded`, que representa el precio base sin impuestos.  
 Si la línea no tiene impuestos asignados, se devuelve directamente `price_unit`.
+Las líneas de sección y nota (`display_type` informado) reciben `0.0` sin pasar
+por `compute_all`.
+
+**Escalado de la cantidad (`ESCALA = 10000.0`):** `compute_all` redondea SIEMPRE
+los totales a la precisión de la moneda (céntimos): con `quantity=1.0` devolvería
+la base unitaria ya redondeada a 2 decimales (p. ej. `1.41` en lugar de `1.416669`).
+Al llamar con `quantity=ESCALA` y dividir el total entre `ESCALA`, el error de
+redondeo se divide entre `ESCALA` (depende de la precisión de la moneda: con
+céntimos, del orden de 5e-7; con monedas sin decimales puede ser mayor, del orden
+de 5e-5), suficiente para presentar 6 decimales. La técnica es lineal para
+impuestos porcentuales y de importe fijo, que se multiplican por la cantidad, por
+lo que el precio unitario resultante no varía.
+
+No se usa un API 'sin redondeo' del motor de impuestos porque Odoo 18 no expone
+públicamente la base unitaria sin redondear (`compute_all` devuelve
+`total_excluded` ya redondeado a la moneda; `raw_total_excluded` es interno):
+escalar la cantidad evita tocar internals privados.
 
 ---
 
@@ -99,15 +128,14 @@ Si la línea no tiene impuestos asignados, se devuelve directamente `price_unit`
 **ID del template heredado:** `report_saleorder_document_untaxed_price`
 
 Se reemplaza la celda `td[@name='td_priceunit']` en el cuerpo de la tabla de líneas
-para mostrar `line.price_unit_untaxed` formateado como moneda:
+para mostrar `line.price_unit_untaxed`. El span usa `t-field`, que toma el formato
+del campo (`min_display_digits='Product Price'`): muestra los mismos decimales que
+`price_unit` en el formulario y sin símbolo de moneda:
 
 ```xml
 <xpath expr="//td[@name='td_priceunit']" position="replace">
     <td name="td_priceunit" class="text-end text-nowrap">
-        <span
-            t-out="line.price_unit_untaxed"
-            t-options='{"widget": "monetary", "display_currency": doc.currency_id}'
-        />
+        <span t-field="line.price_unit_untaxed"/>
     </td>
 </xpath>
 ```
@@ -175,6 +203,16 @@ Para actualizar desde línea de comandos:
     -u klo_sale_order_price_unit_untaxed \
     --stop-after-init
 ```
+
+---
+
+## Historial de cambios
+
+| Versión    | Fecha      | Descripción del cambio |
+|------------|------------|------------------------|
+| 18.0.1.0.0 | 2026-04-13 | Versión inicial |
+| 18.0.2.0.0 | 2026-10-22 | Precisión y formato: el campo pasa de `digits='Product Price'` a `min_display_digits='Product Price'`; el compute llama a `compute_all` con `quantity=ESCALA` (10000.0) y divide `total_excluded` entre `ESCALA` para anular el redondeo a céntimos; el span del informe pasa de `t-out` + widget `monetary` a `t-field` (mismos decimales que el formulario, sin símbolo de moneda) |
+| 18.0.2.0.1 | 2026-10-22 | Licencia unificada a AGPL-3 (antes licencia de tipo Lesser), conforme a AGENTS.md |
 
 ---
 

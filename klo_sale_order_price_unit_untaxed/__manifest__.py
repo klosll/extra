@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2026 KLO Ingeniería Informática S.L.L.
-# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': 'KLO - Sale Order Price Unit Untaxed',
     'summary': 'Muestra el precio unitario sin IVA en el informe de presupuesto/pedido de venta',
@@ -17,7 +17,7 @@
         como precio incluido o excluido.
     """,
     'author': 'KLO',
-    'version': '18.0.1.0.0',
+    'version': '18.0.2.0.1',
     'category': 'Sales/Sales',
     'depends': ['sale', 'portal'],
     'data': [
@@ -25,5 +25,5 @@
     ],
     'installable': True,
     'auto_install': False,
-    'license': 'LGPL-3',
+    'license': 'AGPL-3',
 }
