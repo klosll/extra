@@ -2,7 +2,8 @@
 <odoo>
     <template id="klo_minimal_layout_small_font_footer" inherit_id="web.minimal_layout">
         <xpath expr="//head" position="inside">
-            <t t-set="footer_inter_line" t-value="request.env['ir.config_parameter'].sudo().get_param('klo.report_layout_inter_line_footer', '1.0')"/>
+            <!-- env en lugar de request: mismo valor (ir.config_parameter con sudo) pero sin depender del contexto HTTP; permite renderizar fuera de peticiones (shell/tests). -->
+            <t t-set="footer_inter_line" t-value="env['ir.config_parameter'].sudo().get_param('klo.report_layout_inter_line_footer', '1.0')"/>
             <style>
                 .o_footer_content {
                     <!--

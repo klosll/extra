@@ -5,7 +5,7 @@
 | Campo | Valor |
 |---|---|
 | **Nombre técnico** | `klo_report_layout_inter_line_footer` |
-| **Versión** | 18.0.0.1.0 |
+| **Versión** | 18.0.0.1.1 |
 | **Autor** | KLO Ingeniería Informática S.L.L. |
 | **Licencia** | AGPL-3 |
 | **Categoría** | Accounting/Accounting |
@@ -32,6 +32,7 @@ No añade campos ni métodos Python. La lógica es puramente declarativa (XML + 
 
 1. **Data XML** crea el `ir.config_parameter` con clave `klo.report_layout_inter_line_footer` y valor `1.0` (`noupdate="1"`, `forcecreate="False"` para no sobrescribir un valor editado manualmente).
 2. **Template QWeb** lee el parámetro en tiempo de render y lo inyecta como `line-height` de `.o_footer_content`.
+3. **Contexto de render (18.0.0.1.1, 2026-10-20):** el parámetro se lee con `env['ir.config_parameter']` (antes dependía del objeto `request` HTTP): mismo valor renderizado, y render posible fuera de peticiones (shell/tests).
 
 ---
 
