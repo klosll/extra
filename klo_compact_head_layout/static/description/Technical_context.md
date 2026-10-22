@@ -1,7 +1,7 @@
 # KLO — Compact Head Layout
 
 **Nombre técnico:** `klo_compact_head_layout`  
-**Versión:** 18.0.0.1  
+**Versión:** 18.0.0.1.1  
 **Autor:** KLO Ingeniería Informática S.L.L.  
 **Licencia:** AGPL-3  
 **Categoría:** Uncategorized  
@@ -45,7 +45,7 @@ klo_compact_head_layout/
 └── static/
     └── description/
         ├── icon.png
-        └── Tecnical_document.md
+        └── Technical_context.md
 ```
 
 ---
@@ -60,7 +60,7 @@ El módulo depende del parámetro de sistema provisto por `klo_report_layout_sma
 
 Se obtiene mediante:
 ```python
-request.env['ir.config_parameter'].sudo().get_param('klo.report_layout_small_font_header', '12')
+env['ir.config_parameter'].sudo().get_param('klo.report_layout_small_font_header', '12')
 ```
 
 ---
@@ -270,6 +270,7 @@ Para actualizar desde línea de comandos:
 
 | Versión   | Fecha      | Descripción                                                                 |
 |-----------|------------|-----------------------------------------------------------------------------|
+| 18.0.0.1.1 | 2026-10-20 | `views/report_templates.xml` lee `font_size` con `env['ir.config_parameter']` (antes dependía del objeto `request` HTTP): mismo valor renderizado, y render posible fuera de peticiones (shell/tests). |
 | 18.0.0.1  | 2026-04-14 | Adaptación de ancho dinámico del bloque cliente según presencia de dirección de entrega (`show_shipping`). Refactorización de condiciones en `report_templates.xml`. |
 | 18.0.0.1  | (inicial)  | Creación del layout compacto. Soporte para `sale.order`, `account.move`, `stock.picking`, `account.payment.order`. |
 

@@ -4,7 +4,7 @@
 # KLO
 {
     'name': 'KLO - Cabecera QWeb compacta con datos de cliente',
-    'version': '18.0.0.1.0',
+    'version': '18.0.0.1.1',
     'summary': 'Hace la cabecera de los informes en formato QWeb más compacta',
     'description': """
     Hace la cabecera de los informes en formato QWeb más compacta, mostrando los datos del cliente en la misma 

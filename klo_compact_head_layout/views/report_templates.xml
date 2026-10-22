@@ -3,7 +3,8 @@
     <!-- Definir el nuevo layout compacto -->
     <template id="klo_external_layout_compact" inherit_id="web.external_layout_standard">
         <xpath expr="//div[@t-attf-class='header o_company_#{company.id}_layout']" position="replace">
-            <t t-set="font_size" t-value="request.env['ir.config_parameter'].sudo().get_param('klo.report_layout_small_font_header', '12')"/>
+            <!-- env en lugar de request: mismo valor (ir.config_parameter con sudo) pero sin depender del contexto HTTP; permite renderizar fuera de peticiones (shell/tests). -->
+            <t t-set="font_size" t-value="env['ir.config_parameter'].sudo().get_param('klo.report_layout_small_font_header', '12')"/>
 
             <!-- El logo y la dirección de nuestra empresa se coge del texto de configuración del documento por defecto -->
             <div t-attf-class="header o_company_#{company.id}_layout">
