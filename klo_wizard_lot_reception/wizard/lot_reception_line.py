@@ -3,36 +3,32 @@ from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
 
-class LotReceptionWizardLine(models.TransientModel):
-    _name = 'klo.lot.reception.wizard.line'
-    _description = 'Línea del wizard de captura de lotes'
+class LotReceptionLine(models.Model):
+    _name = 'klo.lot.reception.line'
+    _description = 'Línea persistente de captura de lotes'
 
     wizard_id = fields.Many2one(
         'klo.lot.reception.wizard',
         string='Wizard',
         required=True,
         ondelete='cascade',
+        index=True,
     )
-    reader_ps = fields.Char(
-        string='Reader PS',
-    )
+    reader_ps = fields.Char(string='Reader PS')
     product_id = fields.Many2one(
         'product.product',
         string='Producto',
         required=True,
     )
     lot_name = fields.Char(string='Lote/Serie')
-    container = fields.Integer(
-        string='Container',
-    )
-    qty_done = fields.Float(
-        string='Cantidad',
-        required=True,
-        default=1.0,
-    )
-    surplus = fields.Boolean(
-        string='Excedente',
-        default=False,
+    container = fields.Integer(string='Container')
+    qty_done = fields.Float(string='Cantidad', required=True, default=1.0)
+    surplus = fields.Boolean(string='Excedente', default=False)
+    state = fields.Selection(
+        [('draft', 'Borrador'), ('done', 'Validado')],
+        string='Estado',
+        default='draft',
+        copy=False,
     )
 
     @api.onchange("reader_ps")
@@ -40,7 +36,7 @@ class LotReceptionWizardLine(models.TransientModel):
         if not self.reader_ps:
             return
         move_line_model = self.env['stock.move.line']
-        picking = self.wizard_id.picking_id
+        picking = self.wizard_id.picking_id if self.wizard_id else False
         partner_id = picking.partner_id.id if picking else False
         if picking and picking.company_id:
             company_id = picking.company_id.id

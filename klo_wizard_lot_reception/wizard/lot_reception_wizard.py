@@ -3,7 +3,7 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
 
-class LotReceptionWizard(models.TransientModel):
+class LotReceptionWizard(models.Model):
     _name = 'klo.lot.reception.wizard'
     _description = 'Wizard de captura de lotes para recepciones'
 
@@ -11,40 +11,44 @@ class LotReceptionWizard(models.TransientModel):
         'stock.picking',
         string='Recepción',
         required=True,
+        ondelete='cascade',
+        index=True,
         readonly=True,
     )
     line_ids = fields.One2many(
-        'klo.lot.reception.wizard.line',
+        'klo.lot.reception.line',
         'wizard_id',
         string='Líneas',
     )
+    is_done = fields.Boolean(
+        string='Albarán validado',
+        compute='_compute_is_done',
+    )
 
-    @api.model
-    def default_get(self, fields_list):
-        res = super(LotReceptionWizard, self).default_get(fields_list)
-        picking_id = self.env.context.get('active_id')
-        picking_model = self.env.context.get('active_model')
-        if picking_id and picking_model == 'stock.picking':
-            picking = self.env['stock.picking'].browse(picking_id)
-            if picking.exists():
-                res['picking_id'] = picking.id
-        return res
+    @api.depends('picking_id.state')
+    def _compute_is_done(self):
+        for wizard in self:
+            wizard.is_done = wizard.picking_id.state == 'done'
 
     def action_validate(self):
         self.ensure_one()
         if not self.line_ids:
             raise UserError(_('Debe agregar al menos una línea.'))
 
+        pending = self.line_ids.filtered(lambda l: l.state == 'draft')
+        if not pending:
+            return {'type': 'ir.actions.act_window_close'}
+
         picking = self.picking_id
         partner = picking.partner_id
 
-        surplus_lines = self.line_ids.filtered(lambda l: l.surplus)
-        normal_lines = self.line_ids.filtered(lambda l: not l.surplus)
+        surplus_lines = pending.filtered(lambda l: l.surplus)
+        normal_lines = pending.filtered(lambda l: not l.surplus)
 
         if surplus_lines:
             self._create_purchase_order(surplus_lines, partner, picking)
 
-        new_po_lines = self.env['klo.lot.reception.wizard.line']
+        new_po_lines = self.env['klo.lot.reception.line']
         for line in normal_lines:
             move = picking.move_lines.filtered(
                 lambda m: m.product_id == line.product_id
@@ -58,6 +62,7 @@ class LotReceptionWizard(models.TransientModel):
         if new_po_lines:
             self._create_purchase_order(new_po_lines, partner, picking)
 
+        pending.write({'state': 'done'})
         return {'type': 'ir.actions.act_window_close'}
 
     def _create_stock_move_line(self, move, line, picking):
@@ -76,9 +81,6 @@ class LotReceptionWizard(models.TransientModel):
         return self.env['stock.move.line'].create(move_line_vals)
 
     def _create_purchase_order(self, lines, partner, picking):
-        if isinstance(lines, models.Model):
-            lines = lines
-
         source_po = picking.purchase_id
 
         picking_type_id = False

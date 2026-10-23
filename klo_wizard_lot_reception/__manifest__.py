@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'KLO Wizard Lot Reception',
-    'version': '14.0.1.0.0',
+    'version': '14.0.2.0.0',
     'category': 'Inventory',
     'summary': 'Wizard para capturar lotes en recepciones de compra',
     'description': """
 Wizard para capturar lotes en recepciones de compra.
-Permite crear líneas temporales con lotes y excedentes.
+Permite registrar líneas de lotes y excedentes que quedan asociadas al albarán.
     """,
     'author': 'KLO Ingeniería Informática',
     'website': 'https://www.klo.es',

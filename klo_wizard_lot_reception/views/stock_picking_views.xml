@@ -11,7 +11,7 @@
                         string="Capturar lotes"
                         type="object"
                         groups="stock.group_stock_user,purchase.group_purchase_user"
-                        attrs="{'invisible': ['|', ('picking_type_code', '!=', 'incoming'), ('state', 'not in', ('assigned', 'partially_available'))]}"/>
+                        attrs="{'invisible': ['|', ('picking_type_code', '!=', 'incoming'), ('state', 'not in', ('assigned', 'partially_available', 'done'))]}"/>
             </xpath>
         </field>
     </record>
