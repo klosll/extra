@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     KLO. Plantilla QWeb "Factura Matricial" para impresora matricial en papel
-    continuo (279 mm alto x 210 mm ancho, portrait, margenes 0, Courier New 11px).
+    continuo (279 mm alto x 210 mm ancho, portrait, margenes 0, Liberation Mono 11px).
 
     HEREDA de account.report_invoice_document (primary="True"):
       - No modifica el original: account.report_invoice_document queda intacto.
@@ -63,12 +63,23 @@
                 <t t-set="line_pages"
                    t-value="[lines[i:i+max_lines] for i in range(0, len(lines), max_lines)] or [[]]"/>
 
-                <t t-foreach="line_pages" t-as="page_lines">
+                <!-- KLO. Wrapper <div class="article"> del pipeline de reportes:
+                     ir_actions_report._prepare_html extrae los nodos .article y
+                     los re-renderiza vía web.minimal_layout, que añade el
+                     <meta charset="utf-8"> al fichero temporal .html que lee
+                     wkhtmltopdf. Sin este wrapper el body se escribe sin meta
+                     charset y wkhtmltopdf lo interpreta como Latin-1 (doble
+                     codificación de €/ñ). -->
+                <div class="article"
+                     t-att-data-oe-model="o and o._name"
+                     t-att-data-oe-id="o and o.id"
+                     t-att-data-oe-lang="o and o.env.context.get('lang')">
+                    <t t-foreach="line_pages" t-as="page_lines">
                     <!-- KLO. Hoja física: 210x279 mm con posiciones relativas y
-                         Courier New 11px. page-break-after:auto en la última
+                         Liberation Mono 11px. page-break-after:auto en la última
                          hoja para evitar una hoja en blanco final. -->
                     <div class="page"
-                         t-att-style="'width:210mm;height:279mm;position:relative;overflow:hidden;font-family:\'Courier New\',monospace;font-size:11px;page-break-after:%s;' % ('auto' if page_lines_last else 'always')">
+                         t-att-style="'width:210mm;height:279mm;position:relative;overflow:hidden;font-family:\'Liberation Mono\',\'DejaVu Sans Mono\',monospace;font-size:11px;page-break-after:%s;' % ('auto' if page_lines_last else 'always')">
 
                         <!-- KLO. Cabecera (se repite en TODAS las hojas):
                              posiciones fijas top/left en mm. -->
@@ -126,7 +137,8 @@
                                  t-field="o.invoice_payment_term_id"/>
                         </t>
                     </div>
-                </t>
+                    </t>
+                </div>
             </xpath>
         </template>
 

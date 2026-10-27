@@ -8,7 +8,7 @@
         "los datos en posiciones fijas (mm) sobre formulario preimpreso, "
         "reutilizando el contexto de account.report_invoice_document."
     ),
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.1",
     "author": "KLO Ingeniería Informática S.L.L.",
     "license": "AGPL-3",
     "website": "https://www.klo.es",

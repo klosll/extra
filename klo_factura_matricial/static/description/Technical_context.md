@@ -10,7 +10,7 @@
 |------------------|----------------------------------------------------|
 | Nombre técnico   | `klo_factura_matricial`                            |
 | Nombre legible   | KLO - Factura Matricial                            |
-| Versión          | `18.0.1.0.0`                                       |
+| Versión          | `18.0.1.0.1`                                       |
 | Autor            | KLO Ingeniería Informática S.L.L.                  |
 | Licencia         | AGPL-3                                             |
 | Categoría        | Accounting/Accounting                              |
@@ -41,7 +41,9 @@ Características:
   interlineado de 6 mm.
 - **Pie/totales solo en la última hoja** (base imponible, etiqueta e importe de
   impuestos, total, plazo de pago).
-- Fuente monoespaciada Courier New 11px, márgenes 0, sin cabecera de compañía.
+- Fuente monoespaciada **Liberation Mono 11px** (respaldo `DejaVu Sans Mono`),
+  márgenes 0, sin cabecera de compañía: se usa Liberation Mono en lugar de
+  Courier New por su cobertura Unicode de €/ñ en wkhtmltopdf (detalle en Lógica).
 
 ---
 
@@ -78,6 +80,16 @@ que no necesita `_table`.
 - Sustituye por completo `//t[@t-call='web.external_layout']`
   (`position="replace"`) y re-añade dentro del reemplazo los `t-set` que estaban
   dentro del t-call sustituido: `o = o.with_context(lang=lang)` y `forced_vat`.
+- **Wrapper `article` obligatorio**: el bucle de hojas (`t-foreach="line_pages"`)
+  queda envuelto en `<div class="article">` con `t-att-data-oe-model`,
+  `t-att-data-oe-id` y `t-att-data-oe-lang`. El pipeline de reportes
+  (`ir_actions_report._prepare_html`) extrae los nodos `.article` y los
+  re-renderiza vía `web.minimal_layout`, que es quien añade el
+  `<meta charset="utf-8">` a los ficheros `.html` temporales que lee wkhtmltopdf.
+  Sin este wrapper el body se escribe sin meta charset y wkhtmltopdf lo
+  interpreta como Latin-1, produciendo doble codificación de €/ñ. Esto es
+  **independiente de la fuente** usada: debe mantenerse aunque se cambie la
+  tipografía del informe.
 - **Ordenación de líneas**: la MISMA que la plantilla base:
   `o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)`.
 - **Paginación**: `line_pages = [lines[i:i+15] for i in range(0, len(lines), 15)] or [[]]`.
@@ -85,6 +97,14 @@ que no necesita `_table`.
   `overflow:hidden`. `page-break-after:always` salvo en la última hoja
   (`auto`, variable `page_lines_last` del `t-foreach`) para evitar una hoja en
   blanco final.
+- **Fuente de la hoja**: `font-family:'Liberation Mono','DejaVu Sans Mono',monospace`.
+  Se usa **Liberation Mono** en lugar de Courier New por su cobertura Unicode de
+  €/ñ en wkhtmltopdf: es métricamente compatible con Courier New (mismo ancho de
+  carácter, clave para las columnas matriciales de posiciones fijas) y es
+  TrueType con cobertura completa de € (U+20AC) y ñ (U+00F1). Courier New no
+  está instalada en el servidor y wkhtmltopdf caía a la fuente Type1 "Courier"
+  (pcrr8a.pfb) sin mapa Unicode correcto, lo que provocaba doble codificación
+  de €/ñ en el PDF. `DejaVu Sans Mono` queda como respaldo.
 - **Cuerpo**: `t-foreach="page_lines" t-as="line"` con
   `line_y = 105 + line_index * 6` (mm). Las columnas numéricas (quantity,
   price_unit, price_subtotal) solo se imprimen si `line.display_type ==
@@ -231,6 +251,7 @@ facturas (`account.move`), para los grupos de contabilidad.
 | Versión    | Fecha      | Descripción del cambio |
 |------------|------------|------------------------|
 | 18.0.1.0.0 | 2026-10-14 | Versión inicial        |
+| 18.0.1.0.1 | 2026-10-23 | Fix doble codificación €/ñ: fuente Liberation Mono y wrapper `div.article` con `data-oe-*` para el `<meta charset="utf-8">` de `_prepare_html` |
 
 ---
 
