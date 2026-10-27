@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Formulario: mostrar siempre el campo Cliente (partner_id), aunque allow_billable=False -->
+    <record id="view_project_form_show_partner_always" model="ir.ui.view">
+        <field name="name">project.project.form.klo.show.partner.always</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">False</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Lista: mostrar siempre la columna Cliente -->
+    <record id="view_project_list_show_partner_always" model="ir.ui.view">
+        <field name="name">project.project.list.klo.show.partner.always</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project"/>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">False</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
