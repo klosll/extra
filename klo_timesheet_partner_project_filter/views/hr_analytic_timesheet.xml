@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="klo_hr_timesheet_line_tree" model="ir.ui.view">
+        <field name="name">klo.hr.analytic.timesheet.tree</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree" />
+        <field name="arch" type="xml">
+<!--        KLO. Ponemos el cliente asociado al projecto y el Id del proyecto. -->
+            <xpath expr="//field[@name='project_id']" position="before">
+                <field name="partner_id" string="Partner" optional="show" context="{'klo_company_first': True}"/>
+                <field name="project_id_id" string="Id proyecto" optional="show"/>
+            </xpath>
+<!--        KLO. Que se vean por defecto la hora de inicio y de fin de la tarea. -->
+            <xpath expr="//field[@name='time_start']" position="attributes">
+                <attribute name="optional">show</attribute>
+            </xpath>
+            <xpath expr="//field[@name='time_stop']" position="attributes">
+                <attribute name="optional">show</attribute>
+            </xpath>
+<!--        KLO. Ocultamos por defecto la columna del pedido de venta. -->
+            <xpath expr="//field[@name='so_line']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
