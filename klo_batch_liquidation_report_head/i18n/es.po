@@ -38,37 +38,48 @@ msgstr ""
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
+#: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_proalpe_grouped
 msgid "<span>Container</span>"
 msgstr "<span>Envases</span>"
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
+#: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_proalpe_grouped
 msgid "<span>Lot</span>"
 msgstr "<span>Lote</span>"
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
+#: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_proalpe_grouped
 msgid "<span>Packaging Qty</span>"
 msgstr "<span>Cant. Paquetes</span>"
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
+#: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_proalpe_grouped
 msgid "<span>Packaging</span>"
 msgstr "<span>Empaquetado</span>"
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
+#: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_proalpe_grouped
 msgid "<span>Product</span>"
 msgstr "<span>Producto</span>"
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
+#: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_proalpe_grouped
 msgid "<span>Quantity</span>"
 msgstr "<span>Cantidad</span>"
+
+#. module: klo_batch_liquidation_report_head
+#: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_proalpe_grouped
+msgid "<span>Surplus</span>"
+msgstr "<span>Excedente</span>"
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.external_layout_standard_picking_report_head
@@ -85,6 +96,7 @@ msgstr ""
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
+#: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_proalpe_grouped
 msgid "<strong>Client Ref:</strong>"
 msgstr "<strong>Referencia Cliente:</strong>"
 
@@ -96,6 +108,7 @@ msgstr ""
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.picking_grouped_by_product_document
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
+#: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_proalpe_grouped
 msgid "<strong>Date Done:</strong>"
 msgstr "<strong>Fecha realizada:</strong>"
 
@@ -173,6 +186,11 @@ msgid "Origin:"
 msgstr "Documento origen:"
 
 #. module: klo_batch_liquidation_report_head
+#: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_proalpe_grouped
+msgid "Origin: "
+msgstr "Documento origen: "
+
+#. module: klo_batch_liquidation_report_head
 #: model:ir.actions.report,name:klo_batch_liquidation_report_head.action_report_picking_grouped_by_product
 msgid "Paasa Picking With header Grouped By Product"
 msgstr "Albarán PAASA con Cabecera agrupado por producto"
@@ -188,6 +206,11 @@ msgstr "Teléfono:"
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_head
 msgid "Picking Nº:"
 msgstr "Nº de albarán:"
+
+#. module: klo_batch_liquidation_report_head
+#: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.report_picking_proalpe_grouped
+msgid "Picking Nº: "
+msgstr "Nº de albarán: "
 
 #. module: klo_batch_liquidation_report_head
 #: model_terms:ir.ui.view,arch_db:klo_batch_liquidation_report_head.external_layout_standard_picking_report_head
