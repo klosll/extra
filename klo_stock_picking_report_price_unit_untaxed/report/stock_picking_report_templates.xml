@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Herencia del QWeb de líneas de albarán con serie/lote
+        (stock.stock_report_delivery_has_serial_move_line).
+        Se aplica DESPUÉS del OCA stock_picking_report_valued (priority="17")
+        mediante priority="18".
+
+        Sustituye únicamente el span que muestra `sale_price_unit` por el campo
+        computado `price_unit_untaxed`. Con `t-field` se respetan los decimales
+        definidos por `min_display_digits='Product Price'` (igual que el campo
+        `price_unit` del formulario) y no se añade símbolo de moneda.
+    -->
+    <template id="klo_stock_picking_price_unit_untaxed"
+              inherit_id="stock.stock_report_delivery_has_serial_move_line"
+              priority="18">
+        <xpath expr="//span[@t-field='move_line.sale_price_unit']" position="replace">
+            <span t-field="move_line.price_unit_untaxed"/>
+        </xpath>
+    </template>
+</odoo>
