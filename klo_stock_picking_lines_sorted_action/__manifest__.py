@@ -1,0 +1,13 @@
+{
+    "name": "Stock Picking Lines Sorted Action",
+    "version": "18.0.1.0.0",
+    "summary": "Añade acción rápida para ordenar líneas de la entrega por codigo de producto",
+    "category": "Inventory",
+    "author": "KLO",
+    "license": "AGPL-3",
+    "depends": ["stock", "custom_mrp_descarga"],
+    "data": [
+        "data/ir_actions_server.xml",
+    ],
+    "installable": True,
+}

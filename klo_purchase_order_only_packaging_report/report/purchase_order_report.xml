@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="action_report_purchase_order_only_by_packaging" model="ir.actions.report">
+        <field name="name">Purchase Order Only By Packaging</field>
+        <field name="model">purchase.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field
+      name="report_name"
+    >klo_purchase_order_only_packaging_report.report_purchaseorder_only_by_packaging</field>
+        <field
+      name="report_file"
+    >klo_purchase_order_only_packaging_report.report_purchaseorder_only_by_packaging</field>
+        <field name="binding_model_id" ref="purchase.model_purchase_order" />
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_purchaseorder_only_by_packaging">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="package_report" t-value="True" />
+                <t
+          t-call="klo_purchase_order_only_packaging_report.report_purchaseorder_only_by_packaging_document"
+          t-lang="o.partner_id.lang"
+        />
+            </t>
+        </t>
+    </template>
+
+    <!-- v18: la plantilla purchase.report_purchaseorder_document cambia de columnas
+         (ya no existen th_date_req, th_amount ni td[@name='td_taxes']; el orden de las
+         columnas del cuerpo también cambió). Se ocultan las columnas por nombre en el
+         thead y por contenido en el tbody para que el resultado siga siendo
+         "solo packaging" (Descripción + Packaging + Packaging Qty), sea cual sea el
+         orden de las columnas añadidas por purchase_order_packaging_report. -->
+    <template
+            id="report_purchaseorder_only_by_packaging_document"
+            inherit_id="purchase.report_purchaseorder_document"
+            primary="True"
+    >
+        <th name="th_quantity" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </th>
+        <th name="th_price_unit" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </th>
+        <th name="th_discount" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </th>
+        <th name="th_taxes" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </th>
+        <th name="th_subtotal" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </th>
+
+        <!-- Columnas de la línea de pedido: cantidad -->
+        <xpath expr="//tbody//td[.//span[@t-field='line.product_qty']]" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </xpath>
+        <!-- precio unitario -->
+        <xpath expr="//tbody//td[.//span[@t-field='line.price_unit']]" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </xpath>
+        <!-- descuento -->
+        <xpath expr="//tbody//td[.//span[@t-field='line.discount']]" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </xpath>
+        <!-- impuestos -->
+        <xpath expr="//tbody//td[.//span[contains(@t-out, 'tax')]]" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </xpath>
+        <!-- subtotal de la línea -->
+        <xpath expr="//tbody//td[.//span[@t-field='line.price_subtotal']]" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </xpath>
+        <!-- fecha (solo si purchase_order_packaging_report añade la columna) -->
+        <xpath expr="//tbody//td[.//span[@t-field='line.date_planned']]" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </xpath>
+
+        <xpath expr="//div[@id='total']" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </xpath>
+
+    </template>
+</odoo>

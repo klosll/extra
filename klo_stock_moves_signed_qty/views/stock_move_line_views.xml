@@ -15,7 +15,7 @@
 
             <!--
                 Insertamos la columna "Cantidad neta" justo después
-                de la columna estándar "qty_done" (Cantidad).
+                de la columna estándar "quantity" (Cantidad).
                 El atributo sum="Saldo neto" genera el total al pie de la lista.
             -->
             <xpath expr="//field[@name='quantity']" position="after">

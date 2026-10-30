@@ -1,0 +1,125 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║                  GUÍA RÁPIDA DE INSTALACIÓN                       ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+📦 MÓDULO: Invoice Shipping Sale Type
+📍 UBICACIÓN: /opt/odoo14_paasa/odoo/extra-addons/extra/klo_invoice_shipping_sale_type
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔄 CAMBIOS REALIZADOS
+
+✅ Se eliminó el campo: partner_shipping_category_ids
+✅ Se creó el nuevo campo: shipping_sale_type
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 NUEVA FUNCIONALIDAD
+
+Campo: shipping_sale_type
+Tipo: Char (texto)
+Etiqueta EN: "Sale Order Type"
+Etiqueta ES: "Tipo de pedido de venta"
+Origen: partner_shipping_id.sale_type
+Almacenado: Sí (store=True)
+Permite filtrado: ✅ Sí
+Permite agrupación: ✅ Sí
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📄 ARCHIVOS ACTUALIZADOS
+
+✅ models/account_move.py
+   - Campo shipping_sale_type (Char)
+   - Método _compute_shipping_sale_type()
+   - Validación con hasattr() para evitar errores
+
+✅ views/account_move_views.xml
+   - Columna "Tipo de pedido de venta"
+   - Sin widget especial (campo de texto)
+   - Opcional (oculta por defecto)
+
+✅ i18n/es.po
+   - "Sale Order Type" → "Tipo de pedido de venta"
+   - Tooltip traducido
+
+✅ Documentación actualizada:
+   - README.md
+   - INSTALL.md
+   - TECHNICAL.md
+   - CHANGELOG.md
+   - STATUS.md
+   - QUICKSTART.txt
+   - static/description/index.html
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ VERIFICACIONES COMPLETADAS
+
+✓ Sintaxis Python correcta
+✓ Estructura XML válida
+✓ Traducciones actualizadas
+✓ Documentación actualizada
+✓ Permisos correctos
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 FUNCIONALIDADES DISPONIBLES
+
+1. ✅ Nueva columna en lista de facturas
+2. ✅ Filtrado por tipo de pedido de venta
+3. ✅ Agrupación por tipo de pedido de venta
+4. ✅ Actualización automática cuando cambia partner_shipping_id
+5. ✅ Búsqueda eficiente (campo almacenado)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️  IMPORTANTE - REQUISITO PREVIO
+
+El campo "sale_type" debe existir en el modelo res.partner.
+Si no existe, créelo antes de instalar este módulo.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 PASOS PARA INSTALAR/ACTUALIZAR
+
+1️⃣  Si el módulo ya estaba instalado, DESINSTALARLO primero:
+    → Ir a: Aplicaciones
+    → Buscar: "Invoice Shipping Category"
+    → Clic en: "Desinstalar"
+
+2️⃣  Reiniciar Odoo:
+    sudo systemctl restart odoo14
+
+3️⃣  Actualizar lista de aplicaciones:
+    → Ir a: Aplicaciones
+    → Clic en: "Actualizar lista de aplicaciones"
+
+4️⃣  Instalar el módulo:
+    → Buscar: "Invoice Shipping Category"
+    → Clic en: "Instalar"
+
+5️⃣  Activar la columna:
+    → Ir a: Contabilidad > Clientes > Facturas
+    → Clic en el icono de columnas (≡)
+    → Activar: "Tipo de pedido de venta"
+
+6️⃣  Probar funcionalidades:
+    → Filtrar por tipo de pedido
+    → Agrupar por tipo de pedido
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 NOTAS TÉCNICAS
+
+• El campo usa hasattr() para verificar si sale_type existe
+• Si el campo sale_type no existe, el valor será False
+• El campo es computed y stored para mejor rendimiento
+• Se actualiza automáticamente con @api.depends
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ ESTADO: LISTO PARA INSTALAR
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Extend Invoice Tree View to add Shipping Sale Type Column -->
+        <record id="view_invoice_tree_shipping_sale_type" model="ir.ui.view">
+            <field name="name">account.move.tree.shipping.sale.type</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <!-- v18: la vista de lista de facturas ya no tiene partner_id,
+                     usa invoice_partner_display_name (columna Customer) -->
+                <xpath expr="(//field[@name='invoice_partner_display_name'])[2]" position="after">
+                    <field name="shipping_sale_type" string="Tipo pedido dir entrega" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

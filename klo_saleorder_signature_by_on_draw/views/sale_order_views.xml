@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_signature_by_on" model="ir.ui.view">
+        <field name="name">sale.order.form.klo.signature.by.on</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- La página Customer Signature de sale.view_order_form en v18 -->
+            <xpath expr="//page[@name='customer_signature']" position="attributes">
+                <attribute name="invisible">not require_signature and not signed_by and not signature and not signed_on</attribute>
+            </xpath>
+            <xpath expr="//page[@name='customer_signature']//field[@name='signature']" position="attributes">
+                <attribute name="widget">signature</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

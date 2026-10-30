@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- v18: la vista mrp.mrp_production_form_view ya no incluye el sub-árbol
+             oculto move_line_ids con lot_id que existía en v14. El equivalente v18
+             donde se editan las líneas de movimiento es la lista de Operaciones
+             detalladas (stock.view_stock_move_line_operation_tree). -->
+        <record id="mrp_production_form_view_inherit_temperature" model="ir.ui.view">
+            <field name="name">mrp.production.form.inherit.temperature</field>
+            <field name="model">stock.move.line</field>
+            <field name="type">list</field>
+            <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
+            <field name="arch" type="xml">
+                <field name="lot_id" position="after">
+                    <field name="temperature" optional="hide"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

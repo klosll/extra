@@ -31,7 +31,7 @@ class StockMoveLine(models.Model):
           - Si el destino es interno  y el origen NO lo es  →  entrada  (+)
           - Si el origen  es interno  y el destino NO lo es →  salida   (-)
           - Movimientos internos (ambos internos) o externos (ninguno)   →  0
-        En Odoo 18, qty_done y reserved_qty se unifican en el campo `quantity`.
+        En Odoo 18, quantity y reserved_qty se unifican en el campo `quantity`.
         """
         internal = 'internal'
         for line in self:

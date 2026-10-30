@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="assets_backend" name="klo_wizard_lot_reception assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script
+                type="text/javascript"
+                src="/klo_wizard_lot_reception/static/src/js/reader_ps_autonext.js"
+                defer="defer"
+            />
+        </xpath>
+    </template>
+</odoo>
