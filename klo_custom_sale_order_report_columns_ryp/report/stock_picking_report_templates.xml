@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2026 KLO Ingeniería Informática S.L.L.
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<!--
+    Personalización de columnas del albarán de entrega para RYP,
+    sobre stock.report_delivery_document (cabeceras) y
+    stock.stock_report_delivery_has_serial_move_line (celdas).
+
+    Jerarquía de prioridades en el albarán valorado:
+    - OCA stock_picking_report_valued: priority="17" (añade las columnas de
+      valoración: Unit Price, Discount, Subtotal y Taxes).
+    - klo_stock_picking_report_price_unit_untaxed: priority="18" (sustituye el
+      precio unitario por el precio sin impuestos).
+    - Este módulo RYP: priority="19" (aplica último y adapta las columnas al
+      esquema completo pedido/factura):
+
+    * La cabecera "Unit Price" pasa a "Precio U".
+    * Se añade la columna "Neto" (precio unitario sin impuestos con el descuento
+      aplicado) entre "Discount" y "Subtotal".
+    * La cabecera "Subtotal" pasa a llamarse "Importe"; su valor sigue siendo
+      move_line.sale_price_subtotal (subtotal de Odoo del albarán), que cuadra
+      exactamente con el Untaxed Amount del pie.
+    * La columna "Taxes" se oculta (no se elimina: es ancla de herencias de
+      terceros, siguiendo la lección de superficie mínima).
+    * Se separan 1 mm las columnas numéricas del cuerpo (padding-left) para que
+      los datos no se mezclen visualmente.
+-->
+<odoo>
+    <template
+        id="klo_custom_picking_columns_ryp"
+        inherit_id="stock.report_delivery_document"
+        priority="19"
+    >
+        <!-- Separación de 1 mm entre columnas numéricas del cuerpo (albarán):
+             los datos de las columnas numéricas se mezclaban visualmente,
+             agravado por el padding 1px de los módulos de fuente pequeña.
+             Se aplica a th y td para mantener cabeceras y valores alineados.
+             El scope a table[name='stock_move_line_table'] evita tocar la tabla
+             de totales (valued_picking_total_table).
+             NO insertar entre las tablas stock_move_table (t-if) y
+             stock_move_line_table (t-elif): son una cadena condicional y cualquier
+             nodo intermedio la rompe; se inyecta antes del div.page, como hace el
+             OCA stock_picking_report_valued. -->
+        <xpath expr="//div[hasclass('page')]" position="before">
+            <style>
+                /* Separación de 1 mm entre columnas numéricas del cuerpo. */
+                table[name='stock_move_line_table'] th.text-end,
+                table[name='stock_move_line_table'] td.text-end {
+                    padding-left: 1mm;
+                }
+            </style>
+        </xpath>
+
+        <!-- Cabecera "Precio U": literal solicitado por el cliente (sin i18n).
+             Se sustituye solo el texto del strong para no alterar el th contenedor,
+             que es ancla de herencias de terceros. -->
+        <xpath expr="//table[@name='stock_move_line_table']/thead/tr/t[@t-if='o.valued and o.sale_id and o.move_line_ids and is_outgoing']/th[1]/strong" position="replace">
+            <strong>Precio U</strong>
+        </xpath>
+
+        <!-- Cabecera "Importe": el subtotal del albarán (sale_price_subtotal)
+             cuadra exactamente con el Untaxed Amount del pie, por eso se renombra
+             "Subtotal" a "Importe" manteniendo el mismo valor. -->
+        <xpath expr="//table[@name='stock_move_line_table']/thead/tr/t[@t-if='o.valued and o.sale_id and o.move_line_ids and is_outgoing']/th[3]/strong" position="replace">
+            <strong>Importe</strong>
+        </xpath>
+
+        <!-- Ocultar cabecera "Taxes": NO se elimina para no romper herencias de
+             terceros que pudieran anclar en ella. -->
+        <xpath expr="//table[@name='stock_move_line_table']/thead/tr/t[@t-if='o.valued and o.sale_id and o.move_line_ids and is_outgoing']/th[4]" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+
+        <!-- Añadir columna "Neto" entre "Discount" y "Importe".
+             Se inserta después de th[2] (Discount), que puede estar oculto por
+             grupos; Neto se muestra siempre. -->
+        <xpath expr="//table[@name='stock_move_line_table']/thead/tr/t[@t-if='o.valued and o.sale_id and o.move_line_ids and is_outgoing']/th[2]" position="after">
+            <th class="text-end">
+                <strong>Neto</strong>
+            </th>
+        </xpath>
+    </template>
+
+    <template
+        id="klo_custom_picking_has_serial_move_line_columns_ryp"
+        inherit_id="stock.stock_report_delivery_has_serial_move_line"
+        priority="19"
+    >
+        <!-- Ocultar celda "Taxes": NO se elimina para no romper herencias de
+             terceros que pudieran anclar en ella. -->
+        <xpath expr="//td[span[@t-field='move_line.sale_tax_description']]" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+
+        <!-- Añadir celda "Neto" después de la celda "Discount".
+             El valor se renderiza con t-field sobre el campo computado
+             price_unit_net (mimético del price_unit del core), de forma que el
+             QWeb le aplica los mismos decimales que el campo "Precio unitario"
+             del formulario (precisión decimal "Product Price"). -->
+        <xpath expr="//td[span[@t-field='move_line.sale_discount']]" position="after">
+            <td class="text-end">
+                <span t-field="move_line.price_unit_net"/>
+            </td>
+        </xpath>
+    </template>
+</odoo>
