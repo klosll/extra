@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="action_batch_movement_detail_xlsx" model="ir.actions.report">
+        <field name="name">Detalle de existencias crianzas/madres</field>
+        <field name="model">batch.movement.detail.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">klo_batch_movement_detail_xlsx</field>
+        <field name="report_file">Detalle_existencias_crianzas_madres</field>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
