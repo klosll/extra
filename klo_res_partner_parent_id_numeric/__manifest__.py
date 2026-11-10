@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     "name": "KLO - Res Partner Parent ID Numerico",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.0.2",
     "summary": "Muestra el ID numerico del parent_id en la ficha de contacto",
     "license": "AGPL-3",
     "author": "KLO Ingenieria Informatica S.L.L.",
