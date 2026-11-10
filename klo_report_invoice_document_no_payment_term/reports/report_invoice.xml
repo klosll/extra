@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <template id="klo_invoice_report_document_no_payment_term" inherit_id="account.report_invoice_document">
+      <xpath expr="//span[@id='payment_terms_note_id']" position="attributes">
+          <attribute name="t-if">False</attribute>
+      </xpath>
+      <xpath expr="//span[@id='payment_terms_note_id']/following-sibling::br[1]" position="attributes">
+          <attribute name="t-if">False</attribute>
+      </xpath>
+  </template>
+
+</odoo>
