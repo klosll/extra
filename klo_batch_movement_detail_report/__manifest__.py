@@ -3,7 +3,7 @@
 
 {
     "name": "KLO Detalle de Existencias Crianzas/Madres",
-    "version": "14.0.1.1.0",
+    "version": "14.0.1.2.0",
     "category": "Inventory",
     "license": "AGPL-3",
     "author": "KLO Ingeniería Informática",
@@ -27,7 +27,12 @@ validados de cada crianza/madre hasta dicha fecha, con las columnas:
 La **Estirpe** se toma de la propia ficha en las madres y, en las crianzas,
 de la estirpe con mayor porcentaje de pollitos entrados. El **Factor de
 corrección** es el guardado en la ficha del lote (queda en blanco si no
-tiene).""",
+tiene).
+
+Además de los movimientos de albarán, se incluyen filas con el **pienso que
+está en stock** en la ubicación de la crianza y no proviene de sus movimientos
+(pienso sobrante de las crianzas tipo SOB); su fecha es la de entrada del
+stock y su importe el valor del stock.""",
     "depends": [
         "report_xlsx",
         "stock_picking_batch_liquidation",
