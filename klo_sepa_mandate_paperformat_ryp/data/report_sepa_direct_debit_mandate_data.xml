@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    account_banking_sepa_direct_debit define el informe "Mandato SEPA" en un
+    fichero de datos sin noupdate y con paperformat_id fijado a su formato
+    "European A4 low margin for SEPA": cada "-u" del módulo sobrescribe el campo.
+
+    Este módulo se carga después (por dependencia) y vuelve a asignar el formato
+    de papel "European A4 low margin for SEPA Ruiz y Pérez" en cada instalación
+    y actualización. Al escribirse solo este campo, no se toca ningún otro dato
+    del informe.
+-->
+<odoo>
+    <data>
+        <record
+            id="account_banking_sepa_direct_debit.report_sepa_direct_debit_mandate"
+            model="ir.actions.report"
+        >
+            <field
+                name="paperformat_id"
+                ref="klo_sepa_mandate_paperformat_ryp.paperformat_sepa_mandate_ryp"
+            />
+        </record>
+    </data>
+</odoo>
