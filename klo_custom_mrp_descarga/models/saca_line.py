@@ -18,7 +18,7 @@ class SacaLine(models.Model):
         string="Estirpe (%)",
         compute="_compute_estirpe_percentage",
         store=True,
-        group_operator="avg",
+        aggregator="avg",
         digits="Weight Decimal Precision",
     )
 

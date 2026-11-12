@@ -9,10 +9,10 @@ class SaleReport(models.Model):
         string='P. ponderado uni.',
         readonly=True,
         digits=(16, 4),
-        # group_operator='sum' permite que el campo sea usado como medida en pivot.
+        # aggregator='sum' permite que el campo sea usado como medida en pivot.
         # El valor correcto se recalcula en read_group como
         # SUM(price_subtotal) / SUM(qty_delivered) del grupo.
-        group_operator='sum',
+        aggregator='sum',
     )
 
     def _select_additional_fields(self):
