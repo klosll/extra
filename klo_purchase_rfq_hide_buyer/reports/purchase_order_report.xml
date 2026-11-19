@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Pedido de compra (PO): ocultar el Comprador (Buyer) de la cabecera en todos los
+         estados, tanto en Solicitud de presupuesto como una vez confirmado el pedido. -->
+    <template id="klo_purchase_order_report_hide_buyer"
+              inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="//div[@t-if='o.user_id']" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+    </template>
+
+</odoo>
