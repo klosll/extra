@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Extiende la cabecera compacta global para soportar pedidos de compra -->
+    <template id="klo_external_layout_compact_purchase"
+              inherit_id="klo_compact_head_layout.klo_external_layout_compact">
+
+        <!-- 1. Ampliar show_shipping para incluir purchase.order con dest_address_id -->
+        <xpath expr="//t[@t-set='show_shipping']" position="attributes">
+            <attribute name="t-value">(o_model in ['sale.order', 'account.move'] and bool(o.partner_shipping_id) and o.partner_shipping_id != o.partner_id) or o_model == 'stock.picking' or (o_model == 'purchase.order' and bool(o.dest_address_id))</attribute>
+        </xpath>
+
+        <!-- 2. Añadir el bloque de dirección de entrega para pedidos de compra,
+             justo después del bloque de entrega de albaranes -->
+        <xpath expr="//t[@t-if=&quot;o_model == 'stock.picking'&quot;]" position="after">
+            <t t-if="o_model == 'purchase.order' and o.dest_address_id">
+                <div class="col-3" style="margin-bottom: 5px; font-size: {{font_size}}px; word-wrap: break-word; overflow-wrap: break-word;">
+                    <strong>Dirección de entrega:</strong><br/>
+                    <div t-esc="o.dest_address_id.name" style="word-break: break-word;"/>
+                    <t t-if="o.dest_address_id.comercial">(<span t-esc="o.dest_address_id.comercial"/>)<br/></t>
+                    <span>CIF/NIF: </span><t t-esc="o.dest_address_id.vat"/><br/>
+                    <t t-if="o.dest_address_id.street"><span t-esc="o.dest_address_id.street"/><br/></t>
+                    <t t-esc="o.dest_address_id.zip"/> <t t-esc="o.dest_address_id.city"/>
+                    <t t-if="o.dest_address_id.country_id"><br/><t t-esc="o.dest_address_id.country_id.name"/></t>
+                    <t t-if="o.dest_address_id.phone"><br/><span>Tfno.: </span><t t-esc="o.dest_address_id.phone"/></t>
+                    <t t-if="o.dest_address_id.email"><br/><span>e-mail: </span><t t-esc="o.dest_address_id.email"/></t>
+                </div>
+            </t>
+        </xpath>
+
+        <!-- 3. Cambiar el label "Cliente:" del caso general a "Proveedor:" cuando es compra -->
+        <xpath expr="//t[@t-else]//strong[normalize-space()='Cliente:']" position="replace">
+            <strong><t t-esc="'Proveedor:' if o_model == 'purchase.order' else 'Cliente:'"/></strong>
+        </xpath>
+
+    </template>
+
+</odoo>
