@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Solicitud de presupuesto (RFQ): ocultar la columna "Fecha prevista" (Expected Date) -->
+    <template id="klo_purchase_quotation_hide_expected_date"
+              inherit_id="purchase.report_purchasequotation_document">
+        <xpath expr="//th[@name='th_expected_date']" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+        <xpath expr="//td[span[@t-field='order_line.date_planned']]" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+    </template>
+
+</odoo>
