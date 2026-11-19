@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Pedido de compra (PO): ocultar la Llegada esperada (Expected Arrival) de la
+         cabecera mientras el documento siga siendo una Solicitud de presupuesto (sin confirmar). -->
+    <template id="klo_purchase_order_report_hide_expected_arrival"
+              inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="//div[@t-if='o.date_planned']" position="attributes">
+            <attribute name="t-if">o.date_planned and o.state not in ('draft', 'sent', 'to approve')</attribute>
+        </xpath>
+    </template>
+
+</odoo>
