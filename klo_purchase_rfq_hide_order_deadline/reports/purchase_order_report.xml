@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Pedido de compra (PO): ocultar la Fecha límite del pedido (Order Deadline) de la
+         cabecera mientras el documento siga siendo una Solicitud de presupuesto (sin confirmar). -->
+    <template id="klo_purchase_order_report_hide_order_deadline"
+              inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="//div[@t-elif='o.date_order']" position="attributes">
+            <attribute name="t-elif">o.date_order and o.state not in ('draft', 'sent', 'to approve')</attribute>
+        </xpath>
+    </template>
+
+</odoo>
