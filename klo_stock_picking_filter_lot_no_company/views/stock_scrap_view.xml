@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+  <!-- HT02695: aceptar lotes sin compañía (productos compartidos en v18) -->
+  <record id="stock_scrap_form_view" model="ir.ui.view">
+    <field name="name">stock.scrap.form - klo_stock_picking_filter_lot_no_company</field>
+    <field name="model">stock.scrap</field>
+    <field name="inherit_id" ref="stock_picking_filter_lot.stock_scrap_form_view" />
+    <field name="priority">25</field>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='lot_id']" position="attributes">
+        <attribute name="domain">
+                    [('product_id','=', product_id), '|', ('company_id', '=', False), ('company_id', '=', company_id), ('location_ids', 'child_of', location_id)]
+                </attribute>
+      </xpath>
+    </field>
+  </record>
+
+  <record id="stock_scrap_form_view2" model="ir.ui.view">
+    <field name="name">stock.scrap.form2 - klo_stock_picking_filter_lot_no_company</field>
+    <field name="model">stock.scrap</field>
+    <field name="inherit_id" ref="stock_picking_filter_lot.stock_scrap_form_view2" />
+    <field name="priority">25</field>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='lot_id']" position="attributes">
+        <attribute name="domain">
+                    [('product_id','=', product_id), '|', ('company_id', '=', False), ('company_id', '=', company_id), ('location_ids', 'child_of', location_id)]
+                </attribute>
+      </xpath>
+    </field>
+  </record>
+</odoo>
